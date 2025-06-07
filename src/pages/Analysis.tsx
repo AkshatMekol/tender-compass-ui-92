@@ -28,7 +28,7 @@ const Analysis = () => {
     type: "EPC Contract",
     downloadDocuments: "http://mptenders.gov.in",
     organisation: "M.P. State Highway Authority",
-    organisationId: "12513/664/Procu./MPRDC/NDB/CW/2024",
+    organisationId: "12513/664",
     website: "http://mptenders.gov.in",
     submissionDeadline: "4 March 2025",
     compatibilityScore: 77
@@ -401,32 +401,28 @@ This tender represents an **excellent opportunity** with strong alignment to you
       src: 'https://worldtiles1.waze.com/tiles/17/93135/56855.png?highres=true', 
       title: 'Ujjain-Maksi Route Overview', 
       location: 'Highway Section', 
-      date: '2024-03-15',
-      link: 'https://worldtiles1.waze.com/tiles/17/93135/56855.png?highres=true'
+      date: '2024-03-15'
     },
     { 
       id: '2', 
       src: 'https://worldtiles1.waze.com/tiles/17/93136/56856.png?highres=true', 
       title: 'Road Infrastructure', 
       location: 'Ujjain District', 
-      date: '2024-03-14',
-      link: 'https://worldtiles1.waze.com/tiles/17/93136/56856.png?highres=true'
+      date: '2024-03-14'
     },
     { 
       id: '3', 
       src: 'https://img.staticmb.com/mbphoto/locality/original_images/2021/Dec/24/107306_MAP.png', 
       title: 'Area Development Map', 
       location: 'Madhya Pradesh', 
-      date: '2024-03-13',
-      link: 'https://img.staticmb.com/mbphoto/locality/original_images/2021/Dec/24/107306_MAP.png'
+      date: '2024-03-13'
     },
     { 
       id: '4', 
       src: 'https://worldtiles1.waze.com/tiles/17/93136/56855.png?highres=true', 
       title: 'Regional Context', 
       location: 'Highway Corridor', 
-      date: '2024-03-12',
-      link: 'https://worldtiles1.waze.com/tiles/17/93136/56855.png?highres=true'
+      date: '2024-03-12'
     }
   ];
 
@@ -728,7 +724,7 @@ This tender represents an **excellent opportunity** with strong alignment to you
                   <div
                     key={image.id}
                     className="relative group cursor-pointer rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300"
-                    onClick={() => window.open(image.link, '_blank')}
+                    onClick={() => window.open('https://www.instagram.com/reel/C_5nva-pOa9/', '_blank')}
                   >
                     <div className="aspect-square overflow-hidden">
                       <img
