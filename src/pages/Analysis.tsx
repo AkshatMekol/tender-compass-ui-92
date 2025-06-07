@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,372 +13,420 @@ const Analysis = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   // Calculate days left
-  const submissionDate = new Date('2025-06-19');
+  const submissionDate = new Date('2025-03-04');
   const today = new Date();
   const timeDiff = submissionDate.getTime() - today.getTime();
   const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-  // Tender bio data from placeholder
+  // Tender bio data
   const tenderBio = {
-    brief: "construction improvement of rishi rongli kupup from km 53 design chainage km 55.44 to km 70 design chainage km 74.575 net design length 19.135 km from existing cl 9 to nhdl specifications through epc mode in sikkim under project swastik",
-    location: "Sikkim",
-    estimatedCost: "223.69 Cr.",
-    emd: "4.46 Cr.",
-    length: "19.135 km",
+    brief: "Upgradation of Package 12: Ujjain – Maksi Road in the state of Madhya Pradesh on Engineering, Procurement & Construction (EPC) Mode under proposed NDB Loan",
+    location: "Ujjain, Madhya Pradesh",
+    estimatedCost: "273.45 Cr.",
+    emd: "2.73 Cr.",
+    length: "38.95 km",
     type: "EPC Contract",
-    downloadDocuments: "https://defproc.gov.in/nicgep/app",
-    organisation: "Border Roads Organization",
-    organisationId: "2025_BRO_706797_1",
-    website: "https://defproc.gov.in/nicgep/app",
-    submissionDeadline: "19 June 2025",
-    compatibilityScore: 67
+    downloadDocuments: "http://mptenders.gov.in",
+    organisation: "M.P. State Highway Authority",
+    organisationId: "12513/664/Procu./MPRDC/NDB/CW/2024",
+    website: "http://mptenders.gov.in",
+    submissionDeadline: "4 March 2025",
+    compatibilityScore: 77
   };
 
   // Location insights data
   const locationInsights = [
     { 
       title: "Terrain", 
-      content: `**Terrain Type**: Mountainous  
-*This region in the Eastern Himalayas features steep slopes, high altitude, and rugged terrain typical of Sikkim's topography.*` 
+      content: `**Terrain Type**: Plain  
+*Flat terrain in Ujjain-Maksi region provides favorable conditions for construction and material transport.*` 
     },
     { 
       title: "Climate", 
-      content: `- **Climate Zone**: Alpine (Köppen: ET) at higher elevations (Kupup), Humid Subtropical (Köppen: Cwa) at lower elevations (Gangtok/Rongli)  
-- **Working Season**: March to May (primary dry window), October to November (secondary period for lower segments, avoiding monsoon and extreme cold)` 
+      content: `- **Climate Zone**: Humid Subtropical (Cwa)  
+- **Suitable Working Season**: October to March (avoiding monsoon: June–September)  
+
+*Dry winter months ensure stable conditions for earthwork and paving.*` 
     },
     { 
       title: "Logistics", 
-      content: `**Level**: Very High  
-**Reason**: Extreme mountainous terrain, high altitude (up to 4,000m), and frequent landslides/monsoon disruptions in Sikkim's remote eastern Himalayas.  
+      content: `**Logistical Difficulty**: Moderate  
+**Reason**: Flat terrain in Ujjain-Maksi eases construction, but traffic management on this operational road and coordination in semi-urban/rural zones add complexity.
 
-| Key Challenge         | Impact                          |
-|-----------------------|---------------------------------|
-| **Terrain**           | Steep slopes, unstable geology  |
-| **Accessibility**     | Limited roads, narrow passages  |
-| **Weather**           | Heavy snowfall/monsoon delays   |
-| **Transport**         | Machinery/material haulage issues |` 
+| Key Factor           | Impact                          |
+|----------------------|---------------------------------|
+| **Terrain**          | Favorable flat conditions      |
+| **Road Operations**  | Traffic management required     |
+| **Urban Zones**      | Coordination complexity         |` 
     },
     { 
       title: "Safety", 
       content: `| Risk Factor       | Level       |
 |-------------------|-------------|
-| **Overall Risk**  | **Low**     |
-| **Border Proximity** | Moderate   |
-| **Insurgency Activity** | Very Low  |
+| **Overall Risk**  | **Moderate** |
+| **Religious Significance** | High   |
+| **Security**      | Low         |
 
 - **Key Factors**:  
-  - Gangtok and Sikkim have minimal terrorism history; no active insurgencies reported.  
-  - Proximity to China border increases strategic sensitivity but has low civilian threat.  
+  - Ujjain's religious significance as a pilgrimage hub elevates terrorism vigilance
+  - Madhya Pradesh has low recent security incidents
 - **Current Advisory**:  
-  No travel restrictions; standard border-area vigilance advised.  
+  Standard security protocols for pilgrimage areas
 
-*Note: Remote terrain may complicate emergency response, but no specific terror threats exist.*` 
+*Note: Increased vigilance during festival seasons due to pilgrimage activities.*` 
     },
     { 
       title: "Soil Type", 
-      content: `- **Soil Type**: Predominantly **brown forest soil** (loamy, acidic) mixed with clay and organic matter, typical of Sikkim's Himalayan slopes.  
-- **Rock Availability**: **Yes** – abundant **gneiss, schist, and quartzite** from local quarries; suitable for aggregates but extraction may face terrain challenges.  
+      content: `- **Soil Type**: Predominantly **black cotton soil** (clay-rich, expansive nature)  
+- **Rock Availability**: **Yes** – **Basalt rocks** abundantly available in the Malwa Plateau region, suitable for aggregates  
 
 | Feature          | Details                          |
 |------------------|----------------------------------|
-| **Soil Type**    | Brown forest soil (loamy-clayey) |
-| **Rock Sources** | Gneiss, schist, quartzite        |` 
+| **Soil Type**    | Black cotton soil (expansive)    |
+| **Rock Sources** | Basalt (Malwa Plateau region)    |` 
     },
     { 
       title: "Material Availability", 
-      content: `- **Diesel/Petrol**: Available in Gangtok city (multiple pumps). Limited options beyond Rongli; last reliable refill at Gangtok before Kupup.  
+      content: `- **Diesel/Petrol Pumps**: Available  
+- **Cement Vendors**: Available  
 
-- **Cement**: Available in Gangtok (major suppliers like ACC/Ambuja). Sparse beyond Rongli; no vendors confirmed near Kupup.  
+*Typical availability along major highways and near urban centers like Ujjain/Maksi.*
 
-**Note**: Remote terrain necessitates stocking fuel/cement in Gangtok before heading toward Kupup.` 
+**Current Site**: Existing 2-lane highway (7m-10m width) from km 00+000 to 38+950 spanning 38.95km in Madhya Pradesh.` 
     }
   ];
 
   // Citation links for location insights
   const locationCitationLinks = [
     {
-      title: "Sikkim Climate and Weather Data",
-      url: "https://www.climate-data.org/asia/india/sikkim/gangtok-4025/"
+      title: "Madhya Pradesh Infrastructure Development",
+      url: "http://mptenders.gov.in"
     },
     {
-      title: "Border Roads Organization Projects",
-      url: "https://bro.gov.in/content/projects"
+      title: "Malwa Plateau Geological Survey",
+      url: "https://www.gsi.gov.in/webcenter/portal/OCBIS"
     },
     {
-      title: "Himalayan Construction Challenges Study",
-      url: "https://www.researchgate.net/publication/mountainous-construction"
+      title: "MP Road Development Corporation Projects",
+      url: "https://www.mprdc.nic.in"
     }
   ];
 
   // Nature of work content
   const workCategories = {
-    'road-composition': `### Typical Cross Section (TCS) Schedule
+    'road-composition': `### Pavement Design Summary  
 
-| TCS Type | Proposal Description | Length (m) | Associated Features |
-|----------|----------------------|------------|---------------------|
-| TCS-I | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT & BHS DRAIN | 240 | BHS Drain |
-| TCS-II | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT & LHS DRAIN | 1295 | LHS Drain |
-| TCS-III | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT & RHS DRAIN | 1055 | RHS Drain |
-| TCS-IV | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, BHS BREAST WALL & BHS DRAIN | 1520 | BHS Breast Wall, BHS Drain |
-| TCS-V | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, LHS BREAST WALL & BHS DRAIN | 1860 | LHS Breast Wall, BHS Drain |
-| TCS-VI | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, LHS BREAST WALL & DRAIN | 3945 | LHS Breast Wall, Drain |
-| TCS-VII | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, LHS GABION WALL & RHS STONE PITCHING | 60 | LHS Gabion Wall, RHS Stone Pitching |
-| TCS-VIII | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, LHS RETAINING WALL & RHS DRAIN | 985 | LHS Retaining Wall, RHS Drain |
-| TCS-IX | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, LHS RETAINING WALL, RHS BREAST WALL & DRAIN | 1025 | LHS Retaining Wall, RHS Breast Wall, Drain |
-| TCS-X | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, RHS BREAST WALL & BHS DRAIN | 960 | RHS Breast Wall, BHS Drain |
-| TCS-XI | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, RHS BREAST WALL & DRAIN | 3310 | RHS Breast Wall, Drain |
-| TCS-XII | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, RHS RETAINING WALL & LHS DRAIN | 1490 | RHS Retaining Wall, LHS Drain |
-| TCS-XIII | NEW CONSTRUCTION OF FLEXIBLE PAVEMENT, RHS RETAINING WALL, LHS BREAST WALL & DRAIN | 1390 | RHS Retaining Wall, LHS Breast Wall, Drain |
+#### Pavement Types and Quantities  
+| Pavement Type       | Length (Km) | Design Standard | Design Period |  
+|---------------------|-------------|-----------------|---------------|  
+| Flexible Pavement   | 27.550      | IRC:37-2019     | 20 years      |  
+| Rigid Pavement      | 10.610      | IRC:58-2015     | 30 years      |  
 
-**Total Length**: 19,135 m
+#### Flexible Pavement Specifications  
+**New Construction/Reconstruction/Widening**  
+| Layer    | Thickness (mm) |  
+|----------|----------------|  
+| BC       | 40             |  
+| DBM      | 70             |  
+| WMM      | 150            |  
+| CTSB     | 200            |  
+| Subgrade | 500            |  
 
-### Pavement Layer Details (Assumed Standard for Flexible Pavement)
-- **Surface Course**: BC – 30 mm
-- **Base Course**: DBM – 60 mm
-- **Sub-base**: WMM – 250 mm
-- **Subgrade**: GSB – 200 mm  
-- **Total Thickness**: **540 mm**
+**Temporary Diversion at Structure Location**  
+| Layer               | Thickness (mm) |  
+|---------------------|----------------|  
+| OGPC + Seal Coat    | 20             |  
+| WMM                | 225            |  
+| GSB                | 200            |  
+| Subgrade           | 500            |  
 
-### Notes
-- **Material Specifications**: Refer to Annex-III of Schedule-A
-- **Width**: Carriageway width to match approach roads with proper tapering
-- **Approval**: Final TCS subject to site conditions and Authority approval`,
+#### Rigid Pavement Specifications  
+**Reconstruction/Widening**  
+| Layer    | Thickness (mm) |  
+|----------|----------------|  
+| PQC      | 300            |  
+| DLC      | 150            |  
+| GSB      | 150            |  
+| Subgrade | 500            |  
+
+### Typical Cross Section (TCS) Summary  
+
+| TCS Type | Carriageway + Shoulder Configuration | Typical Length (m) | Area Type | Special Treatment |  
+|----------|-------------------------------------|---------------------|-----------|------------------|  
+| TCS 1    | 2 x 7.0 + 2 x 1.5                   | 18,306.6            | Open Area | Gilsonite Modified Emulsion Surface Treatment |  
+| TCS 2    | 2 x 7.0 + 2 x 2.0                   | 5,105.3             | Built-up  | Standard Treatment |  
+| TCS 3    | 2 x 7.0                             | 990                 | Built-up  | Standard Treatment |  
+| TCS 4    | 7.0 + 2 x 2.5                       | 1,350               | Open Area | Gilsonite Modified Emulsion Surface Treatment |  
+
+#### Design Requirements  
+- **Design Traffic**: Minimum 50 MSA (subject to actual traffic assessment)  
+- **Stage Construction**: Not permitted  
+- **Fly-ash Usage**: As per MPPWD/GoMP circulars`,
     
-    'roadside-drainage': `### Roadside Drainage Details
+    'roadside-drainage': `### Roadside Drainage Specifications  
 
-#### Drainage Specifications
-| Drain Type                     | Minimum Length (m) | Material/Design Standard               |
-|--------------------------------|--------------------|----------------------------------------|
-| V-Shape drains in PCC – M15    | 23,655.00          | As per IRC: SP:48-2023 (Chapter 2, Para 5.12) |
+| **Component**               | **Details**                                                                 |
+|-----------------------------|----------------------------------------------------------------------------|
+| **Connection to Water Bodies** | Roadside drains to be connected to existing ponds or water harvesting pits |
+| **Design Standard**         | MORT&H Specifications for Road and Bridge Works (1986)                     |
+| **Drainage Enhancement**    | Existing drainage system to be maintained and enhanced                     |
+| **Cross Drainage**          | Adequate size/number of structures in sloped areas                         |
+| **Road Elevation**          | Raised above HFL where road level is lower                                 |
+| **Silt Control**            | Silt fencing along ponds; slopes modified to restrict debris               |
+| **Material Reuse**          | Collected sediment reused for slope surfacing/vegetation                   |
 
-#### Key Requirements
-- **Built-up Areas**: 
-  - RCC covered drains cum Footpath mandatory
-  - Invert levels based on ground slopes of adjoining properties/open grounds
-  - RCC covers with locking mechanism to prevent sliding
-- **Traffic Load Areas**: 
-  - RCC covers designed for traffic load at property access points
-- **Cutting Portions**: 
-  - Lined drains of suitable size (to be finalized with Authority Engineer)
-- **Runoff Accommodation**: 
-  - RCC drain sections must handle runoff from carriageway & adjoining areas
+### Mitigation Measures  
+- **Oil/Grease Control**: Oil interceptors at refueling/wash areas; traps and platforms for spills  
+- **Waste Disposal**: Non-bituminous waste in borrow pits; bituminous waste to approved sites  
+- **Water Quality**: Monitoring of ponds/streams; no refueling near water bodies  
 
-#### Notes
-- **Indicative Quantities**: 
-  - 23,655m is the minimum specified length (may increase as per site conditions)
-- **Approval Required**: 
-  - Final drain types/sizes/invert levels require Authority Engineer's approval
-- **Scope Clarification**: 
-  - Length increases beyond specified minimum do not constitute Change of Scope`,
+### Institutional Responsibility  
+| **Activity**               | **Implementation** | **Supervision** |
+|----------------------------|--------------------|--------------------|
+| Drainage Construction      | Contractor         | AE/MPRDC        |
+| Silt Fencing               | Contractor         | AE/MPRDC        |
+| Water Quality Monitoring   | Contractor         | AE/MPRDC        |`,
     
-    'structures-work': `### Culverts (Reconstruction)
-| S.No | Design Chainage (Km) | Type | Span Arrangement (No x m) | Clear Width (m) |
-|------|----------------------|------|---------------------------|-----------------|
-| 1    | 55+580               | SLAB | 1 x 2.0                   | 8.80            |
-| 2    | 55+700               | SLAB | 1 x 2.0                   | 8.80            |
-| 3    | 55+890               | SLAB | 1 x 2.0                   | 8.80            |
+    'structures-work': `### Reconstruction of Box Culverts (5 Nos.)
+| Existing Chainage | Design Chainage | Existing Type | Existing Span | Proposed Type | Proposed Span (No. x L x H) | Width (m) |
+|------------------|----------------|---------------|--------------|---------------|----------------------------|----------|
+| 00+980 | 00+980 | Box Culvert | 1x4.0 | Box Culvert | 1x4.0x2.0 | 24 |
+| 01+145 | 01+145 | HPC | 3x1000 | Box Culvert | 2x2.0x2.0 | 24 |
+| 11+800 | 11+800 | HPC | 1x1000 | Box Culvert | 1x3.0x3.0 | 24 |
+| 17+025 | 17+025 | HPC | 1x1000 | Box Culvert | 1x3.0x2.0 | 24 |
+| 17+260 | 17+260 | HPC | 1x1000 | Box Culvert | 1x3.0x2.0 | 24 |
 
-### Additional New Culverts
-| S.No | Design Chainage (Km) | Type | Span Arrangement (No x m) | Clear Width (m) |
-|------|----------------------|------|---------------------------|-----------------|
-| 1    | 55+775               | SLAB | 1 x 6.0                   | 8.80            |
-| 2    | 55+970               | SLAB | 1 x 3.0                   | 8.80            |
-| 3    | 56+100               | SLAB | 1 x 6.0                   | 8.80            |
-| ...  | ...                  | ...  | ...                       | ...             |
-| 126  | 74+340               | SLAB | 1 x 2.0                   | 8.80            |
+### Widening of Slab/Box Culverts (23 Nos.)
+| Existing Chainage | Design Chainage | Type | Existing Span (No. x L) | Existing Width (m) | Proposed Width (m) | Remark |
+|------------------|----------------|------|-----------------------|-------------------|--------------------|--------|
+| 04+035 | 04+035 | Box Culvert | 1X4.5 | 12 | 24 | TCS-2 |
+| 08+550 | 08+550 | Box Culvert | 1X3.0 | 12 | 24 | TCS-1 |
+| 08+960 | 08+960 | Box Culvert | 1X3.0 | 12 | 24 | TCS-3 |
+| 09+655 | 09+655 | Box Culvert | 1X3.0 | 12 | 24 | TCS-2 |
 
-**Note**: Total 126 culverts (SLAB type) with spans ranging from 2.0m to 6.0m and uniform clear width of 8.80m. Full list available in source tables.
+### New Pipe Culverts (11 Nos.)
+| Design Chainage | No. x Dia (mm) | Width (m) | Type | Remark |
+|----------------|----------------|----------|------|--------|
+| 4+770 | 2X1200 | 26 | HPC | TCS-2 |
+| 5+500 | 1X1200 | 26 | HPC | TCS-2 |
+| 10+390 | 2X1200 | 26 | HPC | TCS-2 |
+| 13+950 | 1X1200 | 26 | HPC | TCS-1 |
 
-### Minor Bridges (New Construction)
-| S.No | Design Chainage (Km) | Type | Span Arrangement (No x m) | Width (m) |
-|------|----------------------|------|---------------------------|-----------|
-| 1    | 56+925               | MNB  | 1 x 10.0                  | 14.5      |
-| 2    | 65+755               | MNB  | 1 x 10.0                  | 14.5      |
-| 3    | 66+530               | MNB  | 1 x 8.0                   | 14.5      |
-| 4    | 68+140               | MNB  | 1 x 10.0                  | 14.5      |
+### Reconstruction of Bridges
+#### Major Bridge (1 No.)
+| Existing Chainage | Design Chainage | Existing Type | Existing Span (No. x L) | Existing Width (m) | Proposed Span (No. x L) | Proposed Width (m) |
+|------------------|----------------|---------------|------------------------|-------------------|------------------------|-------------------|
+| 02+960 | 02+960 | MJB | 4x15 | 8.4 | 4x15 | 13+13 |
 
-### General Specifications
-- **Design Standards**: IRC:SP:73-2018
-- **Carriageway**: Minimum width as per manual (8.80m for culverts, 14.5m for bridges)
-- **Footpaths**: Mandatory for all new bridges
-- **Utility Services**: Designed to carry OFC/telephone lines
-- **High-Level Bridges**: All new bridges to be high-level
+### New Bridges
+#### Major Bridges (2 Nos.)
+| Design Chainage | Span Arrangement (No. x L) | Width (m) | Remark |
+|----------------|---------------------------|----------|--------|
+| 24+825 | 6x10.4 | 13 | RETAIN + LHS NEW CONSTRUCTION |
+| 32+140 | 6x10.4 | 13 | RETAIN + LHS NEW CONSTRUCTION |
 
-### Pipe Culverts
-- **HP Culverts**: To be constructed at cross-road junctions as per site requirements
-- **Balancing Culverts**: Additional pipe culverts if needed
-
-### Protection Works
-- **Floor Protection**: As per IRC codes
-- **Railing/Parapets**: Repairs/replacements specified but no locations listed
-
-### Notes
-- Quantities are minimums; may increase based on site conditions without constituting Change of Scope.
-- All structures to be approved by Authority Engineer.`,
+#### Minor Bridges (4 Nos.)
+| Design Chainage | Span Arrangement (No. x L) | Width (m) | Remark |
+|----------------|---------------------------|----------|--------|
+| 9+200 | 1x10.0 | 13 | RETAIN + RHS NEW CONSTRUCTION |
+| 23+300 | 2x8.4 | 13 | RETAIN + RHS NEW CONSTRUCTION |
+| 31+915 | 1x10.0 | 13 | RETAIN + LHS NEW CONSTRUCTION |
+| 33+285 | 2x9.0 | 13 | RETAIN + RHS NEW CONSTRUCTION |`,
     
-    'protection-work': `### Protection Works Summary  
+    'protection-work': `### Protection Work Details  
 
-| Type              | Side | Length (m) | Associated Features          | TCS Reference |  
-|-------------------|------|------------|------------------------------|---------------|  
-| Breast Wall       | BHS  | 1520       | Flexible Pavement, Drain     | TCS-IV        |  
-| Breast Wall       | LHS  | 1860       | Flexible Pavement, Drain     | TCS-V         |  
-| Breast Wall       | LHS  | 3945       | Flexible Pavement, Drain     | TCS-VI        |  
-| Gabion Wall       | LHS  | 60         | Stone Pitching (RHS)         | TCS-VII       |  
-| Retaining Wall    | LHS  | 985        | Flexible Pavement, Drain     | TCS-VIII      |  
-| Retaining Wall    | LHS  | 1025       | Breast Wall (RHS), Drain     | TCS-IX        |  
-| Breast Wall       | RHS  | 960        | Flexible Pavement, Drain     | TCS-X         |  
-| Breast Wall       | RHS  | 3310       | Flexible Pavement, Drain     | TCS-XI        |  
-| Retaining Wall    | RHS  | 1490       | Flexible Pavement, Drain     | TCS-XII       |  
-| Retaining Wall    | RHS  | 1390       | Breast Wall (LHS), Drain     | TCS-XIII      |  
+| Work Item          | Type               | Measurement/Quantity | Maintenance Timeframe |  
+|--------------------|--------------------|----------------------|-----------------------|  
+| Retaining Wall     | [Not specified]    | [Not specified]      | 7 days for repairs    |  
+| Breast Wall        | [Not specified]    | [Not specified]      | 7 days for repairs    |  
 
-### Key Observations  
-- **Total Length with Protection Works**: 19,135 m (entire project)  
-- **Highest Quantity**: Breast Walls (LHS - 3,945 m)  
-- **Unique Feature**: Gabion Wall paired with Stone Pitching (TCS-VII)  
+### Maintenance Criteria for Hill Roads  
+- **Landslide Clearance**: 12 hours  
+- **Snow Clearance**: 24 hours  
 
-### Notes  
-- **Material Specifications**: [Data unavailable]  
-- **Design Standards**: IRC: SP: 73-2018 (implied from context)  
-- **Execution Flexibility**: Lengths may vary based on site conditions (per Note 1, Page 165)`
+### Standards & Specifications  
+- **Applicable Standards**: BIS, IRC, MoRTH  
+- **Maintenance Binding**: Yes  
+
+### Footpaths on Bridges
+| Location (Km) | Width (m) | Remarks |
+|---------------|----------|---------|
+| 02+960 | 1.5 | BHS Footpath |
+| 09+200 | 1.5 | One side Footpath |
+| 24+825 | 1.5 | One side Footpath |
+| 31+915 | 1.5 | One side Footpath |
+| 32+140 | 1.5 | One side Footpath |
+| 33+285 | 1.5 | One side Footpath |
+
+**Note**: No detailed measurements, types, or quantities found for protection works in the provided content.`
   };
 
   // Payment weightage content
-  const paymentWeightageContent = `### Payment Weightage  
+  const paymentWeightageContent = `### Road Works (60.10%)
+| Sub-Work | Stage | Weightage |
+|----------|-------|-----------|
+| Widening and strengthening of existing road | Widening and repair of culverts | 4.45% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Earthwork up to top of embankment | 1.19% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Sub-Grade | 3.21% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Sub base course | 4.61% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Non-Bituminous base course | 6.89% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Bituminous Base Course | 20.36% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Wearing Coat | 16.35% |
+| Reconstruction/New realignment/bypass (Flexible pavement) | Earthen Shoulder | 0.74% |
+| Reconstruction/New realignment/bypass (Rigid pavement) | Earthwork up to top of embankment | 0.51% |
+| Reconstruction/New realignment/bypass (Rigid pavement) | Sub-Grade | 1.10% |
+| Reconstruction/New realignment/bypass (Rigid pavement) | Sub base course | 2.03% |
+| Reconstruction/New realignment/bypass (Rigid pavement) | Dry lean concrete (DLC) Course | 5.92% |
+| Reconstruction/New realignment/bypass (Rigid pavement) | Pavement Quality Control (PQC) Course | 30.13% |
+| Re-Construction and New Culvert on existing road, realignment, bypass | Culvert (length < 06 m) | 2.49% |
 
-#### Road Works (41.794%)  
-| Sub-Work | Stage | Weightage |  
-|----------|-------|-----------|  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Earthwork up to top of embankment | 22.70% |  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Sub-Grade | 0.68% |  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Sub Base Course | 12.11% |  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Non-Bituminous Base Course | 12.76% |  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Bituminous Base Course | 12.76% |  
-| Reconstruction/New realignment/bypass (Flexible pavement) | Wearing Coat | 7.69% |  
-| Re-Construction and New culverts | Culverts (length < 6 m) | 31.30% |  
+### Minor Bridges/Underpasses/Overpasses (2.41%)
+| Sub-Work | Stage | Weightage |
+|----------|-------|-----------|
+| Widening and Repair of Minor Bridges (length > 06 m and < 60 m) | Foundation: On completion of the foundation work of abutments and piers | 4.85% |
+| Widening and Repair of Minor Bridges (length > 06 m and < 60 m) | Sub-structure: On completion of abutments and piers with abutment/ pier cap | 3.67% |
+| Widening and Repair of Minor Bridges (length > 06 m and < 60 m) | Super-structure: On completion of the super-structure in all respects | 2.82% |
+| Widening and Repair of Minor Bridges (length > 06 m and < 60 m) | Approaches: On completion of approaches | 1.02% |
+| New Minor Bridges (length >6m and <60m) | Foundation: On completion of the foundation work of abutments and piers | 29.78% |
+| New Minor Bridges (length >6m and <60m) | Sub-structure: On completion of abutments and piers with abutment/ pier cap | 27.70% |
+| New Minor Bridges (length >6m and <60m) | Super-structure: On completion of super structure upto deck slab including bearings | 17.28% |
+| New Minor Bridges (length >6m and <60m) | Approaches: On completion of approaches | 5.42% |
 
-#### Minor Bridges/Underpasses/Overpasses (1.950%)  
-| Sub-Work | Stage | Weightage |  
-|----------|-------|-----------|  
-| New Minor bridges (length >6 and <60 m) | Foundation: On completion of foundation work of abutments and piers | 27.42% |  
-| New Minor bridges (length >6 and <60 m) | Sub-structure: On completion of abutments and piers with cap | 35.27% |  
-| New Minor bridges (length >6 and <60 m) | Super-structure: Completion up to deck slab including bearings | 25.28% |  
-| New Minor bridges (length >6 and <60 m) | Miscellaneous Works: Wearing coat, expansion joint, crash barrier, railings | 6.35% |  
-| New Minor bridges (length >6 and <60 m) | Approaches: Wing walls, retaining walls, stone pitching | 5.68% |  
+### Major Bridge Works (3.73%)
+| Sub-Work | Stage | Weightage |
+|----------|-------|-----------|
+| New Construction of Major bridges | Foundation | 30.44% |
+| New Construction of Major bridges | Sub-structure | 21.24% |
+| New Construction of Major bridges | Super structure (including Bearings) | 33.60% |
+| New Construction of Major bridges | Wearing coat including expansion joints | 3.32% |
+| New Construction of Major bridges | Wing wall/return wall | 0.50% |
+| New Construction of Major bridges | Approach (including Retaining walls, stone pitching and protection works) | 5.36% |
+| New Construction of Major bridges | Other | 1.35% |
 
-#### Other Works (56.256%)  
-| Sub-Work | Stage | Weightage |  
-|----------|-------|-----------|  
-| Road side Drain | PCC Drain | 2.69% |  
-| Road side Drain | Unlined surface drains | 0.10% |  
-| Road signs, markings, km stones, safety devices | Road signs, markings, km stones, safety devices | 3.18% |  
-| Overhead gantry mounted signs | Overhead gantry mounted signs | 0.06% |  
-| Junction improvement | Junction improvement | 0.21% |  
-| Project facilities | Bus Bays, Truck lay-byes | 0.22% |  
-| Protection works | Crash Barrier | 0.45% |  
-| Protection works | Retaining Wall | 25.12% |  
-| Protection works | Breast Wall | 59.32% |  
-| Protection works | Parapet | 3.15% |  
-| Protection works | Hydro seeding and mulching for Erosion control | 2.24% |  
-| Safety and traffic management | Safety and traffic management during construction | 0.18% |  
-| Utility Ducts | Utility Ducts across the road | 2.89% |  
-| Helipad | Helipad | 0.19% |`;
+### Other Works (24.22%)
+| Sub-Work | Stage | Weightage |
+|----------|-------|-----------|
+| Drain | Unlined | 0.55% |
+| Drain | Built Up (RCC Box Type Drain) & in Hill section | 22.42% |
+| Drain | Paver Block | 0.37% |
+| Road signs, Road marking, safety device etc | - | 3.42% |
+| Project facilities | Bus Bays & Shelter | 5.56% |
+| Project facilities | Overhead/Cantilever gantry sign boards | 0.69% |
+| Project facilities | Street Lighting (Built-up, Grade Seperator, ROB) | 5.94% |
+| Project facilities | Km Stone, Boundry Pillar , Guard stone | 0.03% |
+| Project facilities | Road Markers/Road Stud with Lense Reflector | 7.39% |
+| Project facilities | Junction improvement | 6.08% |
+| Project facilities | Site clearance and dismantling | 1.71% |
+| Project facilities | Utility Ducts across the road | 1.68% |
+| Project facilities | Median/New Jersey type crash barriers | 24.96% |
+| Project facilities | Road Side Plantation | 2.35% |
+| Project facilities | Thrie-Beam Crash Barrier | 8.11% |
+| Project facilities | Road Rolling Barrier | 6.17% |
+| Project facilities | Running & Operation cost of IMS during O&M Period | 0.76% |
+| Project facilities | Rain Water Harvesting | 1.77% |
+
+### Shifting of Utility Services (9.53%)
+| Sub-Work | Stage | Weightage |
+|----------|-------|-----------|
+| Electrical Utilities | - | 28.47% |
+| Water Supply Utilities | - | 71.53% |`;
 
   // Compatibility Analysis content
   const compatibilityAnalysisContent = `### Executive Summary
 
-**Overall Compatibility Score: 67/100** - This tender represents a moderate match for your organization's capabilities and strategic objectives.
+**Overall Compatibility Score: 77/100** - This tender represents a good match for your organization's capabilities and strategic objectives in highway infrastructure development.
 
 ### Strengths & Opportunities
 
 #### Technical Compatibility ✅
-- **Road Construction Expertise**: Strong alignment with your company's core competencies in highway and infrastructure development
+- **Highway Upgrade Expertise**: Strong alignment with your company's core competencies in highway widening and upgradation projects
 - **EPC Model Experience**: Your organization has demonstrated success in Engineering, Procurement, and Construction contracts
-- **Mountainous Terrain Projects**: Previous experience with challenging topographical conditions provides competitive advantage
+- **Flexible & Rigid Pavement**: Experience with both pavement types provides competitive advantage for this mixed-specification project
 
 #### Financial Viability ✅
-- **Project Scale**: ₹223.69 Cr. contract value aligns with your typical project portfolio
-- **EMD Requirement**: ₹4.46 Cr. EMD is within manageable limits for your financial capacity
-- **Payment Structure**: Staged payment weightage provides healthy cash flow management opportunities
+- **Project Scale**: ₹273.45 Cr. contract value aligns well with your typical project portfolio
+- **EMD Requirement**: ₹2.73 Cr. EMD is within manageable limits for your financial capacity
+- **Payment Structure**: Well-distributed payment weightage across work components provides steady cash flow
 
 ### Challenges & Risk Factors
 
-#### Logistical Complexity ⚠️
+#### Operational Complexity ⚠️
 | Challenge | Impact Level | Mitigation Strategy |
 |-----------|--------------|-------------------|
-| **Remote Location** | High | Establish forward base camps in Gangtok |
-| **Material Transport** | Very High | Pre-position critical materials before monsoon |
-| **Equipment Mobilization** | High | Plan phased equipment deployment |
+| **Traffic Management** | High | Phased construction with traffic diversions |
+| **Urban Coordination** | Medium | Early stakeholder engagement in Ujjain |
+| **Utility Shifting** | Medium | Coordinate with utility agencies early |
 
-#### Environmental & Operational Risks ⚠️
-- **Weather Windows**: Limited working season (March-May, October-November)
-- **Altitude Challenges**: Operations up to 4,000m require specialized equipment and procedures
-- **Border Proximity**: Additional security clearances and compliance requirements
+#### Technical Considerations ⚠️
+- **Black Cotton Soil**: Requires specialized treatment for foundation work
+- **Mixed Pavement Types**: 27.55km flexible + 10.61km rigid pavement coordination
+- **Multiple Structures**: 40+ bridges/culverts requiring careful sequencing
 
 ### Recommendation Matrix
 
 | Criteria | Score | Rationale |
 |----------|-------|-----------|
-| **Technical Fit** | 8/10 | Strong match with core competencies |
-| **Financial Viability** | 7/10 | Appropriate scale, manageable EMD |
-| **Risk Profile** | 5/10 | High logistical complexity, environmental challenges |
-| **Strategic Value** | 7/10 | Enhances portfolio diversity, government relationship |
-| **Resource Availability** | 6/10 | Requires specialized mountain construction resources |
+| **Technical Fit** | 8/10 | Excellent match with highway upgrade experience |
+| **Financial Viability** | 8/10 | Appropriate scale, manageable EMD, good payment terms |
+| **Risk Profile** | 7/10 | Moderate risks with manageable mitigation strategies |
+| **Strategic Value** | 8/10 | Enhances MP market presence, government relationship |
+| **Resource Availability** | 7/10 | Standard highway construction resources available |
 
 ### Strategic Recommendations
 
-#### Proceed with Bid Preparation ✅
-**Rationale**: Despite logistical challenges, this project offers significant strategic value and aligns well with your technical capabilities.
+#### Proceed with Aggressive Bid ✅
+**Rationale**: Excellent strategic fit with manageable technical and financial risks. Strong potential for successful execution.
 
 #### Key Success Factors
-1. **Early Mobilization**: Begin material positioning 6 months before project start
-2. **Local Partnerships**: Establish relationships with Sikkim-based suppliers and contractors
-3. **Weather Planning**: Build detailed climate-responsive construction schedules
-4. **Risk Mitigation**: Secure comprehensive insurance for high-altitude operations
+1. **Traffic Management Plan**: Develop comprehensive phased construction approach
+2. **Utility Coordination**: Establish early partnerships with utility service providers
+3. **Material Planning**: Secure cement and aggregate sources from local Malwa region
+4. **Quality Control**: Implement robust QC for mixed pavement specifications
 
 #### Bid Strategy Recommendations
-- **Pricing**: Add 15-20% contingency for logistical complexities
-- **Timeline**: Request extended completion period to account for weather constraints
-- **Local Content**: Emphasize commitment to local employment and supplier engagement
-- **Technology**: Propose advanced project management systems for remote monitoring
+- **Competitive Pricing**: Target aggressive pricing given excellent fit
+- **Local Partnerships**: Emphasize local employment and material sourcing
+- **Technology Integration**: Propose advanced project monitoring systems
+- **Fast Track Delivery**: Highlight efficient project delivery capabilities
 
 ### Conclusion
 
-This tender represents a **moderate-to-good opportunity** with manageable risks. Your organization's technical expertise and financial capacity align well with project requirements. Success will depend on thorough planning for logistical challenges and effective risk mitigation strategies.
+This tender represents an **excellent opportunity** with strong alignment to your capabilities. The combination of favorable terrain, good material availability, and your technical expertise creates optimal conditions for successful project delivery.
 
-**Recommendation**: **PROCEED** with bid preparation, incorporating suggested risk mitigation strategies.`;
+**Recommendation**: **STRONGLY PROCEED** with bid preparation and aggressive pricing strategy.`;
 
   const siteImages = [
     { 
       id: '1', 
-      src: 'https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3176458044061348240', 
-      title: 'Rishi-Rongli-Kupup Road Overview', 
-      location: 'Sikkim Border Route', 
+      src: 'https://worldtiles1.waze.com/tiles/17/93135/56855.png?highres=true', 
+      title: 'Ujjain-Maksi Route Overview', 
+      location: 'Highway Section', 
       date: '2024-03-15',
-      link: 'https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3176458044061348240'
+      link: 'https://worldtiles1.waze.com/tiles/17/93135/56855.png?highres=true'
     },
     { 
       id: '2', 
-      src: 'https://www.team-bhp.com/forum/attachments/travelogues/1435211d1690135415t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5847.jpg', 
-      title: 'High Altitude Terrain', 
-      location: 'Kupup Area', 
+      src: 'https://worldtiles1.waze.com/tiles/17/93136/56856.png?highres=true', 
+      title: 'Road Infrastructure', 
+      location: 'Ujjain District', 
       date: '2024-03-14',
-      link: 'https://www.team-bhp.com/forum/attachments/travelogues/1435211d1690135415t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5847.jpg'
+      link: 'https://worldtiles1.waze.com/tiles/17/93136/56856.png?highres=true'
     },
     { 
       id: '3', 
-      src: 'https://www.team-bhp.com/forum/attachments/travelogues/1435202d1690135374t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5674.jpg', 
-      title: 'Mountain Road Construction', 
-      location: 'Rongli Section', 
+      src: 'https://img.staticmb.com/mbphoto/locality/original_images/2021/Dec/24/107306_MAP.png', 
+      title: 'Area Development Map', 
+      location: 'Madhya Pradesh', 
       date: '2024-03-13',
-      link: 'https://www.team-bhp.com/forum/attachments/travelogues/1435202d1690135374t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5674.jpg'
+      link: 'https://img.staticmb.com/mbphoto/locality/original_images/2021/Dec/24/107306_MAP.png'
     },
     { 
       id: '4', 
-      src: 'https://www.team-bhp.com/forum/attachments/travelogues/1435210d1690135374t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5862.jpg', 
-      title: 'Alpine Conditions', 
-      location: 'High Altitude Section', 
+      src: 'https://worldtiles1.waze.com/tiles/17/93136/56855.png?highres=true', 
+      title: 'Regional Context', 
+      location: 'Highway Corridor', 
       date: '2024-03-12',
-      link: 'https://www.team-bhp.com/forum/attachments/travelogues/1435210d1690135374t-snarl-old-silk-route-rishi-khola-gnathang-kupup-east-sikkim-icchey-gaon-img_5862.jpg'
+      link: 'https://worldtiles1.waze.com/tiles/17/93136/56855.png?highres=true'
     }
   ];
 
