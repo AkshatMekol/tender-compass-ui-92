@@ -17,7 +17,21 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('saved-date');
 
-  // New Sikkim tender card to be displayed first
+  // Current analyzed tender from the analysis page
+  const analyzedTender: Tender = {
+    id: 'ujjain-maksi-2025',
+    name: 'Upgradation of Package 12: Ujjain – Maksi Road in the state of Madhya Pradesh on Engineering, Procurement & Construction (EPC) Mode under proposed NDB Loan',
+    organisation: 'M.P. State Highway Authority',
+    amount: 273.45,
+    compatibilityScore: 77,
+    location: 'Ujjain, Madhya Pradesh',
+    deadline: '4 March 2025',
+    category: 'Road Construction',
+    workTypes: ['EPC Contract', 'Road Upgradation', 'Highway Development'],
+    savedDate: new Date().toISOString().split('T')[0]
+  };
+
+  // New Sikkim tender card to be displayed second
   const sikkimTender: Tender = {
     id: 'sikkim-road-2025',
     name: 'Construction Improvement of Rishi Rongli Kupup Road from KM 53 to KM 70',
@@ -60,8 +74,8 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
     { id: 'saved-25', name: 'Mining Safety and Environmental Monitoring System', organisation: 'Mining Department', amount: 480, compatibilityScore: 76, location: 'Jharia, JH', deadline: '19-10-2025', category: 'Mining', workTypes: ['Mining Safety', 'Environmental Monitoring', 'System'], savedDate: '2023-12-26' }
   ];
 
-  // Place Sikkim tender first, then existing saved tenders, then additional mock tenders
-  const allTenders = [sikkimTender, ...savedTenders, ...additionalMockTenders];
+  // Place analyzed tender first, then Sikkim tender, then existing saved tenders, then additional mock tenders
+  const allTenders = [analyzedTender, sikkimTender, ...savedTenders, ...additionalMockTenders];
 
   const filteredAndSortedTenders = React.useMemo(() => {
     let filtered = allTenders.filter(tender =>
