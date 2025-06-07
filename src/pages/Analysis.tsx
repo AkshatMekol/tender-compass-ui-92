@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
@@ -90,9 +91,7 @@ const Analysis = () => {
       content: `- **Diesel/Petrol Pumps**: Available  
 - **Cement Vendors**: Available  
 
-*Typical availability along major highways and near urban centers like Ujjain/Maksi.*
-
-**Current Site**: Existing 2-lane highway (7m-10m width) from km 00+000 to 38+950 spanning 38.95km in Madhya Pradesh.` 
+*Typical availability along major highways and near urban centers like Ujjain/Maksi.*` 
     }
   ];
 
@@ -607,6 +606,18 @@ This tender represents an **excellent opportunity** with strong alignment to you
               </CardContent>
             </Card>
           </div>
+
+          {/* Current Site Information Box */}
+          <Card className="shadow-lg border-0 rounded-xl bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full"></div>
+                <p className="text-gray-800 font-medium text-sm">
+                  <span className="font-semibold text-teal-700">Current Site:</span> Existing 2-lane highway (7m-10m width) from km 00+000 to 38+950 spanning 38.95km in Madhya Pradesh.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Location Insights Panel */}
           <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
