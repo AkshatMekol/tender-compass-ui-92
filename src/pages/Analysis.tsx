@@ -332,7 +332,19 @@ const Analysis = () => {
 | Water Supply Utilities | - | 71.53% |`;
 
   // Compatibility Analysis content
-  const compatibilityAnalysisContent = `### Executive Summary
+  const compatibilityAnalysisContent = `### Key Flags Assessment
+
+#### 🔴 Red Flags
+- **Tender Amount**: ₹273 Cr is at lower end of preferred range (₹200-600 Cr)
+- **Suboptimal Payment Terms**: 39% early-stage vs. 50% target may strain cash flow
+
+#### 🟢 Green Flags  
+- **Proximity**: Ongoing site in Ratlam (80 km) enables resource sharing
+- **Organisation**: Existing MPRDC relationship and political alignment
+
+---
+
+### Executive Summary
 
 **Overall Compatibility Score: 77/100** - This tender represents a good match for your organization's capabilities and strategic objectives in highway infrastructure development.
 
