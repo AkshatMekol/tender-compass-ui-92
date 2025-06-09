@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,7 +39,7 @@ const CompanyProfileTab: React.FC = () => {
   const [editData, setEditData] = useState(companyData);
 
   const workTypeOptions = ['Item-rate', 'EPC', 'HAM', 'BOT', 'Others'];
-  const authorityOptions = ['BRO', 'NHAI', 'NHIDCL', 'State PWDs', 'Municipal Corporations', 'Railways', 'Airport Authority'];
+  const authorityOptions = ['BRO', 'NHAI', 'NHIDCL', 'State PWDs', 'Municipal Corporations', 'Others'];
 
   const handleSaveProfile = () => {
     setCompanyData(editData);
