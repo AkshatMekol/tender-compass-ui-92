@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,7 +19,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
   const [selectedState, setSelectedState] = useState('all');
   const [amountRange, setAmountRange] = useState([10, 2000]);
   const [sortBy, setSortBy] = useState('score');
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
   const [todayTendersOnly, setTodayTendersOnly] = useState(false);
   const [selectedWorkType, setSelectedWorkType] = useState('EPC');
@@ -140,7 +139,11 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             <Button
               variant={todayTendersOnly ? "default" : "outline"}
               onClick={() => setTodayTendersOnly(!todayTendersOnly)}
-              className="flex items-center gap-2"
+              className={`flex items-center gap-2 ${
+                todayTendersOnly 
+                  ? 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
             >
               Today Tenders
             </Button>
@@ -148,7 +151,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             <Button
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
@@ -157,13 +160,17 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
         </div>
 
         {/* Work Type Selection */}
-        <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
+        <div className="flex gap-0 p-1 bg-gray-100 rounded-lg">
           {workTypes.map((type) => (
             <Button
               key={type}
-              variant={selectedWorkType === type ? "default" : "ghost"}
+              variant="ghost"
               onClick={() => setSelectedWorkType(type)}
-              className={`flex-1 ${selectedWorkType === type ? 'bg-white shadow-sm' : ''}`}
+              className={`flex-1 rounded-md transition-all duration-200 ${
+                selectedWorkType === type 
+                  ? 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white shadow-sm' 
+                  : 'text-gray-700 hover:bg-gray-200'
+              }`}
             >
               {type}
             </Button>
