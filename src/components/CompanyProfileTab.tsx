@@ -102,7 +102,7 @@ const CompanyProfileTab: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">🏢 Company Profile</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Company Profile</h2>
           <p className="text-gray-600">Manage your organization's information and track performance</p>
         </div>
         
@@ -533,17 +533,6 @@ const CompanyProfileTab: React.FC = () => {
                     <p className="text-sm text-gray-600">{companyData.phone}</p>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            <div>
-              <p className="text-sm font-medium text-gray-900 mb-3">Types of Work Usually Bidded</p>
-              <div className="flex flex-wrap gap-2">
-                {companyData.workTypes.map((type, index) => (
-                  <Badge key={index} variant="secondary" className="bg-teal-100 text-teal-800 hover:bg-teal-200">
-                    {type}
-                  </Badge>
-                ))}
               </div>
             </div>
           </CardContent>
