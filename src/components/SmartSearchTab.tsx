@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, MapPin, Calendar, IndianRupee, SlidersHorizontal, Save, Check, Building2 } from 'lucide-react';
+import { Search, MapPin, Calendar, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import CompatibilityScore from './CompatibilityScore';
 import { Tender } from '../types/tender';
 
@@ -17,16 +17,19 @@ interface SmartSearchTabProps {
 const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrganisation, setSelectedOrganisation] = useState('all');
-  const [selectedOrgType, setSelectedOrgType] = useState('all');
-  const [selectedOwnership, setSelectedOwnership] = useState('all');
   const [selectedState, setSelectedState] = useState('all');
-  const [amountLowerLimit, setAmountLowerLimit] = useState('');
-  const [amountUpperLimit, setAmountUpperLimit] = useState('');
+  const [amountRange, setAmountRange] = useState([10, 2000]);
   const [sortBy, setSortBy] = useState('score');
   const [showFilters, setShowFilters] = useState(true);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
+  const [todayTendersOnly, setTodayTendersOnly] = useState(false);
+  const [selectedWorkType, setSelectedWorkType] = useState('EPC');
+  const [currentPage, setCurrentPage] = useState(1);
+  const tendersPerPage = 10;
 
-  // 20 mock tenders with realistic variations
+  const workTypes = ['Item-rate', 'EPC', 'HAM', 'BOT', 'Others'];
+
+  // Mock tenders with realistic variations
   const mockTenders: Tender[] = [
     { id: '1', name: 'Development, Operations And Maintenance Of Innovative Urban Ropeway Transport Network In Shimla Project (Phase 2)', organisation: 'Himachal Pradesh PWD', amount: 3500, compatibilityScore: 95, location: 'Shimla, HP', deadline: '02-06-2025', category: 'Development', workTypes: ['Transport', 'Infrastructure', 'Urban Development'] },
     { id: '2', name: 'Construction Of New 4 Lane Highway With Paved Shoulder From Dareota Village To Kalar Bala Village', organisation: 'NHAI', amount: 622, compatibilityScore: 88, location: 'Himachal Pradesh', deadline: '12-06-2025', category: 'Highway', workTypes: ['Road Construction', 'Highway', 'Pavement'] },
@@ -51,27 +54,20 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
   ];
 
   const organisations = Array.from(new Set(mockTenders.map(t => t.organisation)));
-  const organisationTypes = ['Government', 'PSU', 'Private', 'Autonomous Body', 'Corporation'];
-  const ownershipTypes = ['Central', 'State', 'Municipal', 'Private', 'Joint Venture'];
   const states = ['Himachal Pradesh', 'Delhi', 'Maharashtra', 'Karnataka', 'Tamil Nadu', 'Rajasthan', 'Kerala', 'Haryana', 'Uttar Pradesh', 'West Bengal', 'Telangana', 'Andhra Pradesh', 'Gujarat', 'Bihar', 'Odisha', 'Assam', 'Madhya Pradesh'];
 
   const filteredAndSortedTenders = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    
     let filtered = mockTenders.filter(tender => {
       const matchesSearch = tender.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            tender.organisation.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            tender.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesOrg = selectedOrganisation === 'all' || tender.organisation === selectedOrganisation;
+      const matchesAmount = tender.amount >= amountRange[0] && tender.amount <= amountRange[1];
+      const matchesToday = !todayTendersOnly || tender.deadline === today;
       
-      // Amount filtering with lower and upper limits
-      let matchesAmount = true;
-      if (amountLowerLimit && !isNaN(Number(amountLowerLimit))) {
-        matchesAmount = matchesAmount && tender.amount >= Number(amountLowerLimit);
-      }
-      if (amountUpperLimit && !isNaN(Number(amountUpperLimit))) {
-        matchesAmount = matchesAmount && tender.amount <= Number(amountUpperLimit);
-      }
-      
-      return matchesSearch && matchesOrg && matchesAmount;
+      return matchesSearch && matchesOrg && matchesAmount && matchesToday;
     });
 
     filtered.sort((a, b) => {
@@ -88,7 +84,11 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     });
 
     return filtered;
-  }, [searchTerm, selectedOrganisation, amountLowerLimit, amountUpperLimit, sortBy]);
+  }, [searchTerm, selectedOrganisation, amountRange, sortBy, todayTendersOnly]);
+
+  const totalPages = Math.ceil(filteredAndSortedTenders.length / tendersPerPage);
+  const startIndex = (currentPage - 1) * tendersPerPage;
+  const currentTenders = filteredAndSortedTenders.slice(startIndex, startIndex + tendersPerPage);
 
   const formatAmount = (amount: number) => {
     if (amount >= 100) {
@@ -106,7 +106,6 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     onSaveTender(tenderWithSaveDate);
     setSavedTenders(prev => new Set([...prev, tender.id]));
     
-    // Remove from saved state after 2 seconds to allow re-saving
     setTimeout(() => {
       setSavedTenders(prev => {
         const newSet = new Set(prev);
@@ -114,6 +113,18 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
         return newSet;
       });
     }, 2000);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -125,14 +136,38 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             <p className="text-gray-600">Discover and analyze relevant tenders</p>
           </div>
           
-          <Button
-            variant="outline"
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            Filters
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant={todayTendersOnly ? "default" : "outline"}
+              onClick={() => setTodayTendersOnly(!todayTendersOnly)}
+              className="flex items-center gap-2"
+            >
+              Today Tenders
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              Filters
+            </Button>
+          </div>
+        </div>
+
+        {/* Work Type Selection */}
+        <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
+          {workTypes.map((type) => (
+            <Button
+              key={type}
+              variant={selectedWorkType === type ? "default" : "ghost"}
+              onClick={() => setSelectedWorkType(type)}
+              className={`flex-1 ${selectedWorkType === type ? 'bg-white shadow-sm' : ''}`}
+            >
+              {type}
+            </Button>
+          ))}
         </div>
 
         <div className="relative">
@@ -147,7 +182,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
 
         {showFilters && (
           <Card className="p-4 bg-gray-50 rounded-xl border-2 border-gray-100">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Organisation</label>
                 <Select value={selectedOrganisation} onValueChange={setSelectedOrganisation}>
@@ -158,36 +193,6 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
                     <SelectItem value="all">All Organisations</SelectItem>
                     {organisations.map(org => (
                       <SelectItem key={org} value={org}>{org}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Organisation Type</label>
-                <Select value={selectedOrgType} onValueChange={setSelectedOrgType}>
-                  <SelectTrigger className="rounded-lg">
-                    <SelectValue placeholder="All Types" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {organisationTypes.map(type => (
-                      <SelectItem key={type} value={type}>{type}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Ownership</label>
-                <Select value={selectedOwnership} onValueChange={setSelectedOwnership}>
-                  <SelectTrigger className="rounded-lg">
-                    <SelectValue placeholder="All Ownership" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Ownership</SelectItem>
-                    {ownershipTypes.map(ownership => (
-                      <SelectItem key={ownership} value={ownership}>{ownership}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -209,26 +214,6 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Amount Range (₹ Cr.)</label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Min"
-                    value={amountLowerLimit}
-                    onChange={(e) => setAmountLowerLimit(e.target.value)}
-                    className="rounded-lg"
-                    type="number"
-                  />
-                  <Input
-                    placeholder="Max"
-                    value={amountUpperLimit}
-                    onChange={(e) => setAmountUpperLimit(e.target.value)}
-                    className="rounded-lg"
-                    type="number"
-                  />
-                </div>
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="rounded-lg">
@@ -242,10 +227,19 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
                 </Select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Results</label>
-                <div className="text-sm text-gray-600 bg-white rounded-lg p-2 border">
-                  {filteredAndSortedTenders.length} of {mockTenders.length} tenders
+              <div className="md:col-span-2 lg:col-span-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Amount Range: ₹{amountRange[0]} Cr - ₹{amountRange[1]} Cr
+                </label>
+                <div className="px-2">
+                  <Slider
+                    value={amountRange}
+                    onValueChange={setAmountRange}
+                    max={2000}
+                    min={10}
+                    step={10}
+                    className="w-full"
+                  />
                 </div>
               </div>
             </div>
@@ -255,7 +249,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
 
       <div className="flex-1 px-6 pb-6 overflow-hidden">
         <div className="h-full overflow-y-auto space-y-4 pr-2">
-          {filteredAndSortedTenders.map((tender) => (
+          {currentTenders.map((tender) => (
             <Card key={tender.id} className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -333,7 +327,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             </Card>
           ))}
 
-          {filteredAndSortedTenders.length === 0 && (
+          {currentTenders.length === 0 && (
             <div className="text-center py-12">
               <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No tenders found</h3>
@@ -341,6 +335,37 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {filteredAndSortedTenders.length > 0 && (
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className="flex items-center gap-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </Button>
+              
+              <span className="text-sm text-gray-600 px-3">
+                Page {currentPage} of {totalPages}
+              </span>
+              
+              <Button
+                variant="outline"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-2"
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
