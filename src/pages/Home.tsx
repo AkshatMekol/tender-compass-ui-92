@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,18 +15,18 @@ const Home = () => {
     },
     {
       icon: BarChart3,
-      title: "Market Analytics",
-      description: "Get insights into tender trends and competitive landscape"
+      title: "Tender Compatibility",
+      description: "Get the compatibility between your company and tender"
     },
     {
       icon: Shield,
-      title: "Compliance Tracking",
+      title: "Deep Tender Insights and Knowledge",
       description: "Stay updated with regulatory requirements and deadlines"
     },
     {
       icon: Users,
-      title: "Team Collaboration",
-      description: "Work together with your team on tender preparations"
+      title: "Tender Tracking",
+      description: "Shortlist and win your favourite tenders"
     }
   ];
 
@@ -116,9 +115,13 @@ const Home = () => {
             <Button
               size="lg"
               variant="outline"
-              className="px-8 py-4 text-lg border-2 hover:bg-gray-50"
+              onClick={() => {
+                // You can add schedule demo functionality here
+                console.log('Schedule Demo clicked');
+              }}
+              className="px-8 py-4 text-lg border-2 hover:bg-gray-50 bg-white"
             >
-              Watch Demo
+              Schedule Demo
             </Button>
           </div>
         </div>
@@ -267,7 +270,11 @@ const Home = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-2 border-white text-white hover:bg-white hover:text-teal-600 px-8 py-4 text-lg"
+              onClick={() => {
+                // You can add schedule demo functionality here
+                console.log('Schedule Demo clicked');
+              }}
+              className="border-2 border-white text-white hover:bg-white hover:text-teal-600 px-8 py-4 text-lg bg-transparent"
             >
               Schedule Demo
             </Button>
