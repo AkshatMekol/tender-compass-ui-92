@@ -6,7 +6,7 @@ import {
   FileText, 
   Folder,
   Building2,
-  GitCompare,
+  // Removed: GitCompare,
   Bell,
   Settings,
   LogOut,
@@ -21,12 +21,13 @@ interface AppSidebarProps {
 }
 
 const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogout }) => {
+  // Removed Dashboard and Compare Tenders tab
   const sidebarItems = [
-    { icon: BarChart3, label: 'Dashboard', key: 'dashboard' },
+    // { icon: BarChart3, label: 'Dashboard', key: 'dashboard' },
     { icon: Search, label: 'Smart Search', key: 'smart-search' },
     { icon: Folder, label: 'My Tenders', key: 'my-tenders' },
     { icon: Building2, label: 'Company Profile', key: 'company-profile' },
-    { icon: GitCompare, label: 'Compare Tenders', key: 'compare-tenders' },
+    // { icon: GitCompare, label: 'Compare Tenders', key: 'compare-tenders' },
     { icon: MessageSquare, label: 'Feedback', key: 'feedback' },
   ];
 
