@@ -17,10 +17,9 @@ const Index = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [savedTenders, setSavedTenders] = useState<Tender[]>([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Simple auth state
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated (you can implement proper auth logic here)
     const authStatus = localStorage.getItem('isAuthenticated');
     if (!authStatus) {
       navigate('/login');
@@ -76,7 +75,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex w-full bg-gray-50">
+    <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-400/20 to-teal-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-orange-400/10 to-red-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
       {/* Fixed Sidebar - spans entire page height */}
       <div className="fixed left-0 top-0 bottom-0 h-screen z-10">
         <AppSidebar 
@@ -88,7 +94,7 @@ const Index = () => {
       
       {/* Main Content with left margin to account for fixed sidebar */}
       <div className="flex-1 ml-64">
-        <div className="h-screen overflow-y-auto">
+        <div className="h-screen overflow-y-auto relative z-10">
           {renderActiveTab()}
         </div>
       </div>
