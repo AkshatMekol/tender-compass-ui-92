@@ -256,6 +256,7 @@ const CompanyProfileTab: React.FC = () => {
     },
   ];
 
+  // Remove this once recent tender logic is done
   const formatAmount = (amount: number) => {
     if (amount >= 100) {
       return `₹${amount.toFixed(2)} Cr.`;

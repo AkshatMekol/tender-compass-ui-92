@@ -180,14 +180,6 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
     startIndex + tendersPerPage
   );
 
-  const formatAmount = (amount: number) => {
-    if (amount >= 100) {
-      return `₹${amount.toFixed(2)} Cr.`;
-    } else {
-      return `₹${(amount * 10).toFixed(2)} L.`;
-    }
-  };
-
   const handleSaveTender = (tender: Tender) => {
     const tenderWithSaveDate = {
       ...tender,
@@ -412,11 +404,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                       <div className="flex items-center text-sm text-gray-600">
                         <IndianRupee className="w-4 h-4 mr-2" />
                         <span className="font-medium">
-                          {tender?.estimatedCost
-                            ? formatAmount(
-                                parseEstimatedCost(tender?.estimatedCost)
-                              )
-                            : ""}
+                          {tender?.estimatedCost ? tender.estimatedCost : ""}
                         </span>
                       </div>
 
