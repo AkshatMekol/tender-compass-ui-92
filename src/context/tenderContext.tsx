@@ -7,6 +7,7 @@ import React, {
 } from "react";
 
 import { toCamelCase } from "@/helpers";
+import { useUser } from "./userContext";
 
 export type Tender = {
   _id: string;
@@ -91,15 +92,17 @@ export const TenderProvider = ({ children }: { children: ReactNode }) => {
   const [tenders, setTenders] = useState<Tender[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
 
   useEffect(() => {
+    if (!user) return;
     const fetchData = async () => {
       try {
         const [tendersRes, scoresRes] = await Promise.all([
           fetch("http://localhost:8000/api/tenders", {
             credentials: "include",
           }),
-          fetch("http://localhost:8000/api/compatibility", {
+          fetch("http://localhost:8000/api/compatibility/user", {
             credentials: "include",
           }),
         ]);
@@ -146,7 +149,7 @@ export const TenderProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
     <TenderContext.Provider value={{ tenders, loading, error }}>
