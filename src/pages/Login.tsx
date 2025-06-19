@@ -7,7 +7,7 @@ const Login = () => {
   const handleLogin = () => {
     console.log("Logged in! 2");
 
-    navigate("/dashboard");
+    navigate("/smart-search");
   };
 
   return <LoginPage onLogin={handleLogin} />;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppSidebar from "../components/AppSidebar";
-import Dashboard from "../components/Dashboard";
+// import Dashboard from "../components/Dashboard";
 import SmartSearchTab from "../components/SmartSearchTab";
 import InsightsTab from "../components/InsightsTab";
 import MyTendersTab from "../components/MyTendersTab";
@@ -15,7 +15,7 @@ import { Tender } from "@/context/tenderContext";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("smart-search");
   const [savedTenders, setSavedTenders] = useState<Tender[]>([]);
 
   const { logout } = useUser();

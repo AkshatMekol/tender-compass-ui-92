@@ -30,7 +30,7 @@ const App = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route
-                    path="/dashboard"
+                    path="/smart-search"
                     element={
                       <ProtectedRoute>
                         <Index />

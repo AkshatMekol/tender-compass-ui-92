@@ -23,7 +23,7 @@ export type Tender = {
   type: string;
   zipFileId: string;
   metadata: Record<string, string | null>;
-  compatibilityScore: number | null;
+  compatibilityScore: number;
   compatibilityAnalysis: string | null;
   estimatedCost: string | null;
 };
@@ -88,6 +88,29 @@ const defaultTender = {
 
 const TenderContext = createContext<TenderContextType | undefined>(undefined);
 
+function normalizeCompatibilityScore(s: number, min: number, max: number) {
+  console.log("Min/Max Scores:", min, max);
+  const percentage = ((s - min) / (max - min)) * 100;
+  console.log("Normalized Score:", percentage);
+  return Math.round(percentage * 100) / 100;
+}
+
+function getMinMaxScores(tenders: Tender[]) {
+  const scores = tenders
+    .map((tender) => tender.compatibilityScore)
+    .filter((score) => score !== null);
+
+  if (scores.length === 0) return { min: 0, max: 100 };
+
+  const minScore = Math.min(...scores);
+  const maxScore = Math.max(...scores);
+
+  return {
+    min: minScore,
+    max: maxScore,
+  };
+}
+
 export const TenderProvider = ({ children }: { children: ReactNode }) => {
   const [tenders, setTenders] = useState<Tender[]>([]);
   const [loading, setLoading] = useState(true);
@@ -138,7 +161,16 @@ export const TenderProvider = ({ children }: { children: ReactNode }) => {
           };
         });
 
-        setTenders(enrichedTenders);
+        const { min, max } = getMinMaxScores(enrichedTenders);
+        enrichedTenders.forEach((tender: Tender) => {
+          if (tender.compatibilityScore !== null) {
+            tender.compatibilityScore = normalizeCompatibilityScore(
+              tender.compatibilityScore,
+              min,
+              max
+            );
+          }
+        });
 
         setTenders(enrichedTenders);
       } catch (err: any) {

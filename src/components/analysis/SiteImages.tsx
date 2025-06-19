@@ -3,17 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, ZoomIn } from "lucide-react";
 
 const SiteImages = ({ tenderData }: { tenderData: Tender }) => {
-  // const [selectedImage, setSelectedImage] = useState<any>(null);
-
-  //   const siteImages = [
-  //     {
-  //       id: "1",
-  //       src: "https://worldtiles1.waze.com/tiles/17/93135/56855.png?highres=true",
-  //       title: "EPC Project Site",
-  //       location: "Project Area",
-  //       date: "2024-03-15",
-  //     },
-  //   ];
+  if (
+    !tenderData?.metadata?.locationImages ||
+    tenderData.metadata.locationImages.length === 0
+  ) {
+    return null; // Return null if no images are available
+  }
 
   return (
     <>
@@ -67,36 +62,3 @@ const SiteImages = ({ tenderData }: { tenderData: Tender }) => {
   );
 };
 export default SiteImages;
-
-{
-  /* <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">
-                Site Images Gallery
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {siteImages.map((image) => (
-                  <div
-                    key={image.id}
-                    className="relative group cursor-pointer rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="aspect-square overflow-hidden">
-                      <img
-                        src={image.src}
-                        alt={image.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                      />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <h4 className="font-medium text-xs truncate">
-                        {image.title}
-                      </h4>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card> */
-}

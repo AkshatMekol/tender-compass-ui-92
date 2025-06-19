@@ -29,11 +29,11 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   const { toast } = useToast();
 
   const sidebarItems = [
-    { icon: BarChart3, label: "Dashboard", key: "dashboard" },
+    // { icon: BarChart3, label: "Dashboard", key: "dashboard" },
     { icon: Search, label: "Smart Search", key: "smart-search" },
     { icon: Folder, label: "My Tenders", key: "my-tenders" },
     { icon: Building2, label: "Company Profile", key: "company-profile" },
-    { icon: GitCompare, label: "Compare Tenders", key: "compare-tenders" },
+    // { icon: GitCompare, label: "Compare Tenders", key: "compare-tenders" },
     { icon: MessageSquare, label: "Feedback", key: "feedback" },
   ];
 

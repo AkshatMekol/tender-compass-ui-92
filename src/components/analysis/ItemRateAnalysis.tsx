@@ -12,6 +12,7 @@ import LocationInsights from "./LocationInsights";
 import CompatibilityAnalysis from "./CompatibilityAnalysis";
 import SiteImages from "./SiteImages";
 import BOQRenderer from "./BOQRenderer";
+import { isObjEmpty } from "@/helpers";
 
 const ItemRateAnalysis = ({ tenderData }: { tenderData: Tender }) => {
   const navigate = useNavigate();
@@ -65,38 +66,77 @@ const ItemRateAnalysis = ({ tenderData }: { tenderData: Tender }) => {
           <LocationInsights tenderData={tenderData} />
 
           {/* Nature of Work Section */}
-          <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">
-                Nature of Work
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="road-composition">
-                <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 rounded-xl p-1">
-                  <TabsTrigger value="road-composition" className="rounded-lg">
-                    Road Composition
-                  </TabsTrigger>
-                  <TabsTrigger value="structures-work" className="rounded-lg">
-                    Structures Work
-                  </TabsTrigger>
-                  <TabsTrigger value="road-safety" className="rounded-lg">
-                    Road Safety
-                  </TabsTrigger>
-                </TabsList>
+          {!Object.values(workCategories).every(isObjEmpty) && (
+            <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-gray-900">
+                  Nature of Work
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="road-composition">
+                  <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-6 bg-gray-100 rounded-xl p-1">
+                    <TabsTrigger
+                      value="road-composition"
+                      className="rounded-lg text-xs"
+                    >
+                      Road Composition
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="structures-work"
+                      className="rounded-lg text-xs"
+                    >
+                      Structures Work
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="protection-work"
+                      className="rounded-lg text-xs"
+                    >
+                      Protection Work
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="roadside-drainage"
+                      className="rounded-lg text-xs"
+                    >
+                      Roadside Drainage
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="intersections-grade"
+                      className="rounded-lg text-xs"
+                    >
+                      Intersections
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="road-safety"
+                      className="rounded-lg text-xs"
+                    >
+                      Road Safety
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="utilities"
+                      className="rounded-lg text-xs"
+                    >
+                      Utilities
+                    </TabsTrigger>
+                  </TabsList>
 
-                {Object.entries(workCategories).map(([category, content]) => (
-                  <TabsContent key={category} value={category} className="mt-0">
-                    <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-200">
-                      <ScrollArea className="h-96 p-6">
-                        <MarkdownRenderer content={content} />
-                      </ScrollArea>
-                    </div>
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </CardContent>
-          </Card>
+                  {Object.entries(workCategories).map(([category, content]) => (
+                    <TabsContent
+                      key={category}
+                      value={category}
+                      className="mt-0"
+                    >
+                      <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-200">
+                        <ScrollArea className="h-96 p-6">
+                          <MarkdownRenderer content={content} />
+                        </ScrollArea>
+                      </div>
+                    </TabsContent>
+                  ))}
+                </Tabs>
+              </CardContent>
+            </Card>
+          )}
 
           {/* BOQ Section (instead of Payment Weightage) */}
           <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">

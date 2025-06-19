@@ -42,3 +42,17 @@ export function toCamelCase(str: string): string {
   // Add back the leading underscore if it was there originally
   return startsWithUnderscore ? "_" + camelCased : camelCased;
 }
+
+export function normalizeAmount(input: string) {
+  const match = input.match(/[\d,.]+(?:\.\d+)?\s*Cr/i);
+  return match ? match[0].replace(",", "").trim() : "";
+}
+
+export const isObjEmpty = (val) =>
+  val === undefined ||
+  val === null ||
+  (typeof val === "string" && val.trim() === "") ||
+  (Array.isArray(val) && val.length === 0) ||
+  (typeof val === "object" &&
+    !Array.isArray(val) &&
+    Object.keys(val).length === 0);

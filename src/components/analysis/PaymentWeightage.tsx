@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MarkdownRenderer from "@/components/analysis/MarkdownRenderer";
 
 const PaymentWeightage = ({ tenderData }: { tenderData: Tender }) => {
+  if (!tenderData?.metadata?.paymentWeightage) return null;
   return (
     <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
       <CardHeader>

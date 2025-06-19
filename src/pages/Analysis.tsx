@@ -62,7 +62,7 @@ const Analysis = () => {
       case "OTHERS":
         return <OthersAnalysis tenderData={tender} />;
       default:
-        return <ItemRateAnalysis tenderData={tender} />;
+        return <OthersAnalysis tenderData={tender} />;
     }
   };
 

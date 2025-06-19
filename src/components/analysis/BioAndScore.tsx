@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
 import TruncatedText from "./TurncatedText";
 import { TrendingUp, Target, AlertTriangle } from "lucide-react";
+import { normalizeAmount } from "@/helpers";
 
 const BioAndScore = ({
   tenderData,
@@ -105,13 +106,13 @@ const BioAndScore = ({
                 Estimated Cost
               </p>
               <p className="font-semibold text-teal-700 text-sm">
-                ₹{tenderData?.estimatedCost}
+                ₹{normalizeAmount(tenderData?.estimatedCost)}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">EMD</p>
               <p className="font-medium text-gray-700 text-sm">
-                ₹{tenderData?.emd}
+                ₹{normalizeAmount(tenderData?.emd)}
               </p>
             </div>
             <div>
@@ -132,9 +133,9 @@ const BioAndScore = ({
               <p className="text-sm font-medium text-gray-500 mb-1">
                 Download Documents
               </p>
-              {tenderData?.downloadDocuments && (
+              {tenderData?.website && (
                 <a
-                  href={tenderData?.downloadDocuments}
+                  href={tenderData?.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-blue-600 hover:text-blue-800 text-sm flex items-center"

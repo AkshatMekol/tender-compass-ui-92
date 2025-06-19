@@ -24,6 +24,7 @@ import {
 import CompatibilityScore from "./CompatibilityScore";
 import { Tender } from "../context/tenderContext";
 import { useTenderContext } from "../context/tenderContext";
+import { normalizeAmount } from "@/helpers";
 
 interface SmartSearchTabProps {
   onAnalyze: (id: string) => void;
@@ -75,14 +76,16 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
 
       let matchesAmount = false;
 
-      if (!tender.estimatedCost) {
+      if (!normalizeAmount(tender.estimatedCost)) {
         matchesAmount = true;
       } else {
         matchesAmount =
           !amountRange ||
           amountRange.length !== 2 ||
-          (parseEstimatedCost(tender.estimatedCost) >= amountRange[0] &&
-            parseEstimatedCost(tender.estimatedCost) <= amountRange[1]);
+          (parseEstimatedCost(normalizeAmount(tender.estimatedCost)) >=
+            amountRange[0] &&
+            parseEstimatedCost(normalizeAmount(tender.estimatedCost)) <=
+              amountRange[1]);
       }
 
       const matchesToday = !todayTendersOnly || tender.submissionDate === today;
@@ -387,7 +390,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                       </div>
 
                       <div className="flex-shrink-0">
-                        {tender?.compatibilityAnalysis ? (
+                        {/* {tender?.compatibilityScore ? (
                           <CompatibilityScore
                             score={tender?.compatibilityScore}
                             showTooltip={false}
@@ -396,7 +399,11 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                           <p className="text-sm text-gray-500 italic mt-auto">
                             Score not available
                           </p>
-                        )}
+                        )} */}
+                        <CompatibilityScore
+                          score={tender?.compatibilityScore}
+                          showTooltip={false}
+                        />
                       </div>
                     </div>
 
@@ -404,7 +411,9 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                       <div className="flex items-center text-sm text-gray-600">
                         <IndianRupee className="w-4 h-4 mr-2" />
                         <span className="font-medium">
-                          {tender?.estimatedCost ? tender.estimatedCost : ""}
+                          {tender?.estimatedCost
+                            ? normalizeAmount(tender.estimatedCost)
+                            : ""}
                         </span>
                       </div>
 

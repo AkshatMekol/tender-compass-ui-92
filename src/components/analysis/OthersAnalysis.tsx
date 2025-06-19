@@ -5,6 +5,7 @@ import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Tender } from "@/context/tenderContext";
 import BioAndScore from "./BioAndScore";
 import SiteImages from "./SiteImages";
+import LocationInsights from "./LocationInsights";
 
 const OthersAnalysis = ({ tenderData }: { tenderData: Tender }) => {
   const navigate = useNavigate();
@@ -30,6 +31,9 @@ const OthersAnalysis = ({ tenderData }: { tenderData: Tender }) => {
 
           {/* Tender Bio & Compatibility Score Unavailable */}
           <BioAndScore tenderData={tenderData} isOthers={true} />
+
+          {/* Location Insights Panel */}
+          <LocationInsights tenderData={tenderData} />
 
           {/* Limited Information Notice */}
 
