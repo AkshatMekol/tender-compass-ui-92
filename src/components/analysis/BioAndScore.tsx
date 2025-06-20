@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
 import TruncatedText from "./TurncatedText";
 import { TrendingUp, Target, AlertTriangle } from "lucide-react";
-import { normalizeAmount } from "@/helpers";
+import { normalizeAmount, calcDaysLeft } from "@/helpers";
 
 const BioAndScore = ({
   tenderData,
@@ -41,13 +41,7 @@ const BioAndScore = ({
     circumference - (tenderData.compatibilityScore / 100) * circumference;
 
   // Calculate days left
-  let daysLeft = null;
-  if (tenderData?.submissionDate) {
-    const submissionDate = new Date(tenderData?.submissionDate);
-    const today = new Date();
-    const timeDiff = submissionDate.getTime() - today.getTime();
-    daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  }
+  const daysLeft = calcDaysLeft(tenderData?.submissionDate);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -59,20 +53,23 @@ const BioAndScore = ({
             </CardTitle>
             <div className="text-right">
               <div
-                className={`text-lg font-bold ${
+                className={`text-sm ${
                   daysLeft > 30
                     ? "text-green-600"
                     : daysLeft > 7
                     ? "text-yellow-600"
-                    : "text-red-600"
+                    : daysLeft > 0
+                    ? "text-red-600"
+                    : "text-gray-500"
                 }`}
               >
-                {daysLeft
+                {typeof daysLeft === "number"
                   ? daysLeft > 0
                     ? `${daysLeft} days left`
                     : "Deadline passed"
                   : ""}
               </div>
+
               <div className="text-sm text-gray-500">
                 {" "}
                 {daysLeft ? "to submit" : ""}
@@ -118,7 +115,8 @@ const BioAndScore = ({
             <div>
               <p className="text-sm font-medium text-gray-500 mb-1">Length</p>
               <p className="font-medium text-gray-700 text-sm">
-                {tenderData?.metadata?.length}
+                {tenderData?.metadata?.length &&
+                  `${tenderData?.metadata?.length} km`}
               </p>
             </div>
             <div>
@@ -126,7 +124,7 @@ const BioAndScore = ({
               <p className="font-medium text-gray-700 text-sm">
                 {tenderData?.metadata?.type === "EPC Contract"
                   ? "EPC"
-                  : tenderData?.metadata?.type}
+                  : tenderData?.metadata?.type.toUpperCase()}
               </p>
             </div>
             <div>

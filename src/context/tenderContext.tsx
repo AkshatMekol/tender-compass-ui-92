@@ -89,9 +89,7 @@ const defaultTender = {
 const TenderContext = createContext<TenderContextType | undefined>(undefined);
 
 function normalizeCompatibilityScore(s: number, min: number, max: number) {
-  console.log("Min/Max Scores:", min, max);
   const percentage = ((s - min) / (max - min)) * 100;
-  console.log("Normalized Score:", percentage);
   return Math.round(percentage * 100) / 100;
 }
 

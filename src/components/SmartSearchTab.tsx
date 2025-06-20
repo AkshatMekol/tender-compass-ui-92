@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,8 @@ import {
 import CompatibilityScore from "./CompatibilityScore";
 import { Tender } from "../context/tenderContext";
 import { useTenderContext } from "../context/tenderContext";
-import { normalizeAmount } from "@/helpers";
+import { normalizeAmount, calcDaysLeft } from "@/helpers";
+import { saveFiltersToStorage, getFiltersFromStorage } from "@/helpers";
 
 interface SmartSearchTabProps {
   onAnalyze: (id: string) => void;
@@ -35,19 +36,58 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
   onAnalyze,
   onSaveTender,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedOrganisation, setSelectedOrganisation] = useState("all");
-  const [selectedState, setSelectedState] = useState("all");
-  const [amountRange, setAmountRange] = useState([10, 2000]);
-  const [sortBy, setSortBy] = useState("score");
+  const initialFilters = getFiltersFromStorage() || {};
+
+  const [searchTerm, setSearchTerm] = useState(
+    () => initialFilters.searchTerm || ""
+  );
+  const [selectedOrganisation, setSelectedOrganisation] = useState(
+    () => initialFilters.selectedOrganisation || "all"
+  );
+  const [selectedState, setSelectedState] = useState(
+    () => initialFilters.selectedState || "all"
+  );
+  const [amountRange, setAmountRange] = useState<[number, number]>(
+    () => initialFilters.amountRange || [10, 2000]
+  );
+  const [sortBy, setSortBy] = useState(() => initialFilters.sortBy || "score");
   const [showFilters, setShowFilters] = useState(false);
+  const [todayTendersOnly, setTodayTendersOnly] = useState(
+    () => initialFilters.todayTendersOnly || false
+  );
+  const [selectedWorkType, setSelectedWorkType] = useState(
+    () => initialFilters.selectedWorkType || "EPC"
+  );
+  const [currentPage, setCurrentPage] = useState(
+    () => initialFilters.currentPage || 1
+  );
+
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
-  const [todayTendersOnly, setTodayTendersOnly] = useState(false);
-  const [selectedWorkType, setSelectedWorkType] = useState("EPC");
-  const [currentPage, setCurrentPage] = useState(1);
   const tendersPerPage = 10;
 
   const { tenders, loading, error } = useTenderContext();
+
+  useEffect(() => {
+    saveFiltersToStorage({
+      searchTerm,
+      selectedOrganisation,
+      selectedState,
+      amountRange,
+      sortBy,
+      todayTendersOnly,
+      selectedWorkType,
+      currentPage,
+    });
+  }, [
+    searchTerm,
+    selectedOrganisation,
+    selectedState,
+    amountRange,
+    sortBy,
+    todayTendersOnly,
+    selectedWorkType,
+    currentPage,
+  ]);
 
   function parseEstimatedCost(costStr: string) {
     const match = costStr.match(/([\d,.]+)\s*Cr\.?/i);
@@ -357,112 +397,131 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
 
       <div className="flex-1 px-6 pb-6 overflow-hidden">
         <div className="h-full overflow-y-auto space-y-4 pr-2">
-          {currentTenders.map((tender) => (
-            <Card
-              key={tender._id}
-              className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md"
-            >
-              <CardContent className="p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1 pr-4">
-                        <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-2">
-                          {tender?.bio?.length > 250
-                            ? `${tender.bio.slice(0, 250)}...`
-                            : tender?.bio}
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-2">
-                          {tender?.organization}
-                        </p>
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {/* {tender.workTypes
-                            .slice(0, 3)
-                            .map((workType, index) => ( */}
-                          <span
-                            // key={index}
-                            className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
-                          >
-                            {tender?.metadata?.type}
-                          </span>
-                          {/* ))} */}
+          {currentTenders.map((tender) => {
+            const daysLeft = calcDaysLeft(tender?.submissionDate);
+            return (
+              <Card
+                key={tender._id}
+                className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md"
+              >
+                <CardContent className="p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1 pr-4">
+                          <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-2">
+                            {tender?.bio?.length > 250
+                              ? `${tender.bio.slice(0, 250)}...`
+                              : tender?.bio}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-2">
+                            {tender?.organization}
+                          </p>
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {/* {tender.workTypes
+                              .slice(0, 3)
+                              .map((workType, index) => ( */}
+                            <span
+                              // key={index}
+                              className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                            >
+                              {tender?.metadata?.type}
+                            </span>
+                            {/* ))} */}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="flex-shrink-0">
-                        {/* {tender?.compatibilityScore ? (
+                        <div className="flex-shrink-0">
+                          {/* {tender?.compatibilityScore ? (
+                            <CompatibilityScore
+                              score={tender?.compatibilityScore}
+                              showTooltip={false}
+                            />
+                          ) : (
+                            <p className="text-sm text-gray-500 italic mt-auto">
+                              Score not available
+                            </p>
+                          )} */}
                           <CompatibilityScore
                             score={tender?.compatibilityScore}
                             showTooltip={false}
                           />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <IndianRupee className="w-4 h-4 mr-2" />
+                          <span className="font-medium">
+                            {tender?.estimatedCost
+                              ? normalizeAmount(tender.estimatedCost)
+                              : ""}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center text-sm text-gray-600">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          <span>{tender?.location}</span>
+                        </div>
+
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Calendar className="w-4 h-4 mr-2" />
+                          <span
+                            className={`text-sm ${
+                              daysLeft > 30
+                                ? "text-green-600"
+                                : daysLeft > 7
+                                ? "text-yellow-600"
+                                : daysLeft > 0
+                                ? "text-red-600"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {typeof daysLeft === "number"
+                              ? daysLeft > 0
+                                ? `${daysLeft} days left`
+                                : "Deadline passed"
+                              : ""}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button
+                        onClick={() => onAnalyze(tender._id)}
+                        className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200"
+                      >
+                        Analyse
+                      </Button>
+
+                      <Button
+                        onClick={() => handleSaveTender(tender)}
+                        variant="outline"
+                        className={`border-teal-200 rounded-lg transition-all duration-200 ${
+                          savedTenders.has(tender._id)
+                            ? "bg-green-50 text-green-700 border-green-200"
+                            : "text-teal-700 hover:bg-teal-50"
+                        }`}
+                      >
+                        {savedTenders.has(tender._id) ? (
+                          <>
+                            <Check className="w-4 h-4 mr-2" />
+                            Saved
+                          </>
                         ) : (
-                          <p className="text-sm text-gray-500 italic mt-auto">
-                            Score not available
-                          </p>
-                        )} */}
-                        <CompatibilityScore
-                          score={tender?.compatibilityScore}
-                          showTooltip={false}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <IndianRupee className="w-4 h-4 mr-2" />
-                        <span className="font-medium">
-                          {tender?.estimatedCost
-                            ? normalizeAmount(tender.estimatedCost)
-                            : ""}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center text-sm text-gray-600">
-                        <MapPin className="w-4 h-4 mr-2" />
-                        <span>{tender?.location}</span>
-                      </div>
-
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        <span>Deadline: {tender?.submissionDate}</span>
-                      </div>
+                          <>
+                            <Save className="w-4 h-4 mr-2" />
+                            Save
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button
-                      onClick={() => onAnalyze(tender._id)}
-                      className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200"
-                    >
-                      Analyse
-                    </Button>
-
-                    <Button
-                      onClick={() => handleSaveTender(tender)}
-                      variant="outline"
-                      className={`border-teal-200 rounded-lg transition-all duration-200 ${
-                        savedTenders.has(tender._id)
-                          ? "bg-green-50 text-green-700 border-green-200"
-                          : "text-teal-700 hover:bg-teal-50"
-                      }`}
-                    >
-                      {savedTenders.has(tender._id) ? (
-                        <>
-                          <Check className="w-4 h-4 mr-2" />
-                          Saved
-                        </>
-                      ) : (
-                        <>
-                          <Save className="w-4 h-4 mr-2" />
-                          Save
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
 
           {currentTenders.length === 0 && (
             <div className="text-center py-12">

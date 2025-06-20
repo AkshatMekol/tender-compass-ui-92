@@ -56,3 +56,27 @@ export const isObjEmpty = (val) =>
   (typeof val === "object" &&
     !Array.isArray(val) &&
     Object.keys(val).length === 0);
+
+export function calcDaysLeft(submissionDate: string | null) {
+  let daysLeft = null;
+
+  if (submissionDate) {
+    const [day, month, year] = submissionDate.split("-");
+    const date = new Date(+year, +month - 1, +day);
+    const today = new Date();
+    const timeDiff = date.getTime() - today.getTime();
+    daysLeft = Math.max(0, Math.ceil(timeDiff / (1000 * 3600 * 24)));
+  }
+  return daysLeft;
+}
+
+const FILTERS_KEY = "tenderFilters";
+
+export function saveFiltersToStorage(filters: any) {
+  localStorage.setItem(FILTERS_KEY, JSON.stringify(filters));
+}
+
+export function getFiltersFromStorage() {
+  const saved = localStorage.getItem(FILTERS_KEY);
+  return saved ? JSON.parse(saved) : null;
+}
