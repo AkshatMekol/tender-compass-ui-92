@@ -88,35 +88,12 @@ const ItemRateAnalysis = ({ tenderData }: { tenderData: Tender }) => {
                     >
                       Structures Work
                     </TabsTrigger>
-                    <TabsTrigger
-                      value="protection-work"
-                      className="rounded-lg text-xs"
-                    >
-                      Protection Work
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="roadside-drainage"
-                      className="rounded-lg text-xs"
-                    >
-                      Roadside Drainage
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="intersections-grade"
-                      className="rounded-lg text-xs"
-                    >
-                      Intersections
-                    </TabsTrigger>
+
                     <TabsTrigger
                       value="road-safety"
                       className="rounded-lg text-xs"
                     >
                       Road Safety
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="utilities"
-                      className="rounded-lg text-xs"
-                    >
-                      Utilities
                     </TabsTrigger>
                   </TabsList>
 

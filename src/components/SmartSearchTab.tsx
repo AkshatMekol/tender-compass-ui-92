@@ -29,14 +29,14 @@ import { saveFiltersToStorage, getFiltersFromStorage } from "@/helpers";
 
 interface SmartSearchTabProps {
   onAnalyze: (id: string) => void;
-  onSaveTender: (tender: Tender) => void;
+  onSaveTender: (id: string) => void;
 }
 
 const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
   onAnalyze,
   onSaveTender,
 }) => {
-  const initialFilters = getFiltersFromStorage() || {};
+  const initialFilters = getFiltersFromStorage("smartSearch") || {};
 
   const [searchTerm, setSearchTerm] = useState(
     () => initialFilters.searchTerm || ""
@@ -68,7 +68,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
   const { tenders, loading, error } = useTenderContext();
 
   useEffect(() => {
-    saveFiltersToStorage({
+    saveFiltersToStorage("smartSearch", {
       searchTerm,
       selectedOrganisation,
       selectedState,
@@ -218,26 +218,10 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
     filteredAndSortedTenders.length / tendersPerPage
   );
   const startIndex = (currentPage - 1) * tendersPerPage;
-  const currentTenders = filteredAndSortedTenders.slice(
-    startIndex,
-    startIndex + tendersPerPage
-  );
+  const currentTenders = filteredAndSortedTenders;
 
-  const handleSaveTender = (tender: Tender) => {
-    const tenderWithSaveDate = {
-      ...tender,
-      savedDate: new Date().toISOString().split("T")[0],
-    };
-    onSaveTender(tenderWithSaveDate);
-    setSavedTenders((prev) => new Set([...prev, tender._id]));
-
-    setTimeout(() => {
-      setSavedTenders((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(tender._id);
-        return newSet;
-      });
-    }, 2000);
+  const handleSaveTender = (tenderId: string) => {
+    onSaveTender(tenderId);
   };
 
   const handleNextPage = () => {
@@ -425,7 +409,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                               // key={index}
                               className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
                             >
-                              {tender?.metadata?.type}
+                              {tender?.metadata?.type.toUpperCase()}
                             </span>
                             {/* ))} */}
                           </div>
@@ -496,7 +480,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({
                       </Button>
 
                       <Button
-                        onClick={() => handleSaveTender(tender)}
+                        onClick={() => handleSaveTender(tender?._id)}
                         variant="outline"
                         className={`border-teal-200 rounded-lg transition-all duration-200 ${
                           savedTenders.has(tender._id)

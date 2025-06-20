@@ -72,11 +72,22 @@ export function calcDaysLeft(submissionDate: string | null) {
 
 const FILTERS_KEY = "tenderFilters";
 
-export function saveFiltersToStorage(filters: any) {
-  localStorage.setItem(FILTERS_KEY, JSON.stringify(filters));
+// helpers.ts
+
+export function getFiltersFromStorage(namespace: string) {
+  try {
+    const data = localStorage.getItem(`filters-${namespace}`);
+    return data ? JSON.parse(data) : null;
+  } catch (e) {
+    console.error("Failed to parse filters from localStorage:", e);
+    return null;
+  }
 }
 
-export function getFiltersFromStorage() {
-  const saved = localStorage.getItem(FILTERS_KEY);
-  return saved ? JSON.parse(saved) : null;
+export function saveFiltersToStorage(namespace: string, filters: any) {
+  try {
+    localStorage.setItem(`filters-${namespace}`, JSON.stringify(filters));
+  } catch (e) {
+    console.error("Failed to save filters to localStorage:", e);
+  }
 }

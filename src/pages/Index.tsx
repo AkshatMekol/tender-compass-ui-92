@@ -11,12 +11,14 @@ import FeedbackTab from "../components/FeedbackTab";
 import LanguageNotificationsTab from "../components/LanguageNotificationsTab";
 import ChatWidget from "../components/ChatWidget";
 import { useUser } from "@/context/userContext";
+import { useCompanyProfile } from "@/context/companyProfileContext";
 import { Tender } from "@/context/tenderContext";
+import { toast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("smart-search");
-  const [savedTenders, setSavedTenders] = useState<Tender[]>([]);
+  const { updateProfile, profile } = useCompanyProfile();
 
   const { logout } = useUser();
 
@@ -24,24 +26,54 @@ const Index = () => {
     navigate(`/analysis/${id}`);
   };
 
-  const handleSaveTender = (tender: Tender) => {
-    setSavedTenders((prev) => {
-      const exists = prev.find((t) => t.id === tender.id);
-      if (!exists) {
-        return [...prev, tender];
-      }
-      return prev;
-    });
+  const handleSaveTender = async (tenderId: string) => {
+    const updatedSavedTenders = [...profile.savedTenders, tenderId];
+
+    try {
+      await updateProfile({ savedTenders: updatedSavedTenders });
+      toast({
+        title: "Tender Saved",
+        description: "Your tender has been saved successfully.",
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast({
+        variant: "destructive",
+        title: "Save Failed",
+        description:
+          error?.message ||
+          "There was an error saving your tender. Please try again.",
+      });
+    }
   };
 
-  const handleRemoveTender = (tenderId: string) => {
-    setSavedTenders((prev) => prev.filter((t) => t.id !== tenderId));
+  const handleRemoveTender = async (tenderId: string) => {
+    const updatedSavedTenders = profile.savedTenders.filter(
+      (id) => id !== tenderId
+    );
+
+    try {
+      await updateProfile({ savedTenders: updatedSavedTenders });
+      toast({
+        title: "Tender Removed",
+        description: "The tender has been removed from your saved list.",
+      });
+    } catch (error) {
+      console.error("Error removing tender:", error);
+      toast({
+        variant: "destructive",
+        title: "Remove Failed",
+        description:
+          error?.message ||
+          "There was an error removing the tender. Please try again.",
+      });
+    }
   };
 
   const renderActiveTab = () => {
     switch (activeTab) {
-      case "dashboard":
-        return <Dashboard />;
+      // case "dashboard":
+      // return <Dashboard />;
       case "smart-search":
         return (
           <SmartSearchTab
@@ -54,7 +86,6 @@ const Index = () => {
       case "my-tenders":
         return (
           <MyTendersTab
-            savedTenders={savedTenders}
             onAnalyze={handleAnalyze}
             onRemoveTender={handleRemoveTender}
           />

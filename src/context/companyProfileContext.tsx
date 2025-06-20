@@ -8,6 +8,8 @@ import React, {
 } from "react";
 import { toCamelCase } from "@/helpers";
 import { useLocation } from "react-router-dom";
+import { Tender } from "./tenderContext";
+import { set } from "date-fns";
 
 type OfficeLocation = {
   type: string;
@@ -53,6 +55,7 @@ export type CompanyProfile = {
   tenderAmountRange: TenderAmountRange;
   description: string;
   userId: string;
+  savedTenders: string[];
 };
 
 export interface CompanyProfileContextType {
@@ -104,6 +107,7 @@ const defaultProfile: CompanyProfile = {
   },
   description: "",
   userId: "",
+  savedTenders: [],
 };
 
 const transformToSnakeCase = (updatedProfile: CompanyProfile) => {
@@ -133,6 +137,7 @@ const transformToSnakeCase = (updatedProfile: CompanyProfile) => {
       upper_limit: updatedProfile?.tenderAmountRange?.upperLimit || 0,
     },
     description: updatedProfile?.description || "",
+    saved_tenders: updatedProfile?.savedTenders || [],
   };
 };
 
@@ -149,6 +154,10 @@ export const CompanyProfileProvider: React.FC<{ children: ReactNode }> = ({
         method: "GET",
         credentials: "include",
       });
+      if (!res.ok) {
+        console.error("Failed to fetch saved tenders");
+        return;
+      }
 
       const data = await res.json();
       if (!res.ok) {
