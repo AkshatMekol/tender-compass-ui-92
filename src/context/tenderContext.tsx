@@ -26,6 +26,10 @@ export type Tender = {
   compatibilityScore: number;
   compatibilityAnalysis: string | null;
   estimatedCost: string | null;
+  categories: object;
+  markdownRoadWorks?: string;
+  markdownStructure?: string;
+  markdownRoadsideFurniture?: string;
 };
 
 type TenderContextType = {

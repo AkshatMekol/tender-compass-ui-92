@@ -1,152 +1,90 @@
-import React from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import MarkdownRenderer from "./MarkdownRenderer";
 
-type Props = {
-  content: string;
+type BOQItem = {
+  "Serial Number": number;
+  "Item Description": string;
+  Quantity: number | null;
+  Units: string;
+  "Estimated Rate": number | null;
+  "Total Amount (Rs.)": number | null;
 };
 
-const BOQFromString: React.FC<Props> = ({ content }) => {
-  const lines = content.trim().split("\n");
+type Props = {
+  categories: Record<string, BOQItem[]>;
+};
 
-  let totalCost = "";
-  let headers: string[] = [];
-  const rows: string[][] = [];
+const generateBOQMarkdown = (categories: Record<string, BOQItem[]>): string => {
+  let output = "";
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+  for (const [category, items] of Object.entries(categories)) {
+    output += `### ${category}\n\n`;
+    output += `| S. No. | Description | Quantity | Units | Rate (₹) | Amount (₹) |\n`;
+    output += `|--------|-------------|----------|--------|----------|-------------|\n`;
 
-    if (line.startsWith("### Total Project Cost")) {
-      totalCost = line.replace(/^#+\s*Total Project Cost:\s*/, "");
-    } else if (line.startsWith("|") && line.includes("|---")) {
-      continue; // Divider row
-    } else if (line.startsWith("|")) {
-      const cells = line
-        .split("|")
-        .map((cell) => cell.trim())
-        .filter(Boolean);
+    for (const item of items) {
+      const description = item["Item Description"]
+        .split("\n")
+        .map((line, i) =>
+          i === 0 ? `**${line.trim()}**` : `<br />${line.trim()}`
+        )
+        .join("");
 
-      if (headers.length === 0) headers = cells;
-      else rows.push(cells);
+      output += `| ${item["Serial Number"] ?? "-"} | ${description} | ${
+        item.Quantity ?? "-"
+      } | ${item.Units || "-"} | ${
+        item["Estimated Rate"]?.toLocaleString("en-IN") ?? "-"
+      } | ${
+        item["Total Amount (Rs.)"]
+          ? `₹${item["Total Amount (Rs.)"].toLocaleString("en-IN")}`
+          : "-"
+      } |\n`;
     }
+
+    output += `\n`;
   }
 
-  return (
-    <div className="p-4 border rounded bg-white shadow-sm space-y-4">
-      <div className="overflow-auto">
-        <table className="min-w-full border border-gray-300 text-sm text-left text-gray-700">
-          <thead className="bg-gray-100">
-            <tr>
-              {headers.map((head, i) => (
-                <th
-                  key={i}
-                  className="px-3 py-2 border border-gray-300 font-medium"
-                >
-                  {head}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, rIdx) => (
-              <tr key={rIdx} className="hover:bg-gray-50">
-                {headers.map((_, cIdx) => (
-                  <td key={cIdx} className="px-3 py-2 border border-gray-200">
-                    {row[cIdx] ?? ""}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+  return output.trim();
+};
 
-      {totalCost && (
-        <div className="text-right text-sm text-gray-600 italic pt-2 border-t">
-          Total Project Cost: <span className="font-semibold">{totalCost}</span>
-        </div>
-      )}
-    </div>
+const BOQRenderer: React.FC<Props> = ({ categories }) => {
+  const keys = Object.keys(categories);
+
+  if (keys.length === 0) return null;
+
+  return (
+    <Card className="shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-sm">
+      <CardContent>
+        <Tabs defaultValue={keys[0]}>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-6 bg-gray-100 rounded-xl p-1">
+            {keys.map((key) => (
+              <TabsTrigger
+                key={key}
+                value={key}
+                className="rounded-lg text-xs text-center"
+              >
+                {key}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {keys.map((key) => (
+            <TabsContent key={key} value={key} className="mt-0">
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-200">
+                <ScrollArea className="h-96 p-6">
+                  <MarkdownRenderer
+                    content={generateBOQMarkdown({ [key]: categories[key] })}
+                  />
+                </ScrollArea>
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 
-export default BOQFromString;
-
-// import React from "react";
-
-// type Props = {
-//   content: string;
-// };
-
-// const BOQRenderer: React.FC<Props> = ({ content }) => {
-//   const lines = content.trim().split("\n");
-
-//   let title = "";
-//   let totalCost = "";
-//   let headers: string[] = [];
-//   const rows: string[][] = [];
-
-//   for (let i = 0; i < lines.length; i++) {
-//     const line = lines[i].trim();
-
-//     if (line.startsWith("###") && title === "") {
-//       title = line.replace(/^#+\s*/, "");
-//     } else if (line.startsWith("|") && line.includes("|---")) {
-//       continue; // Skip divider
-//     } else if (line.startsWith("|")) {
-//       const cells = line
-//         .split("|")
-//         .map((cell) => cell.trim())
-//         .filter(Boolean);
-
-//       if (headers.length === 0) headers = cells;
-//       else rows.push(cells);
-//     } else if (line.startsWith("### Total Project Cost")) {
-//       totalCost = line.replace(/^#+\s*Total Project Cost:\s*/, "");
-//     }
-//   }
-
-//   return (
-//     <div className="p-4 border rounded bg-white shadow-sm space-y-4">
-//       {title && (
-//         <h2 className="text-xl font-semibold text-gray-800 border-b pb-1">
-//           {title}
-//         </h2>
-//       )}
-
-//       <div className="overflow-auto">
-//         <table className="min-w-full border border-gray-300 text-sm text-left text-gray-700">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               {headers.map((head, i) => (
-//                 <th
-//                   key={i}
-//                   className="px-3 py-2 border border-gray-300 font-medium"
-//                 >
-//                   {head}
-//                 </th>
-//               ))}
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {rows.map((row, rIdx) => (
-//               <tr key={rIdx} className="hover:bg-gray-50">
-//                 {headers.map((_, cIdx) => (
-//                   <td key={cIdx} className="px-3 py-2 border border-gray-200">
-//                     {row[cIdx] ?? ""}
-//                   </td>
-//                 ))}
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-
-//       {totalCost && (
-//         <div className="text-right text-sm text-gray-600 italic pt-2 border-t">
-//           Total Project Cost: <span className="font-semibold">{totalCost}</span>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default BOQRenderer;
+export default BOQRenderer;

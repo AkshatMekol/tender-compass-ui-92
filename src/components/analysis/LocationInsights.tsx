@@ -5,6 +5,17 @@ import MarkdownRenderer from "./MarkdownRenderer";
 import { ExternalLink } from "lucide-react";
 
 const LocationInsights = ({ tenderData }: { tenderData: Tender }) => {
+  if (
+    !tenderData?.metadata?.terrian &&
+    !tenderData?.metadata?.climate &&
+    !tenderData?.metadata?.logistics &&
+    !tenderData?.metadata?.safety &&
+    !tenderData?.metadata?.soilType &&
+    !tenderData?.metadata?.materialAvailability
+  ) {
+    return <></>;
+  }
+
   const locationInsights = [
     {
       title: "Terrain",
