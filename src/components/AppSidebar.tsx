@@ -11,7 +11,8 @@ import {
   Settings,
   LogOut,
   MessageSquare,
-  Hammer
+  Hammer,
+  Bot
 } from 'lucide-react';
 
 interface AppSidebarProps {
@@ -25,6 +26,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogo
   const sidebarItems = [
     // { icon: BarChart3, label: 'Dashboard', key: 'dashboard' },
     { icon: Search, label: 'Smart Search', key: 'smart-search' },
+    { icon: Bot, label: 'Tender Robo', key: 'tender-robo' },
     { icon: Folder, label: 'My Tenders', key: 'my-tenders' },
     { icon: Building2, label: 'Company Profile', key: 'company-profile' },
     // { icon: GitCompare, label: 'Compare Tenders', key: 'compare-tenders' },

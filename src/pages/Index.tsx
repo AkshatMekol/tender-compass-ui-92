@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppSidebar from '../components/AppSidebar';
-import Dashboard from '../components/Dashboard';
 import SmartSearchTab from '../components/SmartSearchTab';
+import TenderRoboTab from '../components/TenderRoboTab';
 import InsightsTab from '../components/InsightsTab';
 import MyTendersTab from '../components/MyTendersTab';
 import CompanyProfileTab from '../components/CompanyProfileTab';
@@ -52,6 +53,8 @@ const Index = () => {
     switch (activeTab) {
       case 'smart-search':
         return <SmartSearchTab onAnalyze={handleAnalyze} onSaveTender={handleSaveTender} />;
+      case 'tender-robo':
+        return <TenderRoboTab onAnalyze={handleAnalyze} />;
       case 'insights':
         return <InsightsTab />;
       case 'my-tenders':
