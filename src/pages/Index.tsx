@@ -12,12 +12,23 @@ import LanguageNotificationsTab from '../components/LanguageNotificationsTab';
 import ChatWidget from '../components/ChatWidget';
 import { Tender } from '../types/tender';
 
+interface Message {
+  id: string;
+  type: 'user' | 'bot';
+  content: string;
+  timestamp: Date;
+  loading?: boolean;
+  tenders?: Tender[];
+  showTenders?: boolean;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   // Set default to smart-search instead of dashboard since dashboard is removed
   const [activeTab, setActiveTab] = useState('smart-search');
   const [savedTenders, setSavedTenders] = useState<Tender[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [tenderRoboMessages, setTenderRoboMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
@@ -56,7 +67,13 @@ const Index = () => {
       case 'smart-search':
         return <SmartSearchTab onAnalyze={handleAnalyze} onSaveTender={handleSaveTender} />;
       case 'tender-robo':
-        return <TenderRoboTab onAnalyze={handleAnalyze} />;
+        return (
+          <TenderRoboTab 
+            onAnalyze={handleAnalyze} 
+            messages={tenderRoboMessages}
+            onMessagesChange={setTenderRoboMessages}
+          />
+        );
       case 'insights':
         return <InsightsTab />;
       case 'my-tenders':

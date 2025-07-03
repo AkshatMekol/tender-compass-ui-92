@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check } from 'lucide-react';
 import { Button } from './ui/button';
@@ -17,16 +18,22 @@ interface Message {
 
 interface TenderRoboTabProps {
   onAnalyze?: (tender: any) => void;
+  messages?: Message[];
+  onMessagesChange?: (messages: Message[]) => void;
 }
 
-const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: externalMessages, onMessagesChange }) => {
+  const [internalMessages, setInternalMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Use external messages if provided, otherwise use internal state
+  const messages = externalMessages || internalMessages;
+  const setMessages = onMessagesChange || setInternalMessages;
 
   const loadingSteps = [
     "Fetching the latest tenders from government portals...",
@@ -163,7 +170,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
         const botResponse: Message = {
           id: (Date.now() + 2).toString(),
           type: 'bot',
-          content: "Here are the top tenders for your query 👇",
+          content: "Here are the top tenders for your query",
           timestamp: new Date(),
           tenders: mockTenders,
           showTenders: false
@@ -198,7 +205,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
     const botResponse: Message = {
       id: Date.now().toString(),
       type: 'bot',
-      content: "Downloading your Excel... 📥",
+      content: "Downloading your Excel...",
       timestamp: new Date()
     };
     setMessages(prev => [...prev, botResponse]);
@@ -370,8 +377,8 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
                               <Card className="mb-4 blur-sm opacity-50">
                                 <CardContent className="p-4 text-center">
                                   <div className="py-8">
-                                    <h3 className="font-semibold text-gray-900 mb-2">🔒 More tenders available...</h3>
-                                    <p className="text-gray-600">🕵️‍♂️ Additional opportunities await</p>
+                                    <h3 className="font-semibold text-gray-900 mb-2">More tenders available...</h3>
+                                    <p className="text-gray-600">Additional opportunities await</p>
                                   </div>
                                 </CardContent>
                               </Card>
@@ -388,20 +395,19 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
                               <div className="flex space-x-3">
                                 <Button
                                   onClick={handleExportToExcel}
-                                  className="hover:scale-105 active:scale-95 transition-transform shadow-md hover:shadow-xl"
+                                  className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
                                 >
                                   <Download className="w-4 h-4 mr-2" />
-                                  ⬇️ Export to Excel
+                                  Export to Excel
                                 </Button>
                                 
                                 {!message.showTenders && (
                                   <Button
-                                    variant="outline"
                                     onClick={() => handleViewMoreTenders(message.id)}
-                                    className="hover:scale-105 active:scale-95 transition-transform shadow-md hover:shadow-xl"
+                                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
                                   >
                                     <Eye className="w-4 h-4 mr-2" />
-                                    🔓 View More Tenders
+                                    View More Tenders
                                   </Button>
                                 )}
                               </div>

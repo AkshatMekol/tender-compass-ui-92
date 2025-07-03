@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,8 +11,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Building2, MapPin, Phone, Mail, Edit3, Plus, X, Calendar, IndianRupee } from 'lucide-react';
-import CompatibilityScore from './CompatibilityScore';
+import { Building2, MapPin, Phone, Mail, Edit3, Plus, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const CompanyProfileTab: React.FC = () => {
@@ -87,72 +87,6 @@ const CompanyProfileTab: React.FC = () => {
         ? prev.preferredAuthorities.filter(a => a !== authority)
         : [...prev.preferredAuthorities, authority]
     }));
-  };
-
-  const recentTenders = [
-    { 
-      id: 1, 
-      name: 'Highway Construction Project Phase 2', 
-      score: 92, 
-      date: '2024-01-15',
-      organisation: 'NHAI',
-      amount: 850,
-      location: 'Maharashtra',
-      deadline: '15-06-2025',
-      workTypes: ['Highway', 'Construction', 'Infrastructure']
-    },
-    { 
-      id: 2, 
-      name: 'Bridge Development Initiative', 
-      score: 88, 
-      date: '2024-01-12',
-      organisation: 'State PWD',
-      amount: 420,
-      location: 'Karnataka',
-      deadline: '22-07-2025',
-      workTypes: ['Bridge', 'Development', 'Infrastructure']
-    },
-    { 
-      id: 3, 
-      name: 'Water Management System Upgrade', 
-      score: 85, 
-      date: '2024-01-10',
-      organisation: 'Water Board',
-      amount: 320,
-      location: 'Rajasthan',
-      deadline: '30-08-2025',
-      workTypes: ['Water Management', 'System Upgrade', 'Infrastructure']
-    },
-    { 
-      id: 4, 
-      name: 'Smart City Infrastructure Development', 
-      score: 79, 
-      date: '2024-01-08',
-      organisation: 'Smart City Mission',
-      amount: 680,
-      location: 'Gujarat',
-      deadline: '10-09-2025',
-      workTypes: ['Smart City', 'Infrastructure', 'Technology']
-    },
-    { 
-      id: 5, 
-      name: 'Rural Road Connectivity Project', 
-      score: 91, 
-      date: '2024-01-05',
-      organisation: 'NRRDA',
-      amount: 290,
-      location: 'Odisha',
-      deadline: '18-10-2025',
-      workTypes: ['Rural Roads', 'Connectivity', 'Infrastructure']
-    },
-  ];
-
-  const formatAmount = (amount: number) => {
-    if (amount >= 100) {
-      return `₹${amount.toFixed(2)} Cr.`;
-    } else {
-      return `₹${(amount * 10).toFixed(2)} L.`;
-    }
   };
 
   return (
@@ -591,72 +525,6 @@ const CompanyProfileTab: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Last 5 Analyzed Tenders */}
-        <Card className="rounded-xl border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">Last 5 Analyzed Tenders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentTenders.map((tender) => (
-                <Card key={tender.id} className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md">
-                  <CardContent className="p-6">
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex-1 pr-4">
-                            <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-2">
-                              {tender.name}
-                            </h3>
-                            <p className="text-sm text-gray-600 mb-2">{tender.organisation}</p>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {tender.workTypes.slice(0, 3).map((workType, index) => (
-                                <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                  {workType}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div className="flex-shrink-0">
-                            <CompatibilityScore score={tender.score} showTooltip={false} />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <IndianRupee className="w-4 h-4 mr-2" />
-                            <span className="font-medium">{formatAmount(tender.amount)}</span>
-                          </div>
-                          
-                          <div className="flex items-center text-sm text-gray-600">
-                            <MapPin className="w-4 h-4 mr-2" />
-                            <span>{tender.location}</span>
-                          </div>
-                          
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Calendar className="w-4 h-4 mr-2" />
-                            <span>Analyzed: {new Date(tender.date).toLocaleDateString()}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Button
-                          variant="outline"
-                          className="border-teal-200 rounded-lg text-teal-700 hover:bg-teal-50 transition-all duration-200"
-                        >
-                          View Details
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </CardContent>
         </Card>

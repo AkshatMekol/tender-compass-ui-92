@@ -42,8 +42,8 @@ const ChatWidget = () => {
 
   return (
     <>
-      {/* Chat Button - moved to bottom left */}
-      <div className="fixed bottom-6 left-6 z-50">
+      {/* Chat Button - moved up to avoid logout overlap */}
+      <div className="fixed bottom-20 left-6 z-50">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button 
