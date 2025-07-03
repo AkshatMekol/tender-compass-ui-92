@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Download, Eye, Satellite, Gear, BarChart3 } from 'lucide-react';
+import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 
@@ -205,7 +204,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze }) => {
   );
 
   const getLoadingIcon = () => {
-    const icons = [Satellite, Gear, BarChart3];
+    const icons = [Satellite, Settings, BarChart3];
     const IconComponent = icons[loadingStep % icons.length];
     return <IconComponent className="w-5 h-5 animate-spin" />;
   };
