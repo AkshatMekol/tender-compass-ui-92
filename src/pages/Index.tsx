@@ -50,6 +50,8 @@ const Index = () => {
   };
 
   const renderActiveTab = () => {
+    console.log('Current active tab:', activeTab); // Debug log
+    
     switch (activeTab) {
       case 'smart-search':
         return <SmartSearchTab onAnalyze={handleAnalyze} onSaveTender={handleSaveTender} />;
@@ -68,7 +70,7 @@ const Index = () => {
       case 'settings':
         return <LanguageNotificationsTab />;
       default:
-        // If anything else, show Smart Search by default
+        console.log('Default case triggered, showing Smart Search');
         return <SmartSearchTab onAnalyze={handleAnalyze} onSaveTender={handleSaveTender} />;
     }
   };
