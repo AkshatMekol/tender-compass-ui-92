@@ -32,7 +32,16 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
 
   // Use external messages if provided, otherwise use internal state
   const messages = externalMessages || internalMessages;
-  const setMessages = onMessagesChange || setInternalMessages;
+  
+  // Helper function to update messages properly
+  const updateMessages = (updater: (prev: Message[]) => Message[]) => {
+    if (onMessagesChange) {
+      const newMessages = updater(messages);
+      onMessagesChange(newMessages);
+    } else {
+      setInternalMessages(updater);
+    }
+  };
 
   const loadingSteps = [
     "Fetching the latest tenders from government portals...",
@@ -139,7 +148,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       timestamp: new Date()
     };
 
-    setMessages((prev: Message[]) => [...prev, userMessage]);
+    updateMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
@@ -159,12 +168,12 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
         loading: true
       };
 
-      setMessages((prev: Message[]) => [...prev, loadingMessage]);
+      updateMessages(prev => [...prev, loadingMessage]);
 
       // Simulate API call delay
       setTimeout(() => {
         setIsLoading(false);
-        setMessages((prev: Message[]) => prev.filter(msg => !msg.loading));
+        updateMessages(prev => prev.filter(msg => !msg.loading));
 
         const botResponse: Message = {
           id: (Date.now() + 2).toString(),
@@ -175,7 +184,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           showTenders: false
         };
 
-        setMessages((prev: Message[]) => [...prev, botResponse]);
+        updateMessages(prev => [...prev, botResponse]);
       }, 8000);
     } else {
       // Regular chat response
@@ -187,7 +196,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           content: "I'm here to help you with tender-related queries! You can ask me to find specific tenders, provide market insights, or help with tender analysis. Try asking something like 'Get tenders in Uttar Pradesh for NH works' to see how I can help you find relevant opportunities.",
           timestamp: new Date()
         };
-        setMessages((prev: Message[]) => [...prev, botResponse]);
+        updateMessages(prev => [...prev, botResponse]);
       }, 2000);
     }
   };
@@ -207,11 +216,11 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       content: "Downloading your Excel...",
       timestamp: new Date()
     };
-    setMessages((prev: Message[]) => [...prev, botResponse]);
+    updateMessages(prev => [...prev, botResponse]);
   };
 
   const handleViewMoreTenders = (messageId: string) => {
-    setMessages((prev: Message[]) => prev.map(msg => 
+    updateMessages(prev => prev.map(msg => 
       msg.id === messageId ? { ...msg, showTenders: true } : msg
     ));
   };
