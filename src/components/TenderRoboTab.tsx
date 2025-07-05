@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check } from 'lucide-react';
 import { Button } from './ui/button';
@@ -140,7 +139,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev: Message[]) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
@@ -160,12 +159,12 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
         loading: true
       };
 
-      setMessages(prev => [...prev, loadingMessage]);
+      setMessages((prev: Message[]) => [...prev, loadingMessage]);
 
       // Simulate API call delay
       setTimeout(() => {
         setIsLoading(false);
-        setMessages(prev => prev.filter(msg => !msg.loading));
+        setMessages((prev: Message[]) => prev.filter(msg => !msg.loading));
 
         const botResponse: Message = {
           id: (Date.now() + 2).toString(),
@@ -176,7 +175,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           showTenders: false
         };
 
-        setMessages(prev => [...prev, botResponse]);
+        setMessages((prev: Message[]) => [...prev, botResponse]);
       }, 8000);
     } else {
       // Regular chat response
@@ -188,7 +187,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           content: "I'm here to help you with tender-related queries! You can ask me to find specific tenders, provide market insights, or help with tender analysis. Try asking something like 'Get tenders in Uttar Pradesh for NH works' to see how I can help you find relevant opportunities.",
           timestamp: new Date()
         };
-        setMessages(prev => [...prev, botResponse]);
+        setMessages((prev: Message[]) => [...prev, botResponse]);
       }, 2000);
     }
   };
@@ -208,11 +207,11 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       content: "Downloading your Excel...",
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, botResponse]);
+    setMessages((prev: Message[]) => [...prev, botResponse]);
   };
 
   const handleViewMoreTenders = (messageId: string) => {
-    setMessages(prev => prev.map(msg => 
+    setMessages((prev: Message[]) => prev.map(msg => 
       msg.id === messageId ? { ...msg, showTenders: true } : msg
     ));
   };

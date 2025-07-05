@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import TenderRoboPopup from '@/components/TenderRoboPopup';
 
 const Analysis = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<any>(null);
+  const [isRoboPopupOpen, setIsRoboPopupOpen] = useState(false);
 
   // Calculate days left
   const submissionDate = new Date('2025-03-04');
@@ -467,18 +468,29 @@ This tender represents an **excellent opportunity** with strong alignment to you
       <div className="p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
-          <div className="flex items-center mb-8">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate(-1)} 
-              className="mr-4 rounded-xl border-2 hover:bg-teal-50 hover:border-teal-300 transition-all duration-200"
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate(-1)} 
+                className="mr-4 rounded-xl border-2 hover:bg-teal-50 hover:border-teal-300 transition-all duration-200"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Dashboard
+              </Button>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                Tender Analysis Report
+              </h1>
+            </div>
+            
+            {/* Ask Tender Robo Button */}
+            <Button
+              onClick={() => setIsRoboPopupOpen(true)}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              <Bot className="w-4 h-4 mr-2" />
+              Ask Tender Robo
             </Button>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-              Tender Analysis Report
-            </h1>
           </div>
 
           {/* Tender Bio & Compatibility Score */}
@@ -778,6 +790,9 @@ This tender represents an **excellent opportunity** with strong alignment to you
           </Card>
         </div>
       </div>
+
+      {/* Tender Robo Popup */}
+      <TenderRoboPopup isOpen={isRoboPopupOpen} onClose={() => setIsRoboPopupOpen(false)} />
     </div>
   );
 };
