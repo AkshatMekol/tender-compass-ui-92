@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot, Bookmark } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import TenderRoboPopup from '@/components/TenderRoboPopup';
 
@@ -13,6 +13,7 @@ const Analysis = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [isRoboPopupOpen, setIsRoboPopupOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   // Calculate days left
   const submissionDate = new Date('2025-03-04');
@@ -23,7 +24,7 @@ const Analysis = () => {
   // Tender bio data
   const tenderBio = {
     brief: "Upgradation of Package 12: Ujjain – Maksi Road in the state of Madhya Pradesh on Engineering, Procurement & Construction (EPC) Mode under proposed NDB Loan",
-    location: "Ujjain, Madhya Pradesh",
+    location: "Ujjain, Madhya Pradesh", 
     estimatedCost: "273.45 Cr.",
     emd: "2.73 Cr.",
     length: "38.95 km",
@@ -463,6 +464,12 @@ This tender represents an **excellent opportunity** with strong alignment to you
   const circumference = 2 * Math.PI * 45;
   const strokeDashoffset = circumference - (tenderBio.compatibilityScore / 100) * circumference;
 
+  const handleSave = () => {
+    setIsSaved(!isSaved);
+    // Here you would typically save to backend/localStorage
+    console.log(isSaved ? 'Tender removed from saved' : 'Tender saved');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="p-6 lg:p-8">
@@ -483,14 +490,31 @@ This tender represents an **excellent opportunity** with strong alignment to you
               </h1>
             </div>
             
-            {/* Ask Tender Robo Button */}
-            <Button
-              onClick={() => setIsRoboPopupOpen(true)}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
-            >
-              <Bot className="w-4 h-4 mr-2" />
-              Ask Tender Robo
-            </Button>
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Save Button */}
+              <Button
+                onClick={handleSave}
+                variant={isSaved ? "default" : "outline"}
+                className={`rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ${
+                  isSaved 
+                    ? "bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white" 
+                    : "border-2 hover:bg-teal-50 hover:border-teal-300"
+                }`}
+              >
+                <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
+                {isSaved ? 'Saved' : 'Save'}
+              </Button>
+              
+              {/* Ask Tender Robo Button */}
+              <Button
+                onClick={() => setIsRoboPopupOpen(true)}
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                <Bot className="w-4 h-4 mr-2" />
+                Ask Tender Robo
+              </Button>
+            </div>
           </div>
 
           {/* Tender Bio & Compatibility Score */}

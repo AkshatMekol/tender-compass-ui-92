@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Bell, TrendingUp, AlertCircle, Lightbulb } from 'lucide-react';
 
 interface NotificationEntry {
   id: string;
@@ -66,6 +66,32 @@ const NotificationsFeed: React.FC = () => {
     setNotifications(filteredNotifications);
   }, []);
 
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'new_tenders':
+        return <TrendingUp className="w-4 h-4 text-teal-600" />;
+      case 'corrigendum':
+        return <AlertCircle className="w-4 h-4 text-orange-600" />;
+      case 'suggested_tender':
+        return <Lightbulb className="w-4 h-4 text-blue-600" />;
+      default:
+        return <Bell className="w-4 h-4 text-gray-600" />;
+    }
+  };
+
+  const getNotificationBorder = (type: string) => {
+    switch (type) {
+      case 'new_tenders':
+        return 'border-l-4 border-l-teal-500 bg-gradient-to-r from-teal-50 to-transparent';
+      case 'corrigendum':
+        return 'border-l-4 border-l-orange-500 bg-gradient-to-r from-orange-50 to-transparent';
+      case 'suggested_tender':
+        return 'border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-transparent';
+      default:
+        return 'border-l-4 border-l-gray-300 bg-gray-50';
+    }
+  };
+
   const getDateLabel = (timestamp: Date): string => {
     const now = new Date();
     const diffTime = now.getTime() - timestamp.getTime();
@@ -96,38 +122,59 @@ const NotificationsFeed: React.FC = () => {
     switch (notification.type) {
       case 'new_tenders':
         return (
-          <div className="text-sm text-gray-700">
-            You have <span className="font-medium text-gray-900">{notification.data.count}</span> new tenders matching your interests today.
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0 mt-1">
+              {getNotificationIcon(notification.type)}
+            </div>
+            <div className="flex-1">
+              <div className="text-sm text-gray-700 leading-relaxed">
+                You have <span className="font-semibold text-teal-700">{notification.data.count}</span> new tenders matching your interests today.
+              </div>
+            </div>
           </div>
         );
       
       case 'corrigendum':
         return (
-          <div className="space-y-1">
-            <div className="text-sm text-gray-700">
-              Corrigendum issued for one of your saved tenders.
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0 mt-1">
+              {getNotificationIcon(notification.type)}
             </div>
-            <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
-              {notification.data.tenderName} (₹{notification.data.tenderAmount} Cr) – Closes {notification.data.closeDate}
+            <div className="flex-1 space-y-3">
+              <div className="text-sm text-gray-700 leading-relaxed">
+                Corrigendum issued for one of your saved tenders.
+              </div>
+              <div className="text-sm bg-white/70 border border-orange-200 rounded-lg p-3 shadow-sm">
+                <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
+                <div className="text-orange-700 font-semibold mt-1">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+              </div>
             </div>
           </div>
         );
       
       case 'suggested_tender':
         return (
-          <div className="space-y-3">
-            <div className="text-sm text-gray-700">
-              We found a compatible new tender for you.
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0 mt-1">
+              {getNotificationIcon(notification.type)}
             </div>
-            <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
-              {notification.data.tenderName} (₹{notification.data.tenderAmount} Cr) – Closes {notification.data.closeDate}
+            <div className="flex-1 space-y-3">
+              <div className="text-sm text-gray-700 leading-relaxed">
+                We found a compatible new tender for you.
+              </div>
+              <div className="text-sm bg-white/70 border border-blue-200 rounded-lg p-3 shadow-sm">
+                <div className="font-medium text-gray-900 mb-2">{notification.data.tenderName}</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-blue-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg shadow-sm ml-3"
+                  >
+                    Analyze
+                  </Button>
+                </div>
+              </div>
             </div>
-            <Button 
-              size="sm" 
-              className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg"
-            >
-              Analyze
-            </Button>
           </div>
         );
       
@@ -141,15 +188,21 @@ const NotificationsFeed: React.FC = () => {
 
   if (notifications.length === 0) {
     return (
-      <Card className="rounded-xl border-0 shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900">
+      <Card className="rounded-xl border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center mr-3">
+              <Bell className="w-4 h-4 text-white" />
+            </div>
             Recent Updates
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-gray-500">
-            <p>No recent updates</p>
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+              <Bell className="w-6 h-6 text-gray-400" />
+            </div>
+            <p className="text-sm">No recent updates</p>
           </div>
         </CardContent>
       </Card>
@@ -157,29 +210,35 @@ const NotificationsFeed: React.FC = () => {
   }
 
   return (
-    <Card className="rounded-xl border-0 shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-gray-900">
+    <Card className="rounded-xl border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center mr-3">
+            <Bell className="w-4 h-4 text-white" />
+          </div>
           Recent Updates
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         {dateLabels.map((dateLabel, index) => {
           const dayNotifications = groupedNotifications[dateLabel];
           if (!dayNotifications || dayNotifications.length === 0) return null;
 
           return (
             <div key={dateLabel}>
-              {index > 0 && <Separator className="my-4" />}
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  {dateLabel}
-                </h4>
-                <div className="space-y-3">
+              {index > 0 && <Separator className="my-6" />}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-teal-500 to-blue-600"></div>
+                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    {dateLabel}
+                  </h4>
+                </div>
+                <div className="space-y-3 ml-4">
                   {dayNotifications.map((notification) => (
                     <div 
                       key={notification.id}
-                      className="p-3 bg-white border border-gray-100 rounded-lg hover:border-gray-200 transition-colors"
+                      className={`p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md ${getNotificationBorder(notification.type)}`}
                     >
                       {renderNotificationContent(notification)}
                     </div>
