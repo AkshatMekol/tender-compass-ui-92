@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MessageSquare, ThumbsUp, ThumbsDown, Star, Send, CheckCircle } from 'lucide-react';
+import { MessageSquare, ThumbsUp, ThumbsDown, Star, Send, CheckCircle, Phone, Mail, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const FeedbackTab: React.FC = () => {
@@ -106,6 +106,44 @@ const FeedbackTab: React.FC = () => {
                 <MessageSquare className="w-4 h-4 mr-2" />
                 General Feedback
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Contact Us Section */}
+          <Card className="rounded-xl border-0 shadow-lg mt-6">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-gray-900">Contact Us</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Phone</p>
+                  <p className="text-sm text-gray-600">+91 98765 43210</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Email</p>
+                  <p className="text-sm text-gray-600">support@tenderbharat.com</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-orange-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Office</p>
+                  <p className="text-sm text-gray-600">Business hours: 9 AM - 6 PM</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
