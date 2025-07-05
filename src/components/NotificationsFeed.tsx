@@ -79,19 +79,6 @@ const NotificationsFeed: React.FC = () => {
     }
   };
 
-  const getNotificationBorder = (type: string) => {
-    switch (type) {
-      case 'new_tenders':
-        return 'border-l-4 border-l-teal-500 bg-gradient-to-r from-teal-50 to-transparent';
-      case 'corrigendum':
-        return 'border-l-4 border-l-orange-500 bg-gradient-to-r from-orange-50 to-transparent';
-      case 'suggested_tender':
-        return 'border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-transparent';
-      default:
-        return 'border-l-4 border-l-gray-300 bg-gray-50';
-    }
-  };
-
   const getDateLabel = (timestamp: Date): string => {
     const now = new Date();
     const diffTime = now.getTime() - timestamp.getTime();
@@ -140,13 +127,13 @@ const NotificationsFeed: React.FC = () => {
             <div className="flex-shrink-0 mt-1">
               {getNotificationIcon(notification.type)}
             </div>
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-2">
               <div className="text-sm text-gray-700 leading-relaxed">
                 Corrigendum issued for one of your saved tenders.
               </div>
-              <div className="text-sm bg-white/70 border border-orange-200 rounded-lg p-3 shadow-sm">
+              <div className="text-sm text-gray-600">
                 <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
-                <div className="text-orange-700 font-semibold mt-1">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+                <div className="text-orange-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
               </div>
             </div>
           </div>
@@ -158,21 +145,21 @@ const NotificationsFeed: React.FC = () => {
             <div className="flex-shrink-0 mt-1">
               {getNotificationIcon(notification.type)}
             </div>
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-2">
               <div className="text-sm text-gray-700 leading-relaxed">
                 We found a compatible new tender for you.
               </div>
-              <div className="text-sm bg-white/70 border border-blue-200 rounded-lg p-3 shadow-sm">
-                <div className="font-medium text-gray-900 mb-2">{notification.data.tenderName}</div>
-                <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
                   <div className="text-blue-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
-                  <Button 
-                    size="sm" 
-                    className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg shadow-sm ml-3"
-                  >
-                    Analyze
-                  </Button>
                 </div>
+                <Button 
+                  size="sm" 
+                  className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white text-xs px-3 py-1"
+                >
+                  Analyze
+                </Button>
               </div>
             </div>
           </div>
@@ -238,7 +225,7 @@ const NotificationsFeed: React.FC = () => {
                   {dayNotifications.map((notification) => (
                     <div 
                       key={notification.id}
-                      className={`p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md ${getNotificationBorder(notification.type)}`}
+                      className="p-4 bg-gray-50/80 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors duration-200"
                     >
                       {renderNotificationContent(notification)}
                     </div>
