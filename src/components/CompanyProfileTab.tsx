@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Building2, MapPin, Phone, Mail, Edit3, Plus, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import NotificationsFeed from './NotificationsFeed';
 
 const CompanyProfileTab: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -528,6 +529,9 @@ const CompanyProfileTab: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Notifications Feed */}
+        <NotificationsFeed />
       </div>
     </div>
   );
