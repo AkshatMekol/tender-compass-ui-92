@@ -36,7 +36,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
   const [loadingStep, setLoadingStep] = useState(0);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
   const [queriesLeft, setQueriesLeft] = useState(50);
-  const [showPastMessages, setShowPastMessages] = useState(false);
+  const [isLoadingPastMessages, setIsLoadingPastMessages] = useState(false);
   const [pastSessions, setPastSessions] = useState<{ date: string; messages: Message[] }[]>([
     {
       date: '2025-01-10',
@@ -287,13 +287,18 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
     ));
   };
 
-  const loadPastSession = (sessionMessages: Message[]) => {
-    if (onMessagesChange) {
-      onMessagesChange(sessionMessages);
-    } else {
-      setInternalMessages(sessionMessages);
-    }
-    setShowPastMessages(false);
+  const loadPastSession = async (sessionMessages: Message[]) => {
+    setIsLoadingPastMessages(true);
+    
+    // Show loading animation for 2 seconds
+    setTimeout(() => {
+      if (onMessagesChange) {
+        onMessagesChange(sessionMessages);
+      } else {
+        setInternalMessages(sessionMessages);
+      }
+      setIsLoadingPastMessages(false);
+    }, 2000);
   };
 
   const renderTenderCard = (tender: Tender, isBlurred = false) => (
@@ -403,92 +408,64 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           </div>
           
           <div className="flex items-center space-x-4">
-            {/* Past Messages Button */}
-            <Button
-              onClick={() => setShowPastMessages(!showPastMessages)}
-              variant="outline"
-              className="rounded-xl border-gray-300 hover:bg-gray-50 shadow-sm"
-            >
-              <History className="w-4 h-4 mr-2" />
-              📜 View Past Conversations
-            </Button>
-            
             {/* Query Counter */}
-            <div className="flex items-center">
-              <Badge 
-                className={`text-sm px-4 py-2 rounded-full shadow-sm ${
-                  queriesLeft <= 10 
-                    ? 'bg-red-50 text-red-700 border border-red-200' 
-                    : queriesLeft <= 25
-                    ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
-                    : 'bg-green-50 text-green-700 border border-green-200'
-                }`}
-              >
-                💬 Queries Left: <span className="font-bold ml-1">{queriesLeft}</span>
-              </Badge>
-              {queriesLeft === 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-blue-600 hover:text-blue-700 p-1 ml-2"
-                  title="Contact help to renew"
-                >
-                  <HelpCircle className="w-4 h-4" />
-                </Button>
-              )}
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full shadow-md">
+              <span className="text-sm font-medium">{queriesLeft}</span>
             </div>
+            
+            {queriesLeft === 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-blue-600 hover:text-blue-700 p-1 ml-2"
+                title="Contact help to renew"
+              >
+                <HelpCircle className="w-4 h-4" />
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Past Messages Sidebar */}
-      {showPastMessages && (
-        <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <History className="w-5 h-5 text-teal-600" />
-              Past Conversations
-            </h3>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
-              {pastSessions.map((session, index) => (
-                <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow border-l-4 border-l-teal-500" onClick={() => loadPastSession(session.messages)}>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-900 mb-1">
-                          {session.messages[0]?.content.substring(0, 50)}...
-                        </p>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {new Date(session.date).toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric', 
-                            year: 'numeric' 
-                          })}
-                        </p>
-                      </div>
-                      <Badge variant="secondary" className="text-xs">
-                        {session.messages.length} messages
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Chat Body */}
       <div className="flex-1 overflow-y-auto p-6 chat-body">
         <div className="max-w-4xl mx-auto space-y-6">
+          {/* Load Previous Messages Button */}
+          <div className="text-center mb-6">
+            <Button
+              onClick={() => {
+                if (pastSessions.length > 0) {
+                  loadPastSession(pastSessions[0].messages);
+                }
+              }}
+              disabled={isLoadingPastMessages}
+              className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              {isLoadingPastMessages ? (
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                  <span>Loading previous messages...</span>
+                </div>
+              ) : (
+                <>
+                  <History className="w-4 h-4 mr-2" />
+                  📜 Load 4 more messages
+                </>
+              )}
+            </Button>
+          </div>
+
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-2xl ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
                 <div className={`flex items-start space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
                     message.type === 'user' 
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600' 
+                      ? 'bg-gradient-to-r from-purple-500 to-blue-600' 
                       : 'bg-gradient-to-r from-teal-500 to-blue-600'
                   }`}>
                     {message.type === 'user' ? (
@@ -500,7 +477,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                   
                   <div className={`rounded-2xl p-4 shadow-md ${
                     message.type === 'user'
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+                      ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white'
                       : 'bg-white text-gray-800 border border-gray-100'
                   }`}>
                     {message.loading && (
@@ -600,7 +577,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={queriesLeft === 0 ? "🚫 Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything... 💬"}
-                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm transition-all duration-200 ${
+                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm transition-all duration-200 ${
                   queriesLeft === 0 
                     ? 'border-red-300 bg-red-50 placeholder-red-400 cursor-not-allowed' 
                     : 'border-gray-300 hover:border-gray-400'
@@ -614,7 +591,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
               className={`px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 ${
                 queriesLeft === 0 
                   ? 'bg-gray-300 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700'
+                  : 'bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700'
               }`}
             >
               <Send className="w-5 h-5" />
