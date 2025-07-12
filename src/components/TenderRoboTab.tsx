@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check } from 'lucide-react';
+import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check, History, HelpCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import CompatibilityScore from './CompatibilityScore';
@@ -27,6 +27,44 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
+  const [queriesLeft, setQueriesLeft] = useState(50);
+  const [showPastMessages, setShowPastMessages] = useState(false);
+  const [pastSessions, setPastSessions] = useState<{ date: string; messages: Message[] }[]>([
+    {
+      date: '2025-01-10',
+      messages: [
+        {
+          id: 'past-1',
+          type: 'user',
+          content: 'Show me tenders for road construction in Maharashtra',
+          timestamp: new Date('2025-01-10T10:30:00')
+        },
+        {
+          id: 'past-2',
+          type: 'bot',
+          content: 'I found 5 road construction tenders in Maharashtra. Here are the top matches based on your profile.',
+          timestamp: new Date('2025-01-10T10:30:15')
+        }
+      ]
+    },
+    {
+      date: '2025-01-09',
+      messages: [
+        {
+          id: 'past-3',
+          type: 'user',
+          content: 'What are the payment terms for NHAI projects?',
+          timestamp: new Date('2025-01-09T14:20:00')
+        },
+        {
+          id: 'past-4',
+          type: 'bot',
+          content: 'NHAI projects typically have payment terms of 75% on running account and 25% after completion. Payment cycles are usually monthly.',
+          timestamp: new Date('2025-01-09T14:20:30')
+        }
+      ]
+    }
+  ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -141,6 +179,19 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
+    // Check if queries are exhausted
+    if (queriesLeft === 0) {
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        type: 'bot',
+        content: "Your monthly queries have ended, kindly contact help to renew.",
+        timestamp: new Date()
+      };
+      updateMessages(prev => [...prev, errorMessage]);
+      setInputValue('');
+      return;
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -151,6 +202,9 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
     updateMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    
+    // Decrease query count
+    setQueriesLeft(prev => prev - 1);
 
     // Check if user is asking for tenders
     const isTenderQuery = inputValue.toLowerCase().includes('tender') || 
@@ -223,6 +277,15 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
     updateMessages(prev => prev.map(msg => 
       msg.id === messageId ? { ...msg, showTenders: true } : msg
     ));
+  };
+
+  const loadPastSession = (sessionMessages: Message[]) => {
+    if (onMessagesChange) {
+      onMessagesChange(sessionMessages);
+    } else {
+      setInternalMessages(sessionMessages);
+    }
+    setShowPastMessages(false);
   };
 
   const renderTenderCard = (tender: Tender, isBlurred = false) => (
@@ -315,20 +378,86 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
     <div className="h-full flex flex-col bg-gradient-to-br from-teal-50 to-blue-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200 p-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center">
-            <Bot className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center">
+              <Bot className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Tender Robo – Your AI Tender Assistant
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Ask anything about tenders, market insights, or let us fetch tenders for you!
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Tender Robo – Your AI Tender Assistant
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Ask anything about tenders, market insights, or let us fetch tenders for you!
-            </p>
+          
+          <div className="flex items-center space-x-4">
+            {/* Past Messages Button */}
+            <Button
+              onClick={() => setShowPastMessages(!showPastMessages)}
+              variant="outline"
+              className="rounded-lg border-gray-300 hover:bg-gray-50"
+            >
+              <History className="w-4 h-4 mr-2" />
+              Past Messages
+            </Button>
+            
+            {/* Query Counter */}
+            <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+              <span className="text-sm font-medium text-blue-900">Queries Left:</span>
+              <span className={`text-lg font-bold ${queriesLeft <= 10 ? 'text-red-600' : 'text-blue-600'}`}>
+                {queriesLeft}
+              </span>
+              {queriesLeft === 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-700 p-1"
+                  title="Contact help to renew"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Past Messages Sidebar */}
+      {showPastMessages && (
+        <div className="bg-white border-b border-gray-200 p-4">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-lg font-semibold mb-4">Past Conversations</h3>
+            <div className="space-y-3">
+              {pastSessions.map((session, index) => (
+                <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => loadPastSession(session.messages)}>
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 mb-1">
+                          {session.messages[0]?.content.substring(0, 50)}...
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(session.date).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                          })}
+                        </p>
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {session.messages.length} messages
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Chat Body */}
       <div className="flex-1 overflow-y-auto p-6 chat-body">
@@ -462,14 +591,18 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask Tender Robo anything..."
-                className="w-full px-6 py-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm"
-                disabled={isLoading}
+                placeholder={queriesLeft === 0 ? "Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything..."}
+                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm ${
+                  queriesLeft === 0 
+                    ? 'border-red-300 bg-red-50 placeholder-red-400 cursor-not-allowed' 
+                    : 'border-gray-300'
+                }`}
+                disabled={isLoading || queriesLeft === 0}
               />
             </div>
             <Button
               onClick={handleSendMessage}
-              disabled={isLoading || !inputValue.trim()}
+              disabled={isLoading || !inputValue.trim() || queriesLeft === 0}
               className="px-6 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 shadow-md hover:shadow-lg transition-all duration-200"
             >
               <Send className="w-5 h-5" />
