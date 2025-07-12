@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check, History, HelpCircle } from 'lucide-react';
+import { Send, Bot, User, Download, Eye, Satellite, Settings, BarChart3, MapPin, Calendar, IndianRupee, Save, Check, History, HelpCircle, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
 import CompatibilityScore from './CompatibilityScore';
 import { Tender } from '../types/tender';
 
@@ -22,7 +23,14 @@ interface TenderRoboTabProps {
 }
 
 const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: externalMessages, onMessagesChange }) => {
-  const [internalMessages, setInternalMessages] = useState<Message[]>([]);
+  const [internalMessages, setInternalMessages] = useState<Message[]>([
+    {
+      id: 'welcome',
+      type: 'bot',
+      content: "👋 Hi there! Welcome to Tender Robo — your personal tender companion. You have 💬 50 queries left this month. Ask away and let's find the right tenders together! 🚀",
+      timestamp: new Date()
+    }
+  ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -184,7 +192,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       const errorMessage: Message = {
         id: Date.now().toString(),
         type: 'bot',
-        content: "Your monthly queries have ended, kindly contact help to renew.",
+        content: "🚫 Your monthly queries have ended. Kindly contact help to renew. We're here to assist you! 💙",
         timestamp: new Date()
       };
       updateMessages(prev => [...prev, errorMessage]);
@@ -384,7 +392,8 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-teal-500" />
                 Tender Robo – Your AI Tender Assistant
               </h1>
               <p className="text-gray-600 mt-1">
@@ -398,23 +407,30 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
             <Button
               onClick={() => setShowPastMessages(!showPastMessages)}
               variant="outline"
-              className="rounded-lg border-gray-300 hover:bg-gray-50"
+              className="rounded-xl border-gray-300 hover:bg-gray-50 shadow-sm"
             >
               <History className="w-4 h-4 mr-2" />
-              Past Messages
+              📜 View Past Conversations
             </Button>
             
             {/* Query Counter */}
-            <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
-              <span className="text-sm font-medium text-blue-900">Queries Left:</span>
-              <span className={`text-lg font-bold ${queriesLeft <= 10 ? 'text-red-600' : 'text-blue-600'}`}>
-                {queriesLeft}
-              </span>
+            <div className="flex items-center">
+              <Badge 
+                className={`text-sm px-4 py-2 rounded-full shadow-sm ${
+                  queriesLeft <= 10 
+                    ? 'bg-red-50 text-red-700 border border-red-200' 
+                    : queriesLeft <= 25
+                    ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                    : 'bg-green-50 text-green-700 border border-green-200'
+                }`}
+              >
+                💬 Queries Left: <span className="font-bold ml-1">{queriesLeft}</span>
+              </Badge>
               {queriesLeft === 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-700 p-1"
+                  className="text-blue-600 hover:text-blue-700 p-1 ml-2"
                   title="Contact help to renew"
                 >
                   <HelpCircle className="w-4 h-4" />
@@ -427,19 +443,23 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
 
       {/* Past Messages Sidebar */}
       {showPastMessages && (
-        <div className="bg-white border-b border-gray-200 p-4">
+        <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-lg font-semibold mb-4">Past Conversations</h3>
-            <div className="space-y-3">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <History className="w-5 h-5 text-teal-600" />
+              Past Conversations
+            </h3>
+            <div className="space-y-3 max-h-60 overflow-y-auto">
               {pastSessions.map((session, index) => (
-                <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => loadPastSession(session.messages)}>
+                <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow border-l-4 border-l-teal-500" onClick={() => loadPastSession(session.messages)}>
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <p className="font-medium text-gray-900 mb-1">
                           {session.messages[0]?.content.substring(0, 50)}...
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
                           {new Date(session.date).toLocaleDateString('en-US', { 
                             month: 'short', 
                             day: 'numeric', 
@@ -447,9 +467,9 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                           })}
                         </p>
                       </div>
-                      <div className="text-xs text-gray-400">
+                      <Badge variant="secondary" className="text-xs">
                         {session.messages.length} messages
-                      </div>
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -462,23 +482,11 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       {/* Chat Body */}
       <div className="flex-1 overflow-y-auto p-6 chat-body">
         <div className="max-w-4xl mx-auto space-y-6">
-          {messages.length === 0 && (
-            <div className="text-center py-12">
-              <Bot className="w-16 h-16 text-teal-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                Welcome to Tender Robo!
-              </h3>
-              <p className="text-gray-500">
-                Start by asking me anything about tenders or market insights.
-              </p>
-            </div>
-          )}
-
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-2xl ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
                 <div className={`flex items-start space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
                     message.type === 'user' 
                       ? 'bg-gradient-to-r from-blue-500 to-purple-600' 
                       : 'bg-gradient-to-r from-teal-500 to-blue-600'
@@ -493,7 +501,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                   <div className={`rounded-2xl p-4 shadow-md ${
                     message.type === 'user'
                       ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-                      : 'bg-white text-gray-800'
+                      : 'bg-white text-gray-800 border border-gray-100'
                   }`}>
                     {message.loading && (
                       <div className="flex items-center space-x-2">
@@ -504,7 +512,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                     
                     {!message.loading && (
                       <>
-                        <p>{message.content}</p>
+                        <p className="leading-relaxed">{message.content}</p>
                         
                         {message.tenders && (
                           <div className="mt-4">
@@ -527,7 +535,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                               </div>
                             )}
                             
-                            <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
+                            <div className="mt-6 p-4 bg-gray-50 rounded-2xl border border-gray-200">
                               <p className="text-gray-700 mb-4 font-medium">Would you like to:</p>
                               <div className="flex space-x-3">
                                 <Button
@@ -563,10 +571,10 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
             <div className="flex justify-start">
               <div className="max-w-2xl">
                 <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-blue-600 flex items-center justify-center shadow-md">
                     <Bot className="w-5 h-5 text-white" />
                   </div>
-                  <div className="bg-white rounded-2xl p-4 shadow-md">
+                  <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-100">
                     <div className="flex items-center space-x-2">
                       {getLoadingIcon()}
                       <span className="text-sm text-gray-700">{loadingSteps[loadingStep]}</span>
@@ -581,7 +589,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       </div>
 
       {/* Input Bar */}
-      <div className="bg-white border-t border-gray-200 p-4">
+      <div className="bg-white border-t border-gray-200 p-4 shadow-lg">
         <div className="max-w-4xl mx-auto">
           <div className="flex space-x-4">
             <div className="flex-1 relative">
@@ -591,11 +599,11 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={queriesLeft === 0 ? "Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything..."}
-                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm ${
+                placeholder={queriesLeft === 0 ? "🚫 Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything... 💬"}
+                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm transition-all duration-200 ${
                   queriesLeft === 0 
                     ? 'border-red-300 bg-red-50 placeholder-red-400 cursor-not-allowed' 
-                    : 'border-gray-300'
+                    : 'border-gray-300 hover:border-gray-400'
                 }`}
                 disabled={isLoading || queriesLeft === 0}
               />
@@ -603,7 +611,11 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
             <Button
               onClick={handleSendMessage}
               disabled={isLoading || !inputValue.trim() || queriesLeft === 0}
-              className="px-6 py-4 rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 shadow-md hover:shadow-lg transition-all duration-200"
+              className={`px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 ${
+                queriesLeft === 0 
+                  ? 'bg-gray-300 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700'
+              }`}
             >
               <Send className="w-5 h-5" />
             </Button>
