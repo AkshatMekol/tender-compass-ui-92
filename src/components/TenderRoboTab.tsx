@@ -27,7 +27,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
     {
       id: 'welcome',
       type: 'bot',
-      content: "👋 Hi there! Welcome to Tender Robo — your personal tender companion. You have 💬 50 queries left this month. Ask away and let's find the right tenders together! 🚀",
+      content: "Hi there! Welcome to Tender Robo — your personal tender companion. You have 50 queries left this month. Ask away and let's find the right tenders together!",
       timestamp: new Date()
     }
   ]);
@@ -192,7 +192,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
       const errorMessage: Message = {
         id: Date.now().toString(),
         type: 'bot',
-        content: "🚫 Your monthly queries have ended. Kindly contact help to renew. We're here to assist you! 💙",
+        content: "Your monthly queries have ended. Kindly contact help to renew. We're here to assist you!",
         timestamp: new Date()
       };
       updateMessages(prev => [...prev, errorMessage]);
@@ -409,7 +409,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
           
           <div className="flex items-center space-x-4">
             {/* Query Counter */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full shadow-md">
+            <div className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-4 py-2 rounded-full shadow-md">
               <span className="text-sm font-medium">{queriesLeft}</span>
             </div>
             
@@ -439,7 +439,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 }
               }}
               disabled={isLoadingPastMessages}
-              className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
+              className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {isLoadingPastMessages ? (
                 <div className="flex items-center space-x-2">
@@ -453,7 +453,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
               ) : (
                 <>
                   <History className="w-4 h-4 mr-2" />
-                  📜 Load 4 more messages
+                  Load previous messages
                 </>
               )}
             </Button>
@@ -465,7 +465,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 <div className={`flex items-start space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
                     message.type === 'user' 
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-600' 
+                      ? 'bg-gradient-to-r from-teal-500 to-blue-600' 
                       : 'bg-gradient-to-r from-teal-500 to-blue-600'
                   }`}>
                     {message.type === 'user' ? (
@@ -477,7 +477,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                   
                   <div className={`rounded-2xl p-4 shadow-md ${
                     message.type === 'user'
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white'
+                      ? 'bg-gradient-to-r from-teal-500 to-blue-600 text-white'
                       : 'bg-white text-gray-800 border border-gray-100'
                   }`}>
                     {message.loading && (
@@ -526,7 +526,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                                 {!message.showTenders && (
                                   <Button
                                     onClick={() => handleViewMoreTenders(message.id)}
-                                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                                    className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
                                   >
                                     <Eye className="w-4 h-4 mr-2" />
                                     View More Tenders
@@ -576,8 +576,8 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={queriesLeft === 0 ? "🚫 Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything... 💬"}
-                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm transition-all duration-200 ${
+                placeholder={queriesLeft === 0 ? "Monthly queries exhausted - contact help to renew" : "Ask Tender Robo anything..."}
+                className={`w-full px-6 py-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm transition-all duration-200 ${
                   queriesLeft === 0 
                     ? 'border-red-300 bg-red-50 placeholder-red-400 cursor-not-allowed' 
                     : 'border-gray-300 hover:border-gray-400'
@@ -591,7 +591,7 @@ const TenderRoboTab: React.FC<TenderRoboTabProps> = ({ onAnalyze, messages: exte
               className={`px-6 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 ${
                 queriesLeft === 0 
                   ? 'bg-gray-300 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700'
+                  : 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700'
               }`}
             >
               <Send className="w-5 h-5" />

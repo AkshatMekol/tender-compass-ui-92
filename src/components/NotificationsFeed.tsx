@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Bell, TrendingUp, AlertCircle, Lightbulb } from 'lucide-react';
+import { Bell, TrendingUp, AlertCircle, Lightbulb, Trash2 } from 'lucide-react';
 
 interface NotificationEntry {
   id: string;
@@ -66,6 +67,10 @@ const NotificationsFeed: React.FC = () => {
     setNotifications(filteredNotifications);
   }, []);
 
+  const deleteNotification = (notificationId: string) => {
+    setNotifications(prev => prev.filter(notification => notification.id !== notificationId));
+  };
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'new_tenders':
@@ -109,59 +114,89 @@ const NotificationsFeed: React.FC = () => {
     switch (notification.type) {
       case 'new_tenders':
         return (
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0 mt-1">
-              {getNotificationIcon(notification.type)}
-            </div>
-            <div className="flex-1">
-              <div className="text-sm text-gray-700 leading-relaxed">
-                You have <span className="font-semibold text-teal-700">{notification.data.count}</span> new tenders matching your interests today.
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-3 flex-1">
+              <div className="flex-shrink-0 mt-1">
+                {getNotificationIcon(notification.type)}
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-gray-700 leading-relaxed">
+                  You have <span className="font-semibold text-teal-700">{notification.data.count}</span> new tenders matching your interests today.
+                </div>
               </div>
             </div>
+            <Button
+              onClick={() => deleteNotification(notification.id)}
+              variant="ghost"
+              size="sm"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 ml-2"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
           </div>
         );
       
       case 'corrigendum':
         return (
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0 mt-1">
-              {getNotificationIcon(notification.type)}
-            </div>
-            <div className="flex-1 space-y-2">
-              <div className="text-sm text-gray-700 leading-relaxed">
-                Corrigendum issued for one of your saved tenders.
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-3 flex-1">
+              <div className="flex-shrink-0 mt-1">
+                {getNotificationIcon(notification.type)}
               </div>
-              <div className="text-sm text-gray-600">
-                <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
-                <div className="text-orange-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+              <div className="flex-1 space-y-2">
+                <div className="text-sm text-gray-700 leading-relaxed">
+                  Corrigendum issued for one of your saved tenders.
+                </div>
+                <div className="text-sm text-gray-600">
+                  <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
+                  <div className="text-orange-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+                </div>
               </div>
             </div>
+            <Button
+              onClick={() => deleteNotification(notification.id)}
+              variant="ghost"
+              size="sm"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 ml-2"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
           </div>
         );
       
       case 'suggested_tender':
         return (
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0 mt-1">
-              {getNotificationIcon(notification.type)}
-            </div>
-            <div className="flex-1 space-y-2">
-              <div className="text-sm text-gray-700 leading-relaxed">
-                We found a compatible new tender for you.
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-3 flex-1">
+              <div className="flex-shrink-0 mt-1">
+                {getNotificationIcon(notification.type)}
               </div>
-              <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
-                  <div className="text-blue-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+              <div className="flex-1 space-y-2">
+                <div className="text-sm text-gray-700 leading-relaxed">
+                  We found a compatible new tender for you.
                 </div>
-                <Button 
-                  size="sm" 
-                  className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white text-xs px-3 py-1"
-                >
-                  Analyze
-                </Button>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm">
+                    <div className="font-medium text-gray-900">{notification.data.tenderName}</div>
+                    <div className="text-blue-700 font-semibold">₹{notification.data.tenderAmount} Cr – Closes {notification.data.closeDate}</div>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white text-xs px-3 py-1"
+                  >
+                    Analyze
+                  </Button>
+                </div>
               </div>
             </div>
+            <Button
+              onClick={() => deleteNotification(notification.id)}
+              variant="ghost"
+              size="sm"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 ml-2"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
           </div>
         );
       
