@@ -17,8 +17,21 @@ const Blogs = () => {
       author: 'TenderBharat Team',
       readTime: '5 min read',
       image: '/lovable-uploads/fe55c99d-508d-4b0c-91f1-81fc8c17f7a6.png'
+    },
+    {
+      id: 'hidden-cost-manual-discovery',
+      title: 'The Hidden Cost of Manual Tender Discovery (and the Smart Way Out)',
+      description: 'Uncover the invisible costs of manual tender workflows and discover how smart automation can save millions from your bottom line.',
+      date: 'January 20, 2025',
+      author: 'TenderBharat Team',
+      readTime: '7 min read',
+      image: '/lovable-uploads/25ac090c-ecfe-4c65-a387-993b2dbb403d.png'
     }
   ];
+
+  const handleBlogClick = (blogId: string) => {
+    navigate(`/blog?id=${blogId}`);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50">
@@ -73,7 +86,7 @@ const Blogs = () => {
               <Card 
                 key={post.id} 
                 className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm cursor-pointer group"
-                onClick={() => navigate('/blog')}
+                onClick={() => handleBlogClick(post.id)}
               >
                 <div className="aspect-video overflow-hidden rounded-t-lg">
                   <img 
