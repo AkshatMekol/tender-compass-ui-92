@@ -75,6 +75,13 @@ const Home = () => {
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
+                onClick={() => navigate('/blog')}
+                className="text-gray-600 hover:text-teal-600"
+              >
+                Blog
+              </Button>
+              <Button
+                variant="ghost"
                 onClick={() => navigate('/login')}
                 className="text-gray-600 hover:text-teal-600"
               >
