@@ -151,7 +151,7 @@ const Blog = () => {
                     Ask Tender Robo, your AI assistant, for:
                   </p>
                   <ul className="list-disc list-inside text-gray-700 mb-6 space-y-2">
-                    <li>Custom tender searches (e.g., "Show tenders >200 Cr with &lt;30% bridge work")</li>
+                    <li>Custom tender searches (e.g., "Show tenders {'>'}200 Cr with {'<'}30% bridge work")</li>
                     <li>Market insights & risk analysis</li>
                     <li>Personalized scoring refinements based on your feedback</li>
                   </ul>
