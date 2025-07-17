@@ -1,12 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Calendar, User, CheckCircle, Target, BarChart3, MessageSquare, Bell, Clock, Search, FileText, TrendingUp, Zap, Eye, Filter } from 'lucide-react';
+import { ArrowLeft, Calendar, User, CheckCircle, Target, BarChart3, MessageSquare, Bell, Clock, Search, FileText, TrendingUp, Zap, Eye, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [expandedPost, setExpandedPost] = useState<number | null>(null);
+
+  const toggleExpanded = (postId: number) => {
+    setExpandedPost(expandedPost === postId ? null : postId);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50">
@@ -46,15 +51,15 @@ const Blog = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mb-4">
-            TenderBharat Blogs
+            Blogs
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 mx-auto">
             Insights, updates, and guides to help you master the tendering landscape with AI-powered intelligence.
           </p>
         </div>
 
         {/* Blog Posts Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* First Blog Post */}
           <article className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="bg-gradient-to-r from-teal-600 to-blue-700 text-white p-6">
@@ -115,12 +120,35 @@ const Blog = () => {
                 </div>
               </div>
 
+              {expandedPost === 1 && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-4">How It Works</h3>
+                  <div className="space-y-3 text-gray-700">
+                    <p>TenderBharat leverages advanced AI algorithms to transform how contractors discover and evaluate tenders:</p>
+                    <ul className="list-disc list-inside space-y-2 ml-4">
+                      <li>Automated scanning of 30+ tender portals</li>
+                      <li>Real-time document analysis and classification</li>
+                      <li>Intelligent matching based on your company profile</li>
+                      <li>Predictive scoring for win probability</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <Button 
-                  onClick={() => navigate('/login')}
+                  onClick={() => toggleExpanded(1)}
                   className="w-full bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white"
                 >
-                  Learn More
+                  {expandedPost === 1 ? (
+                    <>
+                      Show Less <ChevronUp className="w-4 h-4 ml-2" />
+                    </>
+                  ) : (
+                    <>
+                      Learn More <ChevronDown className="w-4 h-4 ml-2" />
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
@@ -140,7 +168,7 @@ const Blog = () => {
                 </div>
               </div>
               <h2 className="text-2xl font-bold mb-3 leading-tight">
-                Tender Bharat: The Tender Race Has Changed
+                The Tender Race Has Changed
               </h2>
               <p className="text-orange-100 leading-relaxed">
                 In today's fast-paced infrastructure market, identifying and acting on the right tender at the right time is critical.
@@ -194,12 +222,35 @@ const Blog = () => {
                 </div>
               </div>
 
+              {expandedPost === 2 && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <h3 className="font-semibold text-gray-900 mb-4">The Future of Tendering</h3>
+                  <div className="space-y-3 text-gray-700">
+                    <p>The traditional approach to tender discovery is becoming obsolete. Modern contractors need:</p>
+                    <ul className="list-disc list-inside space-y-2 ml-4">
+                      <li>Real-time intelligence on market opportunities</li>
+                      <li>AI-powered matching and scoring systems</li>
+                      <li>Automated document processing and analysis</li>
+                      <li>Strategic insights for competitive advantage</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <Button 
-                  onClick={() => navigate('/login')}
+                  onClick={() => toggleExpanded(2)}
                   className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white"
                 >
-                  Discover More
+                  {expandedPost === 2 ? (
+                    <>
+                      Show Less <ChevronUp className="w-4 h-4 ml-2" />
+                    </>
+                  ) : (
+                    <>
+                      Discover More <ChevronDown className="w-4 h-4 ml-2" />
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
@@ -207,7 +258,7 @@ const Blog = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-teal-600 to-blue-700 rounded-xl p-8 text-center text-white mt-12 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-teal-600 to-blue-700 rounded-xl p-8 text-center text-white mt-12">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Tendering Process?</h2>
           <p className="text-xl text-teal-100 mb-6">
             Join TenderBharat today and let AI do the heavy lifting—so you can focus on winning.
