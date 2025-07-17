@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -75,10 +76,10 @@ const Home = () => {
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
-                onClick={() => navigate('/blog')}
+                onClick={() => navigate('/blogs')}
                 className="text-gray-600 hover:text-teal-600"
               >
-                Blog
+                Blogs
               </Button>
               <Button
                 variant="ghost"
