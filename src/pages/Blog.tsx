@@ -321,6 +321,249 @@ const Blog = () => {
           </div>
         </div>
       )
+    },
+    'revolutionising-tender-management': {
+      title: 'Revolutionising Tender Management for Infrastructure Success',
+      subtitle: 'A comprehensive presentation on how TenderBharat transforms the tendering landscape for modern contractors.',
+      date: 'January 22, 2025',
+      author: 'TenderBharat Team',
+      content: (
+        <div className="prose prose-lg max-w-none">
+          {/* Slide 1 - Hero Slide */}
+          <div className="bg-gradient-to-r from-teal-600 to-blue-700 text-white rounded-xl p-12 mb-8 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Revolutionising Tender Management for Infrastructure Success
+            </h2>
+            <div className="flex justify-center items-center mt-8">
+              <img 
+                src="/lovable-uploads/95c62349-563f-430e-b186-974a1ead51d0.png" 
+                alt="Professional handshake with city skyline representing infrastructure success"
+                className="rounded-lg shadow-2xl max-w-full h-auto"
+              />
+            </div>
+          </div>
+
+          {/* Slide 2 - The Problem */}
+          <div className="bg-white border-2 border-gray-200 rounded-xl p-8 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+              The Tendering Chaos: Missed Opportunities and Manual Mayhem
+            </h2>
+            <p className="text-lg text-gray-700 text-center mb-8 leading-relaxed">
+              The infrastructure race demands speed and intelligence in tendering, yet contractors are mired in outdated, manual workflows. This inefficiency leads to significant missed opportunities and wasted time.
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">Disjointed Portals</h3>
+                  <p className="text-red-700">Over 12 different portals, each with unique interfaces.</p>
+                </div>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-yellow-800 mb-2">No Centralised Tracking</h3>
+                  <p className="text-yellow-700">Impossible to track all tenders efficiently across various sources.</p>
+                </div>
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-orange-800 mb-2">CAPTCHA Overload</h3>
+                  <p className="text-orange-700">Excessive CAPTCHA challenges hinder swift access to information.</p>
+                </div>
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-purple-800 mb-2">Buried Updates</h3>
+                  <p className="text-purple-700">Critical updates hidden within bulky, unsearchable PDFs.</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <img 
+                  src="/lovable-uploads/0203eee6-cea4-4ace-a7be-576b016bf25d.png" 
+                  alt="Visual representation of manual tender search chaos"
+                  className="rounded-lg shadow-lg max-w-full h-auto"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mt-8">
+              <div className="text-center p-6 bg-red-50 rounded-lg">
+                <div className="text-4xl font-bold text-red-600 mb-2">68%</div>
+                <div className="text-red-700 font-medium">Tenders Missed</div>
+                <p className="text-sm text-red-600 mt-2">An alarming percentage of relevant tenders are overlooked.</p>
+              </div>
+              <div className="text-center p-6 bg-orange-50 rounded-lg">
+                <div className="text-4xl font-bold text-orange-600 mb-2">57%</div>
+                <div className="text-orange-700 font-medium">Time Wasted</div>
+                <p className="text-sm text-orange-600 mt-2">Teams spend 30+ hours weekly just decoding documents.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Slide 3 - The 4-Step Pain Loop */}
+          <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-8 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+              The 4-Step Pain Loop: Why Tendering Is Broken
+            </h2>
+            <p className="text-lg text-gray-700 text-center mb-8 leading-relaxed">
+              The current tendering process traps teams in a repetitive loop of inefficiency, consuming valuable time on rejection rather than strategic bidding.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                  <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold">1</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Scan Portals & Filter</h3>
+                    <p className="text-gray-700">Manually sifting through countless portals and downloading filtered tenders.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">2</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Track Incomplete Tenders</h3>
+                    <p className="text-gray-700">Constantly checking back for updates on partially completed tenders.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold">3</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Manually Read PDFs</h3>
+                    <p className="text-gray-700">Teams spend hours poring over bulky, dense PDF documents.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold">4</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Manual Shortlisting</h3>
+                    <p className="text-gray-700">Painstakingly shortlisting tenders without automated assistance.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center">
+                <img 
+                  src="/lovable-uploads/e4352a3c-ac4f-41ad-9a2f-535d0199487a.png" 
+                  alt="The 4-step pain loop illustration"
+                  className="rounded-lg shadow-lg max-w-full h-auto"
+                />
+              </div>
+            </div>
+
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 mt-8 text-center">
+              <p className="text-red-800 font-medium">
+                On average, contractors encounter 471 tenders per month, yet they can't analyse even a fraction due to these bottlenecks. 
+                Over 100 pages are often scanned just to reject a tender based on scope or payment terms, highlighting the critical need for automation.
+              </p>
+            </div>
+          </div>
+
+          {/* Slide 4 - The Solution */}
+          <div className="bg-gradient-to-r from-teal-600 to-blue-700 text-white rounded-xl p-8 mb-8">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Tender Bharat Automates It All
+            </h2>
+            <p className="text-lg text-center mb-8 leading-relaxed text-teal-100">
+              We go beyond simple discovery. Tender Bharat leverages advanced AI to analyse, score, and surface tenders perfectly tailored to your strengths, providing a full understanding at a glance.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <CheckCircle className="w-6 h-6 text-teal-200" />
+                    <h3 className="font-semibold text-white">Smart Compatibility Match</h3>
+                  </div>
+                  <p className="text-teal-100">Precision matching to tenders aligned with your capabilities.</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <Target className="w-6 h-6 text-teal-200" />
+                    <h3 className="font-semibold text-white">Work & Location Breakdown</h3>
+                  </div>
+                  <p className="text-teal-100">Detailed insights into project scope and geographical relevance.</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <Bell className="w-6 h-6 text-teal-200" />
+                    <h3 className="font-semibold text-white">Smart Notifications</h3>
+                  </div>
+                  <p className="text-teal-100">Timely alerts for critical updates and new opportunities.</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <MessageSquare className="w-6 h-6 text-teal-200" />
+                    <h3 className="font-semibold text-white">Tender Robo Assistant</h3>
+                  </div>
+                  <p className="text-teal-100">AI-powered assistant for streamlined tender analysis and support.</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <img 
+                  src="/lovable-uploads/7e946969-c907-4519-b594-8f17e6b25dd4.png" 
+                  alt="Tender Bharat automation features"
+                  className="rounded-lg shadow-lg max-w-full h-auto"
+                />
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mt-8 text-center">
+              <p className="text-xl font-bold text-white">
+                No document reading. No guesswork. No missed matches.
+              </p>
+            </div>
+          </div>
+
+          {/* Slide 5 - Product Features & CTA */}
+          <div className="bg-white border-2 border-gray-200 rounded-xl p-8 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+              Built for Contractors Who Want to Win More, Waste Less
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                  <div className="text-2xl font-bold text-green-600 mb-2">Special Offer!</div>
+                  <p className="text-green-700 font-medium">First 20 Alpha users get ₹9,999/month + free 1-year upgrades</p>
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                  <h3 className="font-bold text-gray-900 mb-4 flex items-center">
+                    <Target className="w-5 h-5 text-teal-600 mr-2" />
+                    Alpha (Now Live)
+                  </h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Tender Search</li>
+                    <li>• Smart Compatibility</li>
+                    <li>• Key Work Details</li>
+                    <li>• Location Insights</li>
+                    <li>• Tender Robo Assistant</li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                  <h3 className="font-bold text-gray-900 mb-4 flex items-center">
+                    <BarChart3 className="w-5 h-5 text-blue-600 mr-2" />
+                    Beta (Coming Soon)
+                  </h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Full BOQ</li>
+                    <li>• Interactive Cost Analysis</li>
+                    <li>• Past Bid Context</li>
+                  </ul>
+                </div>
+
+                <div className="border-t-2 border-gray-200 pt-6">
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-gray-900 mb-2">Alpha: ₹14,999/month</div>
+                    <div className="text-lg font-bold text-gray-900">Beta: ₹39,999/month</div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center">
+                <img 
+                  src="/lovable-uploads/9161d5e6-32da-4d07-943c-4be79f5e4efb.png" 
+                  alt="Professional contractor using tablet with building plans"
+                  className="rounded-lg shadow-lg max-w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     }
   };
 
