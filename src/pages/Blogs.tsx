@@ -26,15 +26,6 @@ const Blogs = () => {
       author: 'TenderBharat Team',
       readTime: '7 min read',
       image: '/lovable-uploads/25ac090c-ecfe-4c65-a387-993b2dbb403d.png'
-    },
-    {
-      id: 'revolutionising-tender-management',
-      title: 'Revolutionising Tender Management for Infrastructure Success',
-      description: 'A comprehensive presentation on how TenderBharat transforms the tendering landscape for modern contractors.',
-      date: 'January 22, 2025',
-      author: 'TenderBharat Team',
-      readTime: '8 min read',
-      image: '/lovable-uploads/95c62349-563f-430e-b186-974a1ead51d0.png'
     }
   ];
 
