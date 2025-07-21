@@ -4,7 +4,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, MapPin, Calendar, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight, FileSpreadsheet } from 'lucide-react';
 import CompatibilityScore from './CompatibilityScore';
@@ -27,8 +26,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
   const [selectedWorkType, setSelectedWorkType] = useState('EPC');
   const [currentPage, setCurrentPage] = useState(1);
   const tendersPerPage = 10;
-  const [exportDialogOpen, setExportDialogOpen] = useState(false);
-  const [exportMode, setExportMode] = useState<'all' | 'select'>('all');
+  const [isExportMode, setIsExportMode] = useState(false);
   const [selectedTenders, setSelectedTenders] = useState<Set<string>>(new Set());
 
   const workTypes = ['Item-rate', 'EPC', 'HAM', 'BOT', 'Others'];
@@ -158,14 +156,21 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     document.body.removeChild(link);
   };
 
-  const handleExport = () => {
-    if (exportMode === 'all') {
-      exportToExcel(filteredAndSortedTenders);
-    } else {
-      const selectedTenderData = filteredAndSortedTenders.filter(tender => selectedTenders.has(tender.id));
-      exportToExcel(selectedTenderData);
+  const handleExportClick = () => {
+    if (!isExportMode) {
+      setIsExportMode(true);
+      return;
     }
-    setExportDialogOpen(false);
+    
+    // Export selected tenders
+    const selectedTenderData = currentTenders.filter(tender => selectedTenders.has(tender.id));
+    exportToExcel(selectedTenderData);
+    setIsExportMode(false);
+    setSelectedTenders(new Set());
+  };
+
+  const handleCancelExport = () => {
+    setIsExportMode(false);
     setSelectedTenders(new Set());
   };
 
@@ -199,65 +204,36 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
           </div>
           
           <div className="flex items-center gap-3">
-            <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-2 border-green-200 text-green-700 hover:bg-green-50"
-                >
-                  <FileSpreadsheet className="w-4 h-4" />
-                  Export XLS
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Export Tenders</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="export-all"
-                        name="export-mode"
-                        checked={exportMode === 'all'}
-                        onChange={() => setExportMode('all')}
-                        className="text-teal-600"
-                      />
-                      <label htmlFor="export-all" className="text-sm font-medium">
-                        Export All Tenders ({filteredAndSortedTenders.length})
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="export-select"
-                        name="export-mode"
-                        checked={exportMode === 'select'}
-                        onChange={() => setExportMode('select')}
-                        className="text-teal-600"
-                      />
-                      <label htmlFor="export-select" className="text-sm font-medium">
-                        Select Tenders to Export
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleExport}
-                      disabled={exportMode === 'select' && selectedTenders.size === 0}
-                      className="flex-1 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700"
-                    >
-                      Export {exportMode === 'select' ? `(${selectedTenders.size})` : 'All'}
-                    </Button>
-                    <Button variant="outline" onClick={() => setExportDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+            {!isExportMode ? (
+              <Button
+                onClick={handleExportClick}
+                variant="outline"
+                className="flex items-center gap-2 border-green-200 text-green-700 hover:bg-green-50"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Export XLS
+              </Button>
+            ) : (
+              <div className="flex items-center gap-2">
+                {selectedTenders.size > 0 ? (
+                  <Button
+                    onClick={handleExportClick}
+                    className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white"
+                  >
+                    <FileSpreadsheet className="w-4 h-4" />
+                    Done ({selectedTenders.size})
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleCancelExport}
+                    variant="outline"
+                    className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50"
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </div>
+            )}
             
             <Button
               variant={todayTendersOnly ? "default" : "outline"}
@@ -379,7 +355,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
 
       <div className="flex-1 px-6 pb-6 overflow-hidden">
         <div className="h-full overflow-y-auto space-y-4 pr-2">
-          {exportMode === 'select' && currentTenders.length > 0 && (
+          {isExportMode && currentTenders.length > 0 && (
             <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <Checkbox
                 checked={selectedTenders.size === currentTenders.length}
@@ -395,7 +371,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
             <Card key={tender.id} className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  {exportMode === 'select' && (
+                  {isExportMode && (
                     <div className="flex-shrink-0">
                       <Checkbox
                         checked={selectedTenders.has(tender.id)}
