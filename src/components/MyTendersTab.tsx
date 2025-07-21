@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, MapPin, Calendar, IndianRupee, Trash2, Heart } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Search, MapPin, Calendar, IndianRupee, Trash2, Heart, FileSpreadsheet } from 'lucide-react';
 import CompatibilityScore from './CompatibilityScore';
 import { Tender } from '../types/tender';
 
@@ -16,6 +18,9 @@ interface MyTendersTabProps {
 const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, onRemoveTender }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('saved-date');
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [exportMode, setExportMode] = useState<'all' | 'select'>('all');
+  const [selectedTenders, setSelectedTenders] = useState<Set<string>>(new Set());
 
   // Current analyzed tender from the analysis page
   const analyzedTender: Tender = {
@@ -108,6 +113,64 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
     }
   };
 
+  const exportToExcel = (tenders: Tender[]) => {
+    const headers = ['Tender Name', 'Organisation', 'Amount', 'Location', 'Deadline', 'Compatibility Score', 'Category', 'Work Types'];
+    const csvContent = [
+      headers.join(','),
+      ...tenders.map(tender => [
+        `"${tender.name.replace(/"/g, '""')}"`,
+        `"${tender.organisation}"`,
+        formatAmount(tender.amount),
+        `"${tender.location}"`,
+        tender.deadline,
+        tender.compatibilityScore + '%',
+        `"${tender.category}"`,
+        `"${tender.workTypes.join(', ')}"`
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `tenders_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExport = () => {
+    if (exportMode === 'all') {
+      exportToExcel(filteredAndSortedTenders);
+    } else {
+      const selectedTenderData = filteredAndSortedTenders.filter(tender => selectedTenders.has(tender.id));
+      exportToExcel(selectedTenderData);
+    }
+    setExportDialogOpen(false);
+    setSelectedTenders(new Set());
+  };
+
+  const toggleTenderSelection = (tenderId: string) => {
+    setSelectedTenders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(tenderId)) {
+        newSet.delete(tenderId);
+      } else {
+        newSet.add(tenderId);
+      }
+      return newSet;
+    });
+  };
+
+  const selectAllTenders = () => {
+    if (selectedTenders.size === filteredAndSortedTenders.length) {
+      setSelectedTenders(new Set());
+    } else {
+      setSelectedTenders(new Set(filteredAndSortedTenders.map(t => t.id)));
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex-shrink-0 p-6 space-y-6">
@@ -115,6 +178,68 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
           <div>
             <h2 className="text-2xl font-bold text-gray-900">My Tenders</h2>
             <p className="text-gray-600">{allTenders.length} saved tenders</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 border-green-200 text-green-700 hover:bg-green-50"
+                >
+                  <FileSpreadsheet className="w-4 h-4" />
+                  Export XLS
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Export Tenders</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="export-all"
+                        name="export-mode"
+                        checked={exportMode === 'all'}
+                        onChange={() => setExportMode('all')}
+                        className="text-teal-600"
+                      />
+                      <label htmlFor="export-all" className="text-sm font-medium">
+                        Export All Tenders ({filteredAndSortedTenders.length})
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="export-select"
+                        name="export-mode"
+                        checked={exportMode === 'select'}
+                        onChange={() => setExportMode('select')}
+                        className="text-teal-600"
+                      />
+                      <label htmlFor="export-select" className="text-sm font-medium">
+                        Select Tenders to Export
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleExport}
+                      disabled={exportMode === 'select' && selectedTenders.size === 0}
+                      className="flex-1 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700"
+                    >
+                      Export {exportMode === 'select' ? `(${selectedTenders.size})` : 'All'}
+                    </Button>
+                    <Button variant="outline" onClick={() => setExportDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
@@ -144,10 +269,30 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
 
       <div className="flex-1 px-6 pb-6 overflow-hidden">
         <div className="h-full overflow-y-auto space-y-4 pr-2">
+          {exportMode === 'select' && filteredAndSortedTenders.length > 0 && (
+            <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <Checkbox
+                checked={selectedTenders.size === filteredAndSortedTenders.length}
+                onCheckedChange={selectAllTenders}
+              />
+              <span className="text-sm font-medium text-blue-800">
+                Select All ({selectedTenders.size}/{filteredAndSortedTenders.length})
+              </span>
+            </div>
+          )}
+          
           {filteredAndSortedTenders.map((tender) => (
             <Card key={tender.id} className="group hover:shadow-lg transition-all duration-200 border-0 rounded-xl bg-white shadow-md">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  {exportMode === 'select' && (
+                    <div className="flex-shrink-0">
+                      <Checkbox
+                        checked={selectedTenders.has(tender.id)}
+                        onCheckedChange={() => toggleTenderSelection(tender.id)}
+                      />
+                    </div>
+                  )}
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1 pr-4">
