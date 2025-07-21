@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot, Bookmark } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot, Bookmark, FileText } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import TenderRoboPopup from '@/components/TenderRoboPopup';
 
@@ -14,6 +16,7 @@ const Analysis = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [isRoboPopupOpen, setIsRoboPopupOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   // Calculate days left
   const submissionDate = new Date('2025-03-04');
@@ -470,6 +473,68 @@ This tender represents an **excellent opportunity** with strong alignment to you
     console.log(isSaved ? 'Tender removed from saved' : 'Tender saved');
   };
 
+  // Sample summary data
+  const summaryData = [
+    { sNo: "1", description: "Major Bridges", qty: "5", remarks: ["Km 0+396: 5x8m, Stream", "Km 18+806: 4x(18+24+18)m, River", "Km 26+955: 15m+2x22m+15m, Stream", "Km 43+322: 15m+2x22m+15m, River", "Km 46+282: 16.20+37.485+16.20m, LC no. 19"] },
+    { sNo: "2", description: "Minor Bridges", qty: "31", remarks: ["Km 0+451: 2x4m, Stream", "Km 1+768: 4x4m, Stream", "Km 5+065: 2x8m, Stream", "Km 5+360: 2x5m, Stream", "Km 5+825: 3x8m, Stream", "... and so on"] },
+    { sNo: "3", description: "ROB", qty: "3", remarks: ["Km 46+282: 16.20+37.485+16.20m, LC no. 19", "Km 58+622: 16.20+37.485+16.20m, In Realignment", "Km 60+265: 15.0+72.0+15.0m, LC No. 45"] },
+    { sNo: "4", description: "RUB", qty: "1", remarks: ["Km 27+257: 2x10.0m"] },
+    { sNo: "5", description: "VUP", qty: "3", remarks: [] },
+    { sNo: "6", description: "LVUP", qty: "11", remarks: [] },
+    { sNo: "7", description: "Box Culverts", qty: "45", remarks: ["New & Reconstruction"] },
+    { sNo: "8", description: "Pipe Culverts", qty: "39", remarks: ["New & Widening"] },
+    { sNo: "9", description: "Cross road Box Culverts", qty: "20", remarks: [] },
+    { sNo: "10", description: "Slab Culverts", qty: "2", remarks: ["Widened"] },
+    { sNo: "11", description: "Flexible Pavement – Total Length", qty: "62.822 Km", remarks: ["Two lanes with paved shoulder"] },
+    { sNo: "12", description: "Rigid Pavement – Total Length", qty: "As per toll plaza locations", remarks: ["For toll plaza locations"] },
+    { sNo: "13", description: "Total road width (Two Lane with Paved shoulders)", qty: "10m", remarks: ["Includes paved shoulder"] },
+    { sNo: "14", description: "Total road width (Semi-Urban sections)", qty: "12m", remarks: ["Includes paved shoulder and kerb shyness/edge strip"] },
+    { sNo: "15", description: "Total Bypasses", qty: "1 No / 15.380 Km", remarks: ["From project start to end", "Surendranagar bypass: 16+900 to 32+280, 15.380 Km"] },
+    { sNo: "16", description: "Total Realignments", qty: "3 Nos / 6.700 Km", remarks: ["From project start to end", "Ankevaliya realignment: 4+960 to 6+300, 1.340 Km", "Rajsitapur realignment: 41+740 to 45+500, 3.760 Km", "Dharangadhra realignment: 58+300 to 59+900, 1.600 Km"] },
+    { sNo: "17", description: "Total Service Roads", qty: "4 Nos / 8.272 Km", remarks: ["From project start to end", "17+800 to 18+100 (LHS): 0.3 Km", "20+000 to 25+900 (LHS): 5.90 Km", "28+900 to 30+500 (LHS): 1.60 Km", "42+600 to 43+072 (LHS): 0.472 Km"] },
+    { sNo: "18", description: "Total Slip Roads", qty: "6 Nos / 9.482 Km", remarks: ["From project start to end", "21+950 to 22+850 (RHS): 0.9 Km", "29+450 to 30+500 (RHS): 1.05 Km", "42+600 to 43+072 (RHS): 0.472 Km", "45+500 to 46+800 (LHS & RHS): 2x1.30=2.600 Km", "57+990 to 59+470 (LHS & RHS): 2x1.48=2.960 Km", "59+690 to 60+990 (LHS & RHS): 2x1.30=2.600 Km"] },
+    { sNo: "19", description: "Total number of major intersections", qty: "3", remarks: ["At-grade"] },
+    { sNo: "20", description: "Total number of minor intersections", qty: "20", remarks: ["At-grade"] },
+    { sNo: "21", description: "Safety barriers", qty: "5 locations", remarks: ["Ponds, wells, electric sub-stations, towers, split carriageways"] },
+    { sNo: "22", description: "RCC Retaining Wall", qty: "At all pond & water body locations", remarks: ["For ponds and water bodies"] },
+    { sNo: "23", description: "Retaining/Toe Wall", qty: "15560 m", remarks: ["Along various locations"] },
+    { sNo: "24", description: "RE Wall", qty: "10.582 km", remarks: ["Along various locations"] },
+    { sNo: "25", description: "Toll Plaza", qty: "1", remarks: ["8 lanes, includes admin building and weigh bridges"] },
+    { sNo: "26", description: "Kilometer Marker/Stones", qty: "128", remarks: ["Concrete/stone, reflective"] },
+    { sNo: "27", description: "Hectometer Marker/Stones", qty: "503", remarks: ["Reflective signs"] },
+    { sNo: "28", description: "Stop Signs", qty: "21", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "29", description: "Give Way Signs", qty: "21", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "30", description: "Speed Limit Signs (Circular)", qty: "26", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "31", description: "Speed Limit Signs (Vehicle Type)", qty: "26", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "32", description: "Height Limit Signs", qty: "5", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "33", description: "Pass Either Side Signs", qty: "6", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "34", description: "Side Road Signs", qty: "6", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "35", description: "Y-Intersection Signs", qty: "2", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "36", description: "Cross Road Signs", qty: "4", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "37", description: "Merging Traffic Ahead Signs", qty: "8", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "38", description: "Pedestrian Crossing Signs", qty: "21", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "39", description: "Rumble Strip Signs", qty: "21", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "40", description: "Single Chevron Markers", qty: "307", remarks: ["Hot applied thermoplastic"] },
+    { sNo: "41", description: "Left/Right Side Object Hazard Markers", qty: "279", remarks: ["139 Left, 140 Right"] },
+    { sNo: "42", description: "Two-way Object Hazard Markers", qty: "6", remarks: ["Hot applied thermoplastic"] },
+    { sNo: "43", description: "Stack Type Advance Direction Signs", qty: "14", remarks: ["Shoulder mounted"] },
+    { sNo: "44", description: "Flag Type Direction Signs", qty: "4", remarks: ["2 single, 2 double"] },
+    { sNo: "45", description: "Reassurance Signs", qty: "22", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "46", description: "Place Identification Signs", qty: "4", remarks: ["Flag type"] },
+    { sNo: "47", description: "Truck Lay-By Signs", qty: "4", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "48", description: "Toll Booth Ahead Signs", qty: "4", remarks: ["Micro Prismatic Grade"] },
+    { sNo: "49", description: "Roadway Indicators", qty: "60", remarks: ["As per site requirement"] },
+    { sNo: "50", description: "Solar Studs", qty: "6673", remarks: ["On bridges, structures, and medians"] },
+    { sNo: "51", description: "Operation and Maintenance Centers", qty: "1", remarks: ["2000 sq.m minimum"] },
+    { sNo: "52", description: "Rest Area", qty: "1", remarks: ["At 15+650 RHS"] },
+    { sNo: "53", description: "Truck Lay-Byes", qty: "2", remarks: ["At 33+000 RHS and 61+400 RHS"] },
+    { sNo: "54", description: "Bus Bays", qty: "24", remarks: ["With tapers and shelters"] },
+    { sNo: "55", description: "Rainwater Harvesting Structures", qty: "As per design", remarks: ["Type 2 (IRC SP 42)"] },
+    { sNo: "56", description: "Landscaping and Tree Plantation", qty: "333 plants/side", remarks: ["Local varieties, 2 rows per Km"] },
+    { sNo: "57", description: "Ambulances", qty: "2", remarks: ["1 per 50km, GPS/GSM tracked"] },
+    { sNo: "58", description: "Total Length of Drains", qty: "62.822 Km", remarks: ["Lined + Unlined"] }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="p-6 lg:p-8">
@@ -504,6 +569,16 @@ This tender represents an **excellent opportunity** with strong alignment to you
               >
                 <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
                 {isSaved ? 'Saved' : 'Save'}
+              </Button>
+
+              {/* View Summary Button */}
+              <Button
+                onClick={() => setIsSummaryOpen(true)}
+                variant="outline"
+                className="rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border-2 hover:bg-purple-50 hover:border-purple-300"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                View Summary
               </Button>
               
               {/* Ask Tender Robo Button */}
@@ -817,6 +892,52 @@ This tender represents an **excellent opportunity** with strong alignment to you
 
       {/* Tender Robo Popup */}
       <TenderRoboPopup isOpen={isRoboPopupOpen} onClose={() => setIsRoboPopupOpen(false)} />
+      
+      {/* Summary Dialog */}
+      <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
+        <DialogContent className="max-w-6xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-900">Tender Summary</DialogTitle>
+            <div className="text-sm text-gray-600 mt-2">
+              <p className="font-medium">Project Description:</p>
+              <p>{tenderBio.brief}</p>
+            </div>
+          </DialogHeader>
+          
+          <ScrollArea className="max-h-[70vh] mt-4">
+            <div className="rounded-lg border">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="w-16 font-semibold">S. No.</TableHead>
+                    <TableHead className="font-semibold">Description of Item</TableHead>
+                    <TableHead className="w-32 font-semibold">Qty.</TableHead>
+                    <TableHead className="font-semibold">Remarks</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {summaryData.map((item) => (
+                    <TableRow key={item.sNo} className="hover:bg-gray-50">
+                      <TableCell className="font-medium text-center">{item.sNo}</TableCell>
+                      <TableCell className="font-medium">{item.description}</TableCell>
+                      <TableCell className="text-center">{item.qty}</TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          {item.remarks.map((remark, index) => (
+                            <div key={index} className="text-sm text-gray-600">
+                              {remark}
+                            </div>
+                          ))}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
