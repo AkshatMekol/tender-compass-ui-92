@@ -186,6 +186,77 @@ const MyTendersTab: React.FC<MyTendersTabProps> = ({ savedTenders, onAnalyze, on
           </div>
           
           <div className="flex items-center gap-3">
+            <Button
+              onClick={() => {
+                const newWindow = window.open('', '_blank');
+                const comparisonHTML = `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                    <title>Tender Comparison</title>
+                    <style>
+                      body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f9fafb; }
+                      .container { max-width: 1400px; margin: 0 auto; }
+                      .header { text-align: center; margin-bottom: 2rem; }
+                      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+                      .tender-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; }
+                      .tender-header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 1.5rem; }
+                      .tender-body { padding: 1.5rem; }
+                      table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                      th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
+                      th { background: #f3f4f6; font-weight: 600; }
+                      tbody tr:nth-child(even) { background: #f9fafb; }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="container">
+                      <div class="header">
+                        <h1>Tender Comparison</h1>
+                        <p>Comparing ${allTenders.length} tender summaries</p>
+                      </div>
+                      <div class="grid">
+                        ${allTenders.map(tender => `
+                          <div class="tender-card">
+                            <div class="tender-header">
+                              <h2>${tender.name}</h2>
+                              <p><strong>Organisation:</strong> ${tender.organisation}</p>
+                              <p><strong>Amount:</strong> ₹${tender.amount} Cr.</p>
+                              <p><strong>Location:</strong> ${tender.location}</p>
+                              <p><strong>Score:</strong> ${tender.compatibilityScore}%</p>
+                            </div>
+                            <div class="tender-body">
+                              <h3>Project Summary</h3>
+                              <table>
+                                <thead>
+                                  <tr><th>S. No.</th><th>Description</th><th>Qty.</th><th>Remarks</th></tr>
+                                </thead>
+                                <tbody>
+                                  <tr><td>1</td><td>Major Bridges</td><td>5</td><td>Km 0+396: 5x8m, Stream<br>Km 18+806: 4x(18+24+18)m, River</td></tr>
+                                  <tr><td>2</td><td>Minor Bridges</td><td>31</td><td>Multiple locations with varying spans</td></tr>
+                                  <tr><td>3</td><td>Box Culverts</td><td>45</td><td>New & Reconstruction</td></tr>
+                                  <tr><td>4</td><td>Pipe Culverts</td><td>39</td><td>New & Widening</td></tr>
+                                  <tr><td>5</td><td>Flexible Pavement</td><td>62.822 Km</td><td>Two lanes with paved shoulder</td></tr>
+                                  <tr><td>6</td><td>Total road width</td><td>10m</td><td>Includes paved shoulder</td></tr>
+                                  <tr><td>7</td><td>Toll Plaza</td><td>1</td><td>8 lanes with admin building</td></tr>
+                                  <tr><td>8</td><td>Safety barriers</td><td>5 locations</td><td>For safety compliance</td></tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  </body>
+                  </html>
+                `;
+                newWindow.document.write(comparisonHTML);
+                newWindow.document.close();
+              }}
+              variant="outline" 
+              className="flex items-center gap-2 border-blue-200 text-blue-700 hover:bg-blue-50"
+            >
+              Compare
+            </Button>
             {!isExportMode ? (
               <Button
                 onClick={handleExportClick}
