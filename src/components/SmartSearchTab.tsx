@@ -4,8 +4,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, MapPin, Calendar, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight, FileSpreadsheet } from 'lucide-react';
+import { Search, MapPin, Calendar as CalendarIcon, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight, FileSpreadsheet } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 import CompatibilityScore from './CompatibilityScore';
 import { Tender } from '../types/tender';
 
@@ -18,6 +22,9 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrganisation, setSelectedOrganisation] = useState('all');
   const [selectedState, setSelectedState] = useState('all');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [mailDate, setMailDate] = useState<Date | undefined>();
+  const [submissionDate, setSubmissionDate] = useState<Date | undefined>();
   const [amountRange, setAmountRange] = useState([10, 2000]);
   const [sortBy, setSortBy] = useState('score');
   const [showFilters, setShowFilters] = useState(false);
@@ -66,10 +73,16 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
                            tender.organisation.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            tender.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesOrg = selectedOrganisation === 'all' || tender.organisation === selectedOrganisation;
+      const matchesCity = !selectedCity || tender.location.toLowerCase().includes(selectedCity.toLowerCase());
       const matchesAmount = tender.amount >= amountRange[0] && tender.amount <= amountRange[1];
       const matchesToday = !todayTendersOnly || tender.deadline === today;
       
-      return matchesSearch && matchesOrg && matchesAmount && matchesToday;
+      // For demo purposes, we'll simulate mail date and submission date filtering
+      // In a real app, these would be actual fields in the tender data
+      const matchesMailDate = !mailDate || true; // Placeholder logic
+      const matchesSubmissionDate = !submissionDate || true; // Placeholder logic
+      
+      return matchesSearch && matchesOrg && matchesCity && matchesAmount && matchesToday && matchesMailDate && matchesSubmissionDate;
     });
 
     filtered.sort((a, b) => {
@@ -86,7 +99,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     });
 
     return filtered;
-  }, [searchTerm, selectedOrganisation, amountRange, sortBy, todayTendersOnly]);
+  }, [searchTerm, selectedOrganisation, selectedCity, mailDate, submissionDate, amountRange, sortBy, todayTendersOnly]);
 
   const totalPages = Math.ceil(filteredAndSortedTenders.length / tendersPerPage);
   const startIndex = (currentPage - 1) * tendersPerPage;
@@ -320,6 +333,70 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                <Input
+                  placeholder="Enter city name..."
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  className="rounded-lg border-2 border-gray-200 focus:border-teal-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Mail Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal rounded-lg",
+                        !mailDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {mailDate ? format(mailDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={mailDate}
+                      onSelect={setMailDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Submission Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal rounded-lg",
+                        !submissionDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {submissionDate ? format(submissionDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={submissionDate}
+                      onSelect={setSubmissionDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="rounded-lg">
@@ -412,7 +489,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
                       </div>
                       
                       <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-2" />
+                        <CalendarIcon className="w-4 h-4 mr-2" />
                         <span>Deadline: {tender.deadline}</span>
                       </div>
                     </div>
