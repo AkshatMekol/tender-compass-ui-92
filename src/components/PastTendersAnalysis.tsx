@@ -139,12 +139,12 @@ export function PastTendersAnalysis({ isOpen, onToggle }: PastTendersAnalysisPro
                 onChange={(e) => setFilters(prev => ({ ...prev, organization: e.target.value }))}
                 className="text-sm"
               />
-              <Select value={filters.year} onValueChange={(value) => setFilters(prev => ({ ...prev, year: value }))}>
+              <Select value={filters.year || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, year: value === 'all' ? '' : value }))}>
                 <SelectTrigger className="text-sm">
                   <SelectValue placeholder="Year" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Years</SelectItem>
+                  <SelectItem value="all">All Years</SelectItem>
                   <SelectItem value="2023">2023</SelectItem>
                   <SelectItem value="2022">2022</SelectItem>
                   <SelectItem value="2021">2021</SelectItem>
@@ -171,12 +171,12 @@ export function PastTendersAnalysis({ isOpen, onToggle }: PastTendersAnalysisPro
                 onChange={(e) => setFilters(prev => ({ ...prev, maxValue: e.target.value }))}
                 className="text-sm"
               />
-              <Select value={filters.stage} onValueChange={(value) => setFilters(prev => ({ ...prev, stage: value }))}>
+              <Select value={filters.stage || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, stage: value === 'all' ? '' : value }))}>
                 <SelectTrigger className="text-sm">
                   <SelectValue placeholder="Stage" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Stages</SelectItem>
+                  <SelectItem value="all">All Stages</SelectItem>
                   <SelectItem value="Completed">Completed</SelectItem>
                   <SelectItem value="Ongoing">Ongoing</SelectItem>
                   <SelectItem value="Awarded">Awarded</SelectItem>
