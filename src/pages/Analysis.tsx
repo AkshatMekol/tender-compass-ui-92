@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, MapPin, Calendar, ZoomIn, X, Target, TrendingUp, AlertTriangle, ExternalLink, Bot, Bookmark, FileText } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import TenderRoboPopup from '@/components/TenderRoboPopup';
+import { PastTendersAnalysis } from '@/components/PastTendersAnalysis';
 
 const Analysis = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Analysis = () => {
   const [isRoboPopupOpen, setIsRoboPopupOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isPastTendersOpen, setIsPastTendersOpen] = useState(false);
 
   // Calculate days left
   const submissionDate = new Date('2025-03-04');
@@ -887,6 +889,12 @@ This tender represents an **excellent opportunity** with strong alignment to you
               </div>
             </CardContent>
           </Card>
+
+          {/* Past Tenders Analysis */}
+          <PastTendersAnalysis 
+            isOpen={isPastTendersOpen} 
+            onToggle={() => setIsPastTendersOpen(!isPastTendersOpen)}
+          />
         </div>
       </div>
 
