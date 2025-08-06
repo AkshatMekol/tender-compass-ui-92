@@ -6,6 +6,7 @@ import SmartSearchTab from '../components/SmartSearchTab';
 import TenderRoboTab from '../components/TenderRoboTab';
 import InsightsTab from '../components/InsightsTab';
 import MyTendersTab from '../components/MyTendersTab';
+import PastTendersTab from '../components/PastTendersTab';
 import CompanyProfileTab from '../components/CompanyProfileTab';
 import FeedbackTab from '../components/FeedbackTab';
 import LanguageNotificationsTab from '../components/LanguageNotificationsTab';
@@ -78,6 +79,8 @@ const Index = () => {
         return <InsightsTab />;
       case 'my-tenders':
         return <MyTendersTab savedTenders={savedTenders} onAnalyze={handleAnalyze} onRemoveTender={handleRemoveTender} />;
+      case 'past-tenders':
+        return <PastTendersTab />;
       case 'company-profile':
         return <CompanyProfileTab />;
       case 'feedback':

@@ -28,6 +28,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogo
     { icon: Search, label: 'Smart Search', key: 'smart-search' },
     { icon: Bot, label: 'Tender Robo', key: 'tender-robo' },
     { icon: Folder, label: 'My Tenders', key: 'my-tenders' },
+    { icon: FileText, label: 'Past Tenders', key: 'past-tenders' },
     { icon: Building2, label: 'Company Profile', key: 'company-profile' },
     // { icon: GitCompare, label: 'Compare Tenders', key: 'compare-tenders' },
     { icon: MessageSquare, label: 'Feedback', key: 'feedback' },
