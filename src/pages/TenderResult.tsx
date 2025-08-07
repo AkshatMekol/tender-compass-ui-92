@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, MapPin, Calendar, IndianRupee, Building, Globe, Award, Users } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, IndianRupee, Building, Globe, Award, Users, Bookmark, FileText, ExternalLink } from 'lucide-react';
 
 interface ParticipatorData {
   name: string;
@@ -32,6 +33,7 @@ interface TenderResultData {
 const TenderResult: React.FC = () => {
   const { tenderId } = useParams<{ tenderId: string }>();
   const navigate = useNavigate();
+  const [isSaved, setIsSaved] = useState(false);
 
   // Mock data - in real app, this would be fetched based on tenderId
   const tenderData: TenderResultData = {
@@ -100,170 +102,222 @@ const TenderResult: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-7xl mx-auto p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/dashboard')}
-            className="mb-4 hover:bg-gray-100"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Past Tenders
-          </Button>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-            Tender Result Report
-          </h1>
+        {/* Header with Navigation */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                Tender Result Report
+              </h1>
+              <p className="text-gray-600 mt-1">Detailed analysis and participator information</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setIsSaved(!isSaved)}
+              className={`flex items-center gap-2 ${
+                isSaved ? 'bg-red-50 border-red-200 text-red-600' : 'hover:bg-red-50 hover:border-red-300 hover:text-red-600'
+              }`}
+            >
+              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+              {isSaved ? 'Saved' : 'Save'}
+            </Button>
+            <Button className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white">
+              <FileText className="w-4 h-4" />
+              Export Report
+            </Button>
+          </div>
         </div>
 
-        {/* First Section: Tender Summary */}
-        <Card className="mb-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-xl text-gray-900 flex items-center">
-              <Building className="w-5 h-5 mr-2 text-teal-600" />
+        {/* Tender Summary Section */}
+        <Card className="mb-8 shadow-lg border-0 bg-white/90 backdrop-blur-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900">
+              <FileText className="w-5 h-5 text-teal-600" />
               Tender Summary
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Row 1: Description + Deadline Passed */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Row 1: Description + Deadline Status */}
+            <div className="flex justify-between items-start">
+              <div className="flex-1 pr-6">
+                <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-2">
+                  {tenderData.description}
+                </h2>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg border border-red-200">
+                  <span className="font-medium text-sm">
+                    Deadline Passed ({tenderData.deadlinePassed} days ago)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Row 2: Key Details Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Location</p>
+                  <p className="text-gray-900 font-semibold">{tenderData.location}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Calendar className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Submission Date</p>
+                  <p className="text-gray-900 font-semibold">{tenderData.submissionDate}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Calendar className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Contract Date</p>
+                  <p className="text-gray-900 font-semibold">{tenderData.contractDate}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <IndianRupee className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Tender Value</p>
+                  <p className="text-gray-900 font-semibold">₹{tenderData.tenderValue.toFixed(2)} Cr</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <IndianRupee className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Contract Value</p>
+                  <p className="text-gray-900 font-semibold">₹{tenderData.contractValue.toFixed(2)} Cr</p>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Row 3: Additional Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-700">{tenderData.description}</p>
+                <p className="text-sm text-gray-600 font-medium mb-1">Winner</p>
+                <p className="text-gray-900 font-semibold">{tenderData.winner}</p>
               </div>
-              <div className="flex justify-end">
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg">
-                  <span className="font-medium">Deadline Passed ({tenderData.deadlinePassed} days ago)</span>
-                </div>
+              <div>
+                <p className="text-sm text-gray-600 font-medium mb-1">Contract Stage</p>
+                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                  tenderData.stage === 'Completed' 
+                    ? 'bg-green-100 text-green-800' 
+                    : tenderData.stage === 'Ongoing' 
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-orange-100 text-orange-800'
+                }`}>
+                  {tenderData.stage}
+                </span>
               </div>
-            </div>
-
-            {/* Row 2: Location, Dates, Values */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4 text-blue-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Location</p>
-                  <p className="font-medium">{tenderData.location}</p>
-                </div>
+              <div>
+                <p className="text-sm text-gray-600 font-medium mb-1">Organisation</p>
+                <p className="text-gray-900 font-semibold">{tenderData.organisation}</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-purple-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Submission Date</p>
-                  <p className="font-medium">{tenderData.submissionDate}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-orange-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Contract Date</p>
-                  <p className="font-medium">{tenderData.contractDate}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <IndianRupee className="w-4 h-4 text-green-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Tender Value</p>
-                  <p className="font-medium">₹{tenderData.tenderValue.toFixed(2)} Cr</p>
-                </div>
+              <div>
+                <p className="text-sm text-gray-600 font-medium mb-1">Organisation ID</p>
+                <p className="text-gray-900 font-semibold">{tenderData.organisationId}</p>
               </div>
             </div>
 
-            {/* Row 3: Winner, Stage, Organisation, etc. */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-yellow-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Winner</p>
-                  <p className="font-medium">{tenderData.winner}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Users className="w-4 h-4 text-teal-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Stage</p>
-                  <p className="font-medium">{tenderData.stage}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Building className="w-4 h-4 text-blue-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Organisation</p>
-                  <p className="font-medium">{tenderData.organisation}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Globe className="w-4 h-4 text-gray-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Website</p>
-                  <p className="font-medium text-blue-600 hover:underline cursor-pointer">{tenderData.website}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Contract Value and Organisation ID */}
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <IndianRupee className="w-4 h-4 text-green-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Contract Value</p>
-                  <p className="font-medium text-lg text-green-700">₹{tenderData.contractValue.toFixed(2)} Cr</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Building className="w-4 h-4 text-gray-600" />
-                <div>
-                  <p className="text-sm text-gray-600">Organisation ID</p>
-                  <p className="font-medium">{tenderData.organisationId}</p>
-                </div>
+            {/* Website Section */}
+            <div className="pt-4 border-t border-gray-200">
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-gray-600 font-medium">Website:</p>
+                <a 
+                  href={`https://${tenderData.website}`} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium transition-colors"
+                >
+                  {tenderData.website} <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Second Section: Participator Report */}
-        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-xl text-gray-900 flex items-center">
-              <Users className="w-5 h-5 mr-2 text-teal-600" />
+        {/* Participator Report Section */}
+        <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900">
+              <Users className="w-5 h-5 text-teal-600" />
               Participator Report
             </CardTitle>
+            <p className="text-gray-600 text-sm mt-2">
+              Detailed bidding analysis and participant rankings
+            </p>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            <div className="rounded-lg border border-gray-200 overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[250px]">Name</TableHead>
-                    <TableHead className="text-right">Bid (₹ Cr)</TableHead>
-                    <TableHead className="text-center">Rank</TableHead>
-                    <TableHead className="text-right">Bid Variation (%)</TableHead>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="font-semibold text-gray-900">Name</TableHead>
+                    <TableHead className="font-semibold text-gray-900">Bid</TableHead>
+                    <TableHead className="font-semibold text-gray-900">Rank</TableHead>
+                    <TableHead className="font-semibold text-gray-900">Bid Variation</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {tenderData.participators.map((participator, index) => (
-                    <TableRow key={index} className={participator.rank === 1 ? 'bg-yellow-50' : ''}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-2">
+                    <TableRow key={index} className="hover:bg-gray-50 transition-colors">
+                      <TableCell className="font-medium text-gray-900">
+                        <div className="flex items-center gap-2">
                           {participator.rank === 1 && <Award className="w-4 h-4 text-yellow-600" />}
                           <span>{participator.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right font-medium">
-                        ₹{participator.bid.toFixed(2)}
+                      <TableCell className="font-semibold">
+                        ₹{participator.bid.toFixed(2)} Cr
                       </TableCell>
-                      <TableCell className="text-center">
-                        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full border ${getRankBadgeColor(participator.rank)}`}>
+                      <TableCell>
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${getRankBadgeColor(participator.rank)}`}>
                           #{participator.rank}
                         </span>
                       </TableCell>
-                      <TableCell className={`text-right font-medium ${getBidVariationColor(participator.bidVariation)}`}>
-                        {participator.bidVariation > 0 ? '+' : ''}{participator.bidVariation.toFixed(1)}%
+                      <TableCell>
+                        <span className={`font-semibold ${getBidVariationColor(participator.bidVariation)}`}>
+                          {participator.bidVariation > 0 ? '+' : ''}{participator.bidVariation.toFixed(2)}%
+                        </span>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Summary Stats */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-600 font-medium">Total Participants</p>
+                <p className="text-2xl font-bold text-blue-900">{tenderData.participators.length}</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="text-sm text-green-600 font-medium">Winning Bid</p>
+                <p className="text-2xl font-bold text-green-900">₹{Math.min(...tenderData.participators.map(p => p.bid)).toFixed(2)} Cr</p>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                <p className="text-sm text-orange-600 font-medium">Bid Range</p>
+                <p className="text-2xl font-bold text-orange-900">
+                  {((Math.max(...tenderData.participators.map(p => p.bid)) - Math.min(...tenderData.participators.map(p => p.bid))) / Math.min(...tenderData.participators.map(p => p.bid)) * 100).toFixed(1)}%
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
