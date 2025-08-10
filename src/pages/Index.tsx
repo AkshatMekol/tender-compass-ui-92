@@ -11,6 +11,7 @@ import CompanyProfileTab from '../components/CompanyProfileTab';
 import FeedbackTab from '../components/FeedbackTab';
 import LanguageNotificationsTab from '../components/LanguageNotificationsTab';
 import ChatWidget from '../components/ChatWidget';
+import CompetitorAnalysisTab from '../components/CompetitorAnalysisTab';
 import { Tender } from '../types/tender';
 
 interface Message {
@@ -81,6 +82,8 @@ const Index = () => {
         return <MyTendersTab savedTenders={savedTenders} onAnalyze={handleAnalyze} onRemoveTender={handleRemoveTender} />;
       case 'past-tenders':
         return <PastTendersTab />;
+      case 'competitor-analysis':
+        return <CompetitorAnalysisTab />;
       case 'company-profile':
         return <CompanyProfileTab />;
       case 'feedback':
