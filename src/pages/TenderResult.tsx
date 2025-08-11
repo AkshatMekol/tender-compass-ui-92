@@ -147,75 +147,49 @@ const TenderResult: React.FC = () => {
               Tender Summary
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Row 1: Description + Deadline Status */}
-            <div className="flex justify-between items-start">
-              <div className="flex-1 pr-6">
-                <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-2">
-                  {tenderData.description}
-                </h2>
-              </div>
-              <div className="flex-shrink-0">
-                <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg border border-red-200">
-                  <span className="font-medium text-sm">
-                    Deadline Passed ({tenderData.deadlinePassed} days ago)
-                  </span>
+          <CardContent>
+            <div className="mb-6">
+              <div className="flex justify-between items-start">
+                <div className="flex-1 pr-6">
+                  <p className="text-gray-700 text-sm leading-relaxed">{tenderData.description}</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg border border-red-200">
+                    <span className="font-medium text-sm">
+                      Deadline Passed ({tenderData.deadlinePassed} days ago)
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <Separator />
-
-            {/* Row 2: Key Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Location</p>
-                  <p className="text-gray-900 font-semibold">{tenderData.location}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Calendar className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Submission Date</p>
-                  <p className="text-gray-900 font-semibold">{tenderData.submissionDate}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Calendar className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Contract Date</p>
-                  <p className="text-gray-900 font-semibold">{tenderData.contractDate}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <IndianRupee className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Tender Value</p>
-                  <p className="text-gray-900 font-semibold">₹{tenderData.tenderValue.toFixed(2)} Cr</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <IndianRupee className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Contract Value</p>
-                  <p className="text-gray-900 font-semibold">₹{tenderData.contractValue.toFixed(2)} Cr</p>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Row 3: Additional Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div>
-                <p className="text-sm text-gray-600 font-medium mb-1">Winner</p>
-                <p className="text-gray-900 font-semibold">{tenderData.winner}</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">Location</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.location}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 font-medium mb-1">Contract Stage</p>
-                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                <p className="text-sm font-medium text-gray-500 mb-1">Submission Date</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.submissionDate}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Contract Date</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.contractDate}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Tender Value</p>
+                <p className="font-semibold text-teal-700 text-sm">₹{tenderData.tenderValue.toFixed(2)} Cr</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Contract Value</p>
+                <p className="font-medium text-gray-700 text-sm">₹{tenderData.contractValue.toFixed(2)} Cr</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Winner</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.winner}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Contract Stage</p>
+                <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
                   tenderData.stage === 'Completed' 
                     ? 'bg-green-100 text-green-800' 
                     : tenderData.stage === 'Ongoing' 
@@ -226,26 +200,22 @@ const TenderResult: React.FC = () => {
                 </span>
               </div>
               <div>
-                <p className="text-sm text-gray-600 font-medium mb-1">Organisation</p>
-                <p className="text-gray-900 font-semibold">{tenderData.organisation}</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">Organisation</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.organisation}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 font-medium mb-1">Organisation ID</p>
-                <p className="text-gray-900 font-semibold">{tenderData.organisationId}</p>
+                <p className="text-sm font-medium text-gray-500 mb-1">Organisation ID</p>
+                <p className="font-medium text-gray-700 text-sm">{tenderData.organisationId}</p>
               </div>
-            </div>
-
-            {/* Website Section */}
-            <div className="pt-4 border-t border-gray-200">
-              <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-600 font-medium">Website:</p>
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">Website</p>
                 <a 
                   href={`https://${tenderData.website}`} 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium transition-colors"
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="font-medium text-blue-600 hover:text-blue-800 text-sm flex items-center"
                 >
-                  {tenderData.website} <ExternalLink className="w-3 h-3" />
+                  Visit <ExternalLink className="w-3 h-3 ml-1" />
                 </a>
               </div>
             </div>
