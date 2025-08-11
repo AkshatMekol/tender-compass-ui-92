@@ -3,9 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, MapPin, Calendar, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight, FileSpreadsheet, Eye } from 'lucide-react';
+import { Search, MapPin, Calendar as CalendarIcon, IndianRupee, SlidersHorizontal, Save, Check, ChevronLeft, ChevronRight, FileSpreadsheet, Eye } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface PastTender {
   id: string;
@@ -30,10 +35,14 @@ const PastTendersTab: React.FC = () => {
   const [selectedOrganisation, setSelectedOrganisation] = useState('all');
   const [selectedState, setSelectedState] = useState('all');
   const [selectedCity, setSelectedCity] = useState('');
+  const [mailDate, setMailDate] = useState<Date | undefined>();
+  const [submissionDate, setSubmissionDate] = useState<Date | undefined>();
   const [selectedWinner, setSelectedWinner] = useState('all');
   const [selectedParticipators, setSelectedParticipators] = useState('');
   const [selectedStage, setSelectedStage] = useState('all');
+  const [recentTenders, setRecentTenders] = useState('all');
   const [valueType, setValueType] = useState('tender');
+  const [amountRange, setAmountRange] = useState([10, 2000]);
   const [sortBy, setSortBy] = useState('tenderValue');
   const [showFilters, setShowFilters] = useState(false);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
@@ -127,7 +136,7 @@ const PastTendersTab: React.FC = () => {
   ];
 
   const organisations = Array.from(new Set(pastTenders.map(t => t.organisation)));
-  const states = Array.from(new Set(pastTenders.map(t => t.state)));
+  const states = ['Himachal Pradesh', 'Delhi', 'Maharashtra', 'Karnataka', 'Tamil Nadu', 'Rajasthan', 'Kerala', 'Haryana', 'Uttar Pradesh', 'West Bengal', 'Telangana', 'Andhra Pradesh', 'Gujarat', 'Bihar', 'Odisha', 'Assam', 'Madhya Pradesh'];
   const winners = Array.from(new Set(pastTenders.map(t => t.winner)));
 
   const filteredAndSortedTenders = useMemo(() => {
@@ -143,9 +152,17 @@ const PastTendersTab: React.FC = () => {
         p.toLowerCase().includes(selectedParticipators.toLowerCase())
       );
       const matchesStage = selectedStage === 'all' || tender.contractStage.toLowerCase() === selectedStage.toLowerCase();
+      const matchesAmount = (valueType === 'tender' ? tender.tenderValue : tender.contractValue) >= amountRange[0] && 
+                           (valueType === 'tender' ? tender.tenderValue : tender.contractValue) <= amountRange[1];
+      const matchesRecentTenders = recentTenders === 'all' || true; // Placeholder logic
+
+      // For demo purposes, we'll simulate mail date and submission date filtering
+      const matchesMailDate = !mailDate || true; // Placeholder logic
+      const matchesSubmissionDate = !submissionDate || true; // Placeholder logic
 
       return matchesSearch && matchesOrg && matchesState && matchesCity && 
-             matchesWinner && matchesParticipators && matchesStage;
+             matchesWinner && matchesParticipators && matchesStage && matchesAmount && 
+             matchesRecentTenders && matchesMailDate && matchesSubmissionDate;
     });
 
     filtered.sort((a, b) => {
@@ -164,7 +181,7 @@ const PastTendersTab: React.FC = () => {
     });
 
     return filtered;
-  }, [searchTerm, selectedOrganisation, selectedState, selectedCity, selectedWinner, selectedParticipators, selectedStage, valueType, sortBy]);
+  }, [searchTerm, selectedOrganisation, selectedState, selectedCity, selectedWinner, selectedParticipators, selectedStage, valueType, sortBy, amountRange, recentTenders, mailDate, submissionDate]);
 
   const totalPages = Math.ceil(filteredAndSortedTenders.length / tendersPerPage);
   const startIndex = (currentPage - 1) * tendersPerPage;
@@ -264,6 +281,14 @@ const PastTendersTab: React.FC = () => {
     }
   };
 
+  const formatAmount = (amount: number) => {
+    if (amount >= 100) {
+      return `₹${amount.toFixed(2)} Cr.`;
+    } else {
+      return `₹${(amount * 10).toFixed(2)} L.`;
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex-shrink-0 p-6 space-y-6">
@@ -319,7 +344,7 @@ const PastTendersTab: React.FC = () => {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="Search past tenders..."
+            placeholder="AI search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 rounded-xl border-2 border-gray-200 focus:border-teal-400"
@@ -370,6 +395,85 @@ const PastTendersTab: React.FC = () => {
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Recent Tenders</label>
+                <Select value={recentTenders} onValueChange={setRecentTenders}>
+                  <SelectTrigger className="rounded-lg">
+                    <SelectValue placeholder="All Tenders" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Tenders</SelectItem>
+                    <SelectItem value="today">Today</SelectItem>
+                    <SelectItem value="week">This Week</SelectItem>
+                    <SelectItem value="month">This Month</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Mail Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal rounded-lg",
+                        !mailDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {mailDate ? format(mailDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={mailDate}
+                      onSelect={setMailDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Submission Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal rounded-lg",
+                        !submissionDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {submissionDate ? format(submissionDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={submissionDate}
+                      onSelect={setSubmissionDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Participator</label>
+                <Input
+                  placeholder="Filter by participators"
+                  value={selectedParticipators}
+                  onChange={(e) => setSelectedParticipators(e.target.value)}
+                  className="rounded-lg"
+                />
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Winner</label>
                 <Select value={selectedWinner} onValueChange={setSelectedWinner}>
                   <SelectTrigger className="rounded-lg">
@@ -385,17 +489,7 @@ const PastTendersTab: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Participators</label>
-                <Input
-                  placeholder="Filter by participators"
-                  value={selectedParticipators}
-                  onChange={(e) => setSelectedParticipators(e.target.value)}
-                  className="rounded-lg"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Contract Stage</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tender Stage</label>
                 <Select value={selectedStage} onValueChange={setSelectedStage}>
                   <SelectTrigger className="rounded-lg">
                     <SelectValue placeholder="All Stages" />
@@ -425,6 +519,22 @@ const PastTendersTab: React.FC = () => {
                   </Select>
                 </div>
 
+                <div className="flex-1 min-w-0">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount Range: ₹{amountRange[0]} Cr - ₹{amountRange[1]} Cr
+                  </label>
+                  <div className="px-2">
+                    <Slider
+                      value={amountRange}
+                      onValueChange={setAmountRange}
+                      max={2000}
+                      min={10}
+                      step={10}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
                   <Select value={sortBy} onValueChange={setSortBy}>
@@ -438,6 +548,36 @@ const PastTendersTab: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              <div className="mt-4 flex gap-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedOrganisation('all');
+                    setSelectedState('all');
+                    setSelectedCity('');
+                    setMailDate(undefined);
+                    setSubmissionDate(undefined);
+                    setSelectedWinner('all');
+                    setSelectedParticipators('');
+                    setSelectedStage('all');
+                    setRecentTenders('all');
+                    setValueType('tender');
+                    setAmountRange([10, 2000]);
+                    setSortBy('tenderValue');
+                  }}
+                  className="rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
+                  Reset All Filters
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
+                  No Changes
+                </Button>
               </div>
             </div>
           </Card>
