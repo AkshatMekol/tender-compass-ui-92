@@ -600,7 +600,7 @@ const PastTendersTab: React.FC = () => {
 
         <div className="space-y-4">
           {currentTenders.map((tender) => (
-            <Card key={tender.id} className="bg-white border border-gray-200 hover:shadow-md transition-shadow">
+            <Card key={tender.id} className="bg-white border border-gray-200 hover:shadow-lg transition-all duration-300 rounded-xl overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
@@ -613,57 +613,59 @@ const PastTendersTab: React.FC = () => {
                     )}
                     
                     <div className="flex-1">
-                      <div className="text-sm font-medium text-gray-500 mb-1">
-                        {tender.serialNumber}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md font-medium">
+                          #{tender.serialNumber}
+                        </span>
                       </div>
                       
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-tight pr-4">
                         {tender.description}
                       </h3>
                       
-                      <p className="text-gray-600 mb-4">{tender.organisation}</p>
+                      <p className="text-blue-600 font-medium mb-3">{tender.organisation}</p>
                       
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                         <div className="flex items-center text-sm">
-                          <IndianRupee className="w-4 h-4 text-green-600 mr-1" />
-                          <span className="text-gray-600">Tender:</span>
-                          <span className="font-medium ml-1">₹{tender.tenderValue.toFixed(2)} Cr</span>
+                          <IndianRupee className="w-4 h-4 text-green-600 mr-2" />
+                          <div>
+                            <p className="text-gray-500 text-xs">Tender Value</p>
+                            <p className="font-semibold text-gray-900">{formatAmount(tender.tenderValue)}</p>
+                          </div>
                         </div>
                         <div className="flex items-center text-sm">
-                          <MapPin className="w-4 h-4 text-blue-600 mr-1" />
-                          <span className="text-gray-600">Location:</span>
-                          <span className="font-medium ml-1">{tender.location}</span>
+                          <MapPin className="w-4 h-4 text-orange-500 mr-2" />
+                          <div>
+                            <p className="text-gray-500 text-xs">Location</p>
+                            <p className="font-semibold text-gray-900">{tender.city}, {tender.state}</p>
+                          </div>
                         </div>
                         <div className="flex items-center text-sm">
-                          <Calendar className="w-4 h-4 text-purple-600 mr-1" />
-                          <span className="text-gray-600">Submission:</span>
-                          <span className="font-medium ml-1">{tender.submissionDate}</span>
-                        </div>
-                        <div className="flex items-center text-sm">
-                          <Calendar className="w-4 h-4 text-orange-600 mr-1" />
-                          <span className="text-gray-600">Contract:</span>
-                          <span className="font-medium ml-1">{tender.contractDate}</span>
+                          <CalendarIcon className="w-4 h-4 text-purple-600 mr-2" />
+                          <div>
+                            <p className="text-gray-500 text-xs">Deadline</p>
+                            <p className="font-semibold text-gray-900">{tender.submissionDate}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="ml-6 text-right">
-                    <div className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-4 py-2 rounded-xl shadow-lg">
-                      <div className="text-xs font-medium opacity-90">Contract Stage</div>
-                      <div className="text-sm font-bold">{tender.contractStage}</div>
-                      <div className="text-xs font-medium opacity-90 mt-1">Contract Value</div>
-                      <div className="text-sm font-bold">₹{tender.contractValue.toFixed(2)} Cr</div>
+                  <div className="ml-6 text-right flex flex-col items-end gap-3">
+                    <div className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-4 py-3 rounded-xl shadow-lg text-center min-w-[120px]">
+                      <div className="text-xs font-medium opacity-90 mb-1">{tender.contractStage}</div>
+                      <div className="text-lg font-bold">{formatAmount(tender.contractValue)}</div>
+                      <div className="text-xs font-medium opacity-90">Contract Value</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleSaveTender(tender)}
-                    className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-colors"
+                    className="flex items-center space-x-2 hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-colors rounded-lg"
                   >
                     {savedTenders.has(tender.id) ? (
                       <Check className="w-4 h-4" />
@@ -674,7 +676,7 @@ const PastTendersTab: React.FC = () => {
                   </Button>
                   <Button
                     onClick={() => handleViewResults(tender.id)}
-                    className="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg"
                   >
                     <Eye className="w-4 h-4" />
                     <span>View Results</span>
