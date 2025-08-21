@@ -970,79 +970,144 @@ This tender represents an **excellent opportunity** with strong alignment to you
                 </div>
               </div>
               
-              {/* Location Information Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Airport */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Nearest Airport</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Devi Ahilya Bai Holkar Airport</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 12.5 km</p>
-                  </CardContent>
-                </Card>
-                
-                {/* Hospital 1 */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Major Hospital</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Ujjain District Hospital</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 8.2 km</p>
-                  </CardContent>
-                </Card>
-                
-                {/* Hospital 2 */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Private Hospital</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Acharya Shree Bhikshu Hospital</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 5.7 km</p>
-                  </CardContent>
-                </Card>
-                
-                {/* Hospital 3 */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Emergency Care</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Maksi Primary Health Center</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 3.4 km</p>
-                  </CardContent>
-                </Card>
-                
-                {/* Stone Crusher 1 */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Stone Crusher</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Malwa Stone Crushers Pvt Ltd</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 6.8 km</p>
-                  </CardContent>
-                </Card>
-                
-                {/* Stone Crusher 2 */}
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                      <h4 className="font-medium text-foreground">Aggregate Supplier</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Ujjain Quarry & Stone Works</p>
-                    <p className="text-sm font-medium text-foreground">Distance: 11.3 km</p>
-                  </CardContent>
-                </Card>
+              {/* Location Information Tabs */}
+              <div className="space-y-4">
+                <Tabs defaultValue="airport" className="w-full">
+                  <TabsList className="grid w-full grid-cols-6 h-12 bg-muted/30">
+                    <TabsTrigger value="airport" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      Airport
+                    </TabsTrigger>
+                    <TabsTrigger value="hospital1" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      Hospital 1
+                    </TabsTrigger>
+                    <TabsTrigger value="hospital2" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      Hospital 2
+                    </TabsTrigger>
+                    <TabsTrigger value="hospital3" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      Hospital 3
+                    </TabsTrigger>
+                    <TabsTrigger value="crusher1" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      Crusher 1
+                    </TabsTrigger>
+                    <TabsTrigger value="crusher2" className="flex items-center gap-2 text-xs data-[state=active]:bg-background">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      Crusher 2
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="airport" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Nearest Airport</h4>
+                            <p className="text-muted-foreground">Devi Ahilya Bai Holkar Airport</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-primary font-medium">12.5 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-primary rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="hospital1" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Major Hospital</h4>
+                            <p className="text-muted-foreground">Ujjain District Hospital</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-green-600 font-medium">8.2 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="hospital2" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Private Hospital</h4>
+                            <p className="text-muted-foreground">Acharya Shree Bhikshu Hospital</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-green-600 font-medium">5.7 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="hospital3" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Emergency Care</h4>
+                            <p className="text-muted-foreground">Maksi Primary Health Center</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-green-600 font-medium">3.4 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="crusher1" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Stone Crusher</h4>
+                            <p className="text-muted-foreground">Malwa Stone Crushers Pvt Ltd</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-orange-600 font-medium">6.8 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-orange-500 rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="crusher2" className="mt-4">
+                    <Card className="border-border/50">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-semibold text-foreground">Aggregate Supplier</h4>
+                            <p className="text-muted-foreground">Ujjain Quarry & Stone Works</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">Distance:</span>
+                              <span className="text-sm text-orange-600 font-medium">11.3 km</span>
+                            </div>
+                          </div>
+                          <div className="w-4 h-4 bg-orange-500 rounded-full border-2 border-background shadow-lg"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
               </div>
             </CardContent>
           </Card>
