@@ -895,6 +895,157 @@ This tender represents an **excellent opportunity** with strong alignment to you
             isOpen={isPastTendersOpen} 
             onToggle={() => setIsPastTendersOpen(!isPastTendersOpen)}
           />
+
+          {/* Site Location Map Section */}
+          <Card className="bg-background border border-border shadow-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-primary" />
+                Site Location Map
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Static Map */}
+              <div className="relative bg-muted rounded-lg overflow-hidden">
+                <div className="aspect-[16/9] bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center relative">
+                  {/* Map background with grid */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="grid grid-cols-8 grid-rows-6 h-full w-full">
+                      {Array.from({ length: 48 }).map((_, i) => (
+                        <div key={i} className="border border-gray-300"></div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Roads */}
+                  <div className="absolute inset-4">
+                    <div className="w-full h-1 bg-gray-600 absolute top-1/3 rounded"></div>
+                    <div className="w-1 h-full bg-gray-600 absolute left-1/2 rounded"></div>
+                    <div className="w-3/4 h-1 bg-gray-500 absolute top-2/3 left-1/4 rounded"></div>
+                  </div>
+                  
+                  {/* Site marker */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-lg relative">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                        Project Site
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Airport marker */}
+                  <div className="absolute top-1/4 right-1/4">
+                    <div className="w-4 h-4 bg-blue-500 rounded-full border border-white shadow"></div>
+                    <span className="absolute -top-6 -left-2 text-xs text-gray-700">Airport</span>
+                  </div>
+                  
+                  {/* Hospital markers */}
+                  <div className="absolute top-1/3 left-1/4">
+                    <div className="w-3 h-3 bg-green-500 rounded-full border border-white shadow"></div>
+                    <span className="absolute -top-5 -left-3 text-xs text-gray-700">Hospital</span>
+                  </div>
+                  <div className="absolute bottom-1/3 right-1/3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full border border-white shadow"></div>
+                  </div>
+                  <div className="absolute top-2/3 left-1/3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full border border-white shadow"></div>
+                  </div>
+                  
+                  {/* Stone crusher markers */}
+                  <div className="absolute bottom-1/4 left-1/4">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full border border-white shadow"></div>
+                    <span className="absolute -top-5 -left-4 text-xs text-gray-700">Crusher</span>
+                  </div>
+                  <div className="absolute top-1/4 left-3/4">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full border border-white shadow"></div>
+                  </div>
+                  <div className="absolute bottom-1/3 left-2/3">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full border border-white shadow"></div>
+                  </div>
+                  
+                  {/* Scale */}
+                  <div className="absolute bottom-4 left-4 bg-white/90 px-2 py-1 rounded text-xs">
+                    0 ──── 10 km
+                  </div>
+                </div>
+              </div>
+              
+              {/* Location Information Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Airport */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Nearest Airport</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Devi Ahilya Bai Holkar Airport</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 12.5 km</p>
+                  </CardContent>
+                </Card>
+                
+                {/* Hospital 1 */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Major Hospital</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Ujjain District Hospital</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 8.2 km</p>
+                  </CardContent>
+                </Card>
+                
+                {/* Hospital 2 */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Private Hospital</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Acharya Shree Bhikshu Hospital</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 5.7 km</p>
+                  </CardContent>
+                </Card>
+                
+                {/* Hospital 3 */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Emergency Care</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Maksi Primary Health Center</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 3.4 km</p>
+                  </CardContent>
+                </Card>
+                
+                {/* Stone Crusher 1 */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Stone Crusher</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Malwa Stone Crushers Pvt Ltd</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 6.8 km</p>
+                  </CardContent>
+                </Card>
+                
+                {/* Stone Crusher 2 */}
+                <Card className="bg-muted/50 border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                      <h4 className="font-medium text-foreground">Aggregate Supplier</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">Ujjain Quarry & Stone Works</p>
+                    <p className="text-sm font-medium text-foreground">Distance: 11.3 km</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
