@@ -8,53 +8,68 @@ import { Building2, Search, BarChart3, Shield, Users, CheckCircle, ArrowRight, S
 const Home = () => {
   const navigate = useNavigate();
 
-  const features = [
+  const painPoints = [
     {
-      icon: Search,
-      title: "Smart Tender Search",
-      description: "AI-powered search to find the most relevant tenders for your business"
+      icon: "📈",
+      title: "Idle Machinery",
+      description: "Not bagging a new tender ahead of time, cause expensive assets to sit unused"
     },
     {
-      icon: BarChart3,
-      title: "Tender Compatibility",
-      description: "Get the compatibility between your company and tender"
+      icon: "💰",
+      title: "Cash Crunches",
+      description: "Nightmares like bounced EMIs and delayed salaries become reality"
     },
     {
-      icon: Shield,
-      title: "Deep Tender Insights and Knowledge",
-      description: "Stay updated with regulatory requirements and deadlines"
+      icon: "⚡",
+      title: "Panic Bidding",
+      description: "Desperate need for work forces contractors to bid at extremely low rates"
     },
     {
-      icon: Users,
-      title: "Tender Tracking",
-      description: "Shortlist and win your favourite tenders"
+      icon: "🌙",
+      title: "All other work sidelined",
+      description: "Tenders consume focus, slowing down everything else"
     }
   ];
 
-  const stats = [
-    { value: "10,000+", label: "Active Tenders" },
-    { value: "500+", label: "Partner Organizations" },
-    { value: "95%", label: "Success Rate" },
-    { value: "24/7", label: "Support Available" }
+  const features = [
+    {
+      title: "Preparing shortlists",
+      description: "Identify the right opportunities before the race even begins."
+    },
+    {
+      title: "Complete past result context",
+      description: "Get insights from previous bids to guide smarter decisions."
+    },
+    {
+      title: "Estimating BOQs",
+      description: "Deep AI assistance in quantity generations"
+    },
+    {
+      title: "Filling tender documents",
+      description: "Auto-fill forms with precision quickly"
+    }
   ];
 
   const testimonials = [
     {
-      name: "Rajesh Kumar",
-      company: "Tech Solutions Pvt Ltd",
-      text: "TenderBharat transformed our tender process. We've won 3x more contracts since using their platform.",
+      name: "Mr. Pranav Singh Chaudhri",
+      company: "New India Contractors & Developers",
+      designation: "Managing Director",
+      text: "Tender Bharat has drastically improved the speed and clarity of our tendering process. It's streamlined our workflow and has the potential to become an industry benchmark",
       rating: 5
     },
     {
-      name: "Priya Sharma",
-      company: "Infrastructure Corp",
-      text: "The AI-powered matching is incredible. We only see tenders that are perfect for our business.",
+      name: "Mr. Hardik Goyal",
+      company: "Hardik Construction Company",
+      designation: "Managing Director",
+      text: "I've always preferred reviewing tenders myself. With Tender Bharat, I can now go deep into 10x more tenders, without depending on my team. It's a game-changer for decision-makers like me",
       rating: 5
     },
     {
-      name: "Amit Patel",
-      company: "Digital Services Ltd",
-      text: "Best tender platform in India. Their analytics helped us understand the market better.",
+      name: "Mr. Prince Garg",
+      company: "DK Infra",
+      designation: "Managing Partner",
+      text: "With Tender Bharat, we always feel in control of relevant tenders. It removes the stress of tracking corrigendums or missing critical updates—letting us stay focused on project execution",
       rating: 5
     }
   ];
@@ -100,34 +115,35 @@ const Home = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Find Your Perfect{' '}
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              Tender
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+            Redefining{' '}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Tender Management
             </span>
+            <br />
+            with AI
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            India's most advanced tender discovery platform. Use AI to find, analyze, and win government and private sector tenders.
+          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+            Let AI Handle the Hard Work, So Your Team Can Focus on What Matters
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white px-8 py-4 text-lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-4 text-lg font-semibold"
             >
-              Start Finding Tenders
+              Get Started
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
             <Button
               size="lg"
               variant="outline"
               onClick={() => {
-                // You can add schedule demo functionality here
                 console.log('Schedule Demo clicked');
               }}
-              className="px-8 py-4 text-lg border-2 hover:bg-gray-50 bg-white"
+              className="px-10 py-4 text-lg border-2 hover:bg-gray-50 bg-white"
             >
               Schedule Demo
             </Button>
@@ -135,120 +151,103 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-teal-600 mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
+      {/* Problem Statement */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-lg text-gray-600 mb-4">Ever found out a tender result... and thought... 🤔</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+              "When did this even get published?"
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Now imagine how many high-value tenders your team never even knew existed.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Pain Points */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose TenderBharat?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our platform combines cutting-edge technology with deep market insights to give you a competitive edge.
-            </p>
+            <h2 className="text-lg text-gray-600 mb-4">Pain points 😰</h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+              When Tender Planning Fails,{' '}
+              <span className="text-red-600">the Fallout Is Brutal</span>
+            </h3>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-white" />
+          <div className="grid md:grid-cols-2 gap-8">
+            {painPoints.map((point, index) => (
+              <Card key={index} className="p-8 bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start space-x-4">
+                  <div className="text-3xl">{point.icon}</div>
+                  <div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">{point.title}</h4>
+                    <p className="text-gray-600">{point.description}</p>
                   </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-600">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-white/50 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      {/* Our Vision */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600">
-              Get started in minutes and start winning tenders
+            <h2 className="text-lg text-blue-600 mb-4">Our Vision 🔥</h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+              Let AI Handle the Hard Work,{' '}
+              <span className="text-blue-600">So Your Team Can Focus on What Matters</span>
+            </h3>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Because your team should be solving problems not juggling with tasks
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-white">1</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Sign Up & Set Preferences</h3>
-              <p className="text-gray-600">
-                Create your account and tell us about your business interests and capabilities.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-white">2</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-4">AI Matches Relevant Tenders</h3>
-              <p className="text-gray-600">
-                Our AI analyzes thousands of tenders and shows you only the most relevant opportunities.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl font-bold text-white">3</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Apply & Win</h3>
-              <p className="text-gray-600">
-                Use our tools to prepare winning proposals and track your applications.
-              </p>
-            </div>
+          
+          {/* How We Help */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+            {features.map((feature, index) => (
+              <Card key={index} className="p-6 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-white font-bold">{index + 1}</span>
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h4>
+                  <p className="text-gray-600 text-sm">{feature.description}</p>
+                  {feature.title.includes("BOQs") || feature.title.includes("documents") ? (
+                    <span className="inline-block mt-2 text-xs text-blue-600 font-medium">(Under Development)</span>
+                  ) : null}
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Trusted by Leading Companies
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              What our clients say
             </h2>
-            <p className="text-xl text-gray-600">
-              See what our customers say about TenderBharat
-            </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                <CardContent className="p-6">
+              <Card key={index} className="border-0 shadow-xl bg-white p-8">
+                <CardContent className="p-0">
                   <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-gray-600 mb-4">"{testimonial.text}"</p>
-                  <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">{testimonial.company}</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{testimonial.text}</p>
+                  <div className="border-t pt-4">
                     <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.company}</div>
+                    <div className="text-sm text-gray-500">{testimonial.designation}</div>
                   </div>
                 </CardContent>
               </Card>
