@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import TenderResult from "./pages/TenderResult";
+import DocumentViewer from "./pages/DocumentViewer";
 import Blog from "./pages/Blog";
 import Blogs from "./pages/Blogs";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Index />} />
           <Route path="/analysis" element={<Analysis />} />
+          <Route path="/document-viewer" element={<DocumentViewer />} />
           <Route path="/tender-result/:tenderId" element={<TenderResult />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog" element={<Blog />} />

@@ -583,13 +583,13 @@ This tender represents an **excellent opportunity** with strong alignment to you
                 View Summary
               </Button>
               
-              {/* Ask Tender Robo Button */}
+              {/* View Documents Button */}
               <Button
-                onClick={() => setIsRoboPopupOpen(true)}
+                onClick={() => navigate('/document-viewer')}
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
               >
-                <Bot className="w-4 h-4 mr-2" />
-                Ask Tender Robo
+                <FileText className="w-4 h-4 mr-2" />
+                View Documents
               </Button>
             </div>
           </div>
