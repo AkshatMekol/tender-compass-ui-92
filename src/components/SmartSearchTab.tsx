@@ -29,14 +29,21 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
   const [sortBy, setSortBy] = useState('score');
   const [showFilters, setShowFilters] = useState(false);
   const [savedTenders, setSavedTenders] = useState<Set<string>>(new Set());
-  const [todayTendersOnly, setTodayTendersOnly] = useState(false);
-  const [selectedWorkType, setSelectedWorkType] = useState('EPC');
   const [currentPage, setCurrentPage] = useState(1);
   const tendersPerPage = 10;
   const [isExportMode, setIsExportMode] = useState(false);
   const [selectedTenders, setSelectedTenders] = useState<Set<string>>(new Set());
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set(['roads', 'bridges', 'buildings', 'railways', 'airports', 'water', 'energy']));
 
-  const workTypes = ['Item-rate', 'EPC', 'HAM', 'BOT', 'Others'];
+  const planCategories = [
+    { id: 'roads', label: 'Roads & Highways' },
+    { id: 'bridges', label: 'Bridges & Flyovers' },
+    { id: 'buildings', label: 'Buildings & Housing' },
+    { id: 'railways', label: 'Railways & Metro' },
+    { id: 'airports', label: 'Airports & Aviation' },
+    { id: 'water', label: 'Water & Sanitation' },
+    { id: 'energy', label: 'Energy & Power' }
+  ];
 
   // Mock tenders with realistic variations
   const mockTenders: Tender[] = [
@@ -75,14 +82,18 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
       const matchesOrg = selectedOrganisation === 'all' || tender.organisation === selectedOrganisation;
       const matchesCity = !selectedCity || tender.location.toLowerCase().includes(selectedCity.toLowerCase());
       const matchesAmount = tender.amount >= amountRange[0] && tender.amount <= amountRange[1];
-      const matchesToday = !todayTendersOnly || tender.deadline === today;
+      const matchesCategories = selectedCategories.size === 0 || 
+        Array.from(selectedCategories).some(cat => 
+          tender.category.toLowerCase().includes(cat) || 
+          tender.workTypes.some(wt => wt.toLowerCase().includes(cat))
+        );
       
       // For demo purposes, we'll simulate mail date and submission date filtering
       // In a real app, these would be actual fields in the tender data
       const matchesMailDate = !mailDate || true; // Placeholder logic
       const matchesSubmissionDate = !submissionDate || true; // Placeholder logic
       
-      return matchesSearch && matchesOrg && matchesCity && matchesAmount && matchesToday && matchesMailDate && matchesSubmissionDate;
+      return matchesSearch && matchesOrg && matchesCity && matchesAmount && matchesCategories && matchesMailDate && matchesSubmissionDate;
     });
 
     filtered.sort((a, b) => {
@@ -99,7 +110,7 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     });
 
     return filtered;
-  }, [searchTerm, selectedOrganisation, selectedCity, mailDate, submissionDate, amountRange, sortBy, todayTendersOnly]);
+  }, [searchTerm, selectedOrganisation, selectedCity, mailDate, submissionDate, amountRange, sortBy, selectedCategories]);
 
   const totalPages = Math.ceil(filteredAndSortedTenders.length / tendersPerPage);
   const startIndex = (currentPage - 1) * tendersPerPage;
@@ -207,6 +218,26 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     }
   };
 
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleAllCategories = () => {
+    if (selectedCategories.size === planCategories.length) {
+      setSelectedCategories(new Set());
+    } else {
+      setSelectedCategories(new Set(planCategories.map(cat => cat.id)));
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex-shrink-0 p-6 space-y-6">
@@ -248,17 +279,55 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
               </div>
             )}
             
-            <Button
-              variant={todayTendersOnly ? "default" : "outline"}
-              onClick={() => setTodayTendersOnly(!todayTendersOnly)}
-              className={`flex items-center gap-2 ${
-                todayTendersOnly 
-                  ? 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              Today Tenders
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 border-blue-300 text-blue-700 hover:bg-blue-50"
+                >
+                  My Plan ({selectedCategories.size}/{planCategories.length})
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4" align="end">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-gray-900">My Plan Categories</h4>
+                    <p className="text-sm text-gray-600">
+                      Select the tender categories included in your subscription plan
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={toggleAllCategories}
+                      className="text-xs"
+                    >
+                      {selectedCategories.size === planCategories.length ? 'Deselect All' : 'Select All'}
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {planCategories.map((category) => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={category.id}
+                          checked={selectedCategories.has(category.id)}
+                          onCheckedChange={() => toggleCategory(category.id)}
+                        />
+                        <label
+                          htmlFor={category.id}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {category.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
             
             <Button
               variant="outline"
@@ -271,23 +340,6 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
           </div>
         </div>
 
-        {/* Work Type Selection */}
-        <div className="flex gap-0 p-1 bg-gray-100 rounded-lg">
-          {workTypes.map((type) => (
-            <Button
-              key={type}
-              variant="ghost"
-              onClick={() => setSelectedWorkType(type)}
-              className={`flex-1 rounded-md transition-all duration-200 ${
-                selectedWorkType === type 
-                  ? 'bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white shadow-sm' 
-                  : 'text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
