@@ -45,6 +45,8 @@ const SmartSearchTab: React.FC<SmartSearchTabProps> = ({ onAnalyze, onSaveTender
     { id: 'energy', label: 'Energy & Power' }
   ];
 
+  console.log('SmartSearchTab rendered with selectedCategories:', selectedCategories.size, 'planCategories:', planCategories.length);
+
   // Mock tenders with realistic variations
   const mockTenders: Tender[] = [
     { id: '1', name: 'Development, Operations And Maintenance Of Innovative Urban Ropeway Transport Network In Shimla Project (Phase 2)', organisation: 'Himachal Pradesh PWD', amount: 3500, compatibilityScore: 95, location: 'Shimla, HP', deadline: '02-06-2025', category: 'Development', workTypes: ['Transport', 'Infrastructure', 'Urban Development'] },

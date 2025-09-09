@@ -63,7 +63,7 @@ const Index = () => {
   };
 
   const renderActiveTab = () => {
-    console.log('Current active tab:', activeTab); // Debug log
+    console.log('Current active tab:', activeTab, new Date().toISOString()); // Debug log with timestamp
     
     switch (activeTab) {
       case 'smart-search':
