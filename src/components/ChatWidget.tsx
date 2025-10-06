@@ -47,7 +47,7 @@ const ChatWidget = () => {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button 
-              className="rounded-full w-14 h-14 bg-teal-600 hover:bg-teal-700 shadow-lg"
+              className="rounded-full w-14 h-14 gradient-bg hover:opacity-90 shadow-glow"
               size="icon"
             >
               <MessageSquare className="w-6 h-6 text-white" />
@@ -84,7 +84,7 @@ const ChatWidget = () => {
                   <div
                     className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
                       msg.sender === 'user'
-                        ? 'bg-teal-600 text-white'
+                        ? 'gradient-bg text-white'
                         : 'bg-gray-200 text-gray-800'
                     }`}
                   >
@@ -102,7 +102,7 @@ const ChatWidget = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Type your message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
               <Button onClick={sendMessage} size="sm">
                 <Send className="w-4 h-4" />

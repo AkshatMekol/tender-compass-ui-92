@@ -22,10 +22,10 @@ const Dashboard = () => {
   ];
 
   const workTypeData = [
-    { type: 'Road Construction', count: 45, color: '#0891b2' },
-    { type: 'Building', count: 32, color: '#059669' },
-    { type: 'Water Management', count: 28, color: '#7c3aed' },
-    { type: 'Infrastructure', count: 25, color: '#dc2626' }
+    { type: 'Road Construction', count: 45, color: 'hsl(var(--primary))' },
+    { type: 'Building', count: 32, color: 'hsl(var(--accent))' },
+    { type: 'Water Management', count: 28, color: 'hsl(var(--secondary))' },
+    { type: 'Infrastructure', count: 25, color: 'hsl(var(--muted))' }
   ];
 
   const recentTenders = [
@@ -140,7 +140,7 @@ const Dashboard = () => {
         <CardContent>
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              isDragOver ? 'border-teal-400 bg-teal-50' : 'border-gray-300 hover:border-gray-400'
+              isDragOver ? 'border-primary bg-secondary' : 'border-border hover:border-muted-foreground'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -160,7 +160,7 @@ const Dashboard = () => {
             <Button
               onClick={() => document.getElementById('file-upload')?.click()}
               variant="outline"
-              className="border-teal-200 text-teal-700 hover:bg-teal-50"
+              className="border-border text-foreground hover:bg-secondary"
             >
               Choose Files
             </Button>
@@ -192,7 +192,7 @@ const Dashboard = () => {
                         <Button
                           onClick={() => analyzeFile(file.id)}
                           size="sm"
-                          className="bg-teal-600 hover:bg-teal-700 text-white"
+                          className="gradient-bg text-white hover:opacity-90"
                         >
                           Analyse
                         </Button>
@@ -219,8 +219,8 @@ const Dashboard = () => {
                   +12% from last month
                 </p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <FileText className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-accent" />
               </div>
             </div>
           </CardContent>
@@ -237,8 +237,8 @@ const Dashboard = () => {
                   +3.2% improvement
                 </p>
               </div>
-              <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                <Target className="w-6 h-6 text-teal-600" />
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center">
+                <Target className="w-6 h-6 text-primary" />
               </div>
             </div>
           </CardContent>
@@ -255,8 +255,8 @@ const Dashboard = () => {
                   +8 new tenders
                 </p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center">
+                <Clock className="w-6 h-6 text-accent" />
               </div>
             </div>
           </CardContent>
@@ -273,8 +273,8 @@ const Dashboard = () => {
                   +15% increase
                 </p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <IndianRupee className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center">
+                <IndianRupee className="w-6 h-6 text-primary" />
               </div>
             </div>
           </CardContent>
@@ -301,7 +301,7 @@ const Dashboard = () => {
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }} 
                 />
-                <Line type="monotone" dataKey="score" stroke="#0891b2" strokeWidth={3} dot={{ fill: '#0891b2', strokeWidth: 2, r: 4 }} />
+                <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={3} dot={{ fill: 'hsl(var(--accent))', strokeWidth: 2, r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -349,7 +349,7 @@ const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   <div className="text-right">
                     <div className="text-sm font-medium text-gray-700">Compatibility</div>
-                    <div className="text-lg font-bold text-teal-600">{tender.score}%</div>
+                    <div className="text-lg font-bold text-primary">{tender.score}%</div>
                   </div>
                   <div className={`w-3 h-3 rounded-full ${tender.score >= 90 ? 'bg-green-500' : tender.score >= 80 ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
                 </div>

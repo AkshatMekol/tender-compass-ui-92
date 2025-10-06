@@ -44,11 +44,11 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogo
     <div className="w-64 h-full bg-white shadow-xl border-r border-gray-200 flex flex-col">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
             <Hammer className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold gradient-bg bg-clip-text text-transparent">
               TenderBharat
             </h1>
             <p className="text-xs text-gray-500">Find Your Perfect Tender</p>
@@ -61,10 +61,10 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogo
           <button
             key={index}
             onClick={() => setActiveTab(item.key)}
-            className={`w-full flex items-center px-6 py-3 text-left hover:bg-teal-50 hover:border-r-2 hover:border-teal-500 transition-all duration-200 ${
+            className={`w-full flex items-center px-6 py-3 text-left hover:bg-secondary hover:border-r-2 hover:border-accent transition-all duration-200 ${
               activeTab === item.key
-                ? 'bg-teal-50 text-teal-700 border-r-2 border-teal-600 font-medium' 
-                : 'text-gray-600 hover:text-teal-700'
+                ? 'bg-secondary text-primary border-r-2 border-accent font-medium' 
+                : 'text-muted-foreground hover:text-primary'
             }`}
           >
             <item.icon className="w-5 h-5 mr-3" />
@@ -93,7 +93,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activeTab, setActiveTab, onLogo
       <div className="p-4 border-t border-gray-200">
         <button 
           onClick={onLogout}
-          className="w-full flex items-center px-6 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200 rounded-xl"
+          className="w-full flex items-center px-6 py-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200 rounded-xl"
         >
           <LogOut className="w-5 h-5 mr-3" />
           Logout
